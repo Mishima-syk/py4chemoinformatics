@@ -1,7 +1,7 @@
 # 目次
 ちょっと追加した(2018.12.12)。web interfaceは入門の範囲を超えそうなのでどうするかは考える。
 
-![chemoinformatics tutorial](python_for_ci.png)
+<img src="python_for_ci.png" width="250" />
 
 ## 01 はじめに
 - ケモインフォマティクスとは？
