@@ -13,12 +13,12 @@ link:  https://pythonclock.org/
 == Anacondaのインストール方法
 
   　では早速Anacondaをインストールしましょう。アナコンダの公式サイトにアクセスし、ご自身の環境にあったインストーラーをダウンロードします。
-  link: https://www.anaconda.com/
+link: https://www.anaconda.com/
   　上でも申し上げましたように３系が良いのでPython3.7version(201901現在)のインストーラーをダウンロードします。　ついでLinuxであれば、ターミナルからインストーラーを実行します。
   
-  [source, bash]
-  ----
-  bash ~/Downloads/Anaconda3-4.1.0-Linux-x86_64.sh
-  ----
+[source, bash]
+----
+bash ~/Downloads/Anaconda3-4.1.0-Linux-x86_64.sh
+----
 
   その後インストーラーが起動し色々聞かれると思いますが、基本的にエンターまたはYesで進めていけば良いです。
