@@ -19,3 +19,41 @@ bash ~/Downloads/Anaconda3-4.1.0-Linux-x86_64.sh
 ----
 
 その後インストーラーが起動し色々聞かれると思いますが、基本的にエンターまたはYesで進めていけば良いです。
+　Anacondaのインストールが完了すると、コマンドプロンプトまたはターミナルから'conda'コマンドが使えるようになるはずです。下記によく使うコマンドをまとめます。
+
+[source, bash]
+----
+# install package
+$ conda install <package name>
+ 
+# 仮想環境の作成。
+$ conda create -n 仮想環境の名前 python=バージョン
+ 
+# 作った仮想環境一覧の表示
+$ conda info -e
+ 
+# 仮想環境の削除
+$ conda remove -n 仮想環境の名前
+ 
+# 仮想環境を使う
+# mac/linuxの場合
+$ source activate 仮想環境の名前
+ 
+# 仮想環境を使う
+# windowsの場合
+$ activate 仮想環境の名前
+ 
+# 仮想環境から出る
+$ source deactivate
+ 
+# 今使っている仮想環境にインストールされているライブラリの一覧を表示
+$ conda list
+----
+
+　今回はPython3.6の環境を構築し作業を進めていきたいと思いますので下記のような手順で環境を作ります。-nの後ろは皆さんの好きな名前でも構いません。
+
+[source, bash]
+---
+$ conda create -n py4chemoinformatics python3.6
+$ source activate py4chemoinformatis
+---
