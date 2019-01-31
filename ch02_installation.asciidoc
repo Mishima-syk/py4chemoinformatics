@@ -50,10 +50,16 @@ $ source deactivate
 $ conda list
 ----
 
-　今回はPython3.6の環境を構築し作業を進めていきたいと思いますので下記のような手順で環境を作ります。-nの後ろは皆さんの好きな名前でも構いません。
-
+== Packageのインストール
+　今回はPython3.6の環境を構築し作業を進めていきたいと思いますので下記のような手順で環境を作ります。-nの後ろは皆さんの好きな名前でも構いません。環境構築後以後のセッションで利用するツールキットも入れていきます。後でそれぞれのパッケージ関して簡単に説明します。
 [source, bash]
 ---
 $ conda create -n py4chemoinformatics python3.6
 $ source activate py4chemoinformatis
+
+# install packages
+$ conda install -c conda-forge rdkit
+$ conda install -c conda-forge seaborn
 ---
+
+=== RDKit
