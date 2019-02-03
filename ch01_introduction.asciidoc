@@ -20,6 +20,8 @@
 - 突然企業でケモインフォマティクス要員にアサインされた方
 - AI創薬に興味があるがなにからはじめたらいいかわからない人
 
+== おまけ
+
 .Chemoinformatics or Cheminformatics?
 ****
 もともとはBioに対してChemoと語感を合わせて登場してきたように記憶しているが、link:https://jcheminf.biomedcentral.com/[Journal of Cheminformatics]の創刊により一時期Chemに大きく離されていた。しかし、最近のlink:https://trends.google.co.jp/trends/explore?date=all&q=chemoinformatics,cheminformatics[Google trend]によるとどちらでもいいようですがRhymeは重視したほうが良いでしょう。
