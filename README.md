@@ -1,6 +1,8 @@
 # 目次
 ちょっと追加した(2018.12.12)。web interfaceは入門の範囲を超えそうなのでどうするかは考える。
 
+- [AsciiDoc Syntax Quick Reference](https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/#formatted-text)
+
 <img src="python_for_ci.png" width="250" />
 
 ## [01 はじめに](ch01_introduction.asciidoc)
