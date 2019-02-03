@@ -50,5 +50,5 @@
 - 記述子を工夫してみる(neural fingerprint)
 - DNNを利用した予測モデル構築
 
-## 11 コンピューターに化学構造を考えさせる
+## [11 コンピューターに化学構造を考えさせる](ch11_generativemodels.asciidoc)
 - Recurrent Neural Networkを利用した構造生成
