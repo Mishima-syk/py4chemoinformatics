@@ -1,0 +1,39 @@
+= RDKitで構造情報を取り扱う
+:imagesdir: images
+
+この章ではRDKitを使って分子の読み込みの基本を覚えます。
+
+== SMILESとは
+
+Simplified molecular input line entry system(SMILES)とは化学構造を文字列で表現するための表記方法です。
+詳しくはlink:http://www.daylight.com/meetings/summerschool98/course/dave/smiles-intro.html#TOC[SMILES Tutorial]で説明されていますが、例えばc1ccccc1は6つの芳香族炭素が最初と最後をつないでループになっている構造、つまりベンゼンを表現していることになります。
+
+== 構造を描画してみよう
+
+SMILESで分子を表現することがわかったので、SMILESを読み込んで分子を描画させてみましょう。まずはRDKitのライブラリからChemクラスを読み込みます。二行目はJupyter Notebook上で構造を描画するための設定です。
+
+[source, python]
+----
+from rdkit import Chem
+from rdkit.Chem.Draw import IPythonConsole
+----
+
+RDKitにはSMILES文字列を読み込むためにMolFromSmilesというメソッドが用意されていますので、これを使い分子を読み込みます。
+
+[source, python]
+----
+mol = Chem.MolFromSmiles("c1ccccc1")
+----
+
+続いて構造を描画しますが、単純にmolを評価するだけで構造が表示されます。
+
+[source, python]
+----
+mol
+----
+
+図のように構造が表示されているはずです。
+
+image::ch05/ch05_01.png[Depict benzene]
+
+== 複数の化合物を一度に取り扱うには？

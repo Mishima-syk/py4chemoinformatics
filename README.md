@@ -18,7 +18,7 @@
 - ChEMBL
 - PubChem
 
-## 05 RDKitで構造情報を取り扱う
+## [05 RDKitで構造情報を取り扱う](ch05_rdkit.asciidoc)
 - SMILESとは？
 - 構造を描画してみよう
 - 複数の化合物を一度に取り扱うには？
