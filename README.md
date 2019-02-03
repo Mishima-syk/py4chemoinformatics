@@ -6,7 +6,7 @@
 ## [01 はじめに](ch01_introduction.asciidoc)
 - ケモインフォマティクスとは？
 
-## 02 ケモインフォマティクスのための環境を整えよう
+## [02 ケモインフォマティクスのための環境を整えよう](ch02_installation.asciidoc)
 - Anaconda(Python, Jupyter, scikit-learn)
 - RDKit
 
