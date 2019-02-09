@@ -1,0 +1,107 @@
+= RDKitで構造情報を取り扱う
+:imagesdir: images
+
+この章ではRDKitを使って分子の読み込みの基本を覚えます。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_rdkit.ipynb[本章のjupyter notebook]
+
+== SMILESとは
+
+Simplified molecular input line entry system(SMILES)とは化学構造を文字列で表現するための表記方法です。
+詳しくはlink:http://www.daylight.com/meetings/summerschool98/course/dave/smiles-intro.html#TOC[SMILES Tutorial]で説明されていますが、例えばc1ccccc1は6つの芳香族炭素が最初と最後をつないでループになっている構造、つまりベンゼンを表現していることになります。
+
+== 構造を描画してみよう
+
+SMILESで分子を表現することがわかったので、SMILESを読み込んで分子を描画させてみましょう。まずはRDKitのライブラリからChemクラスを読み込みます。二行目はJupyter Notebook上で構造を描画するための設定です。
+
+[source, python]
+----
+from rdkit import Chem
+from rdkit.Chem.Draw import IPythonConsole
+----
+
+RDKitにはSMILES文字列を読み込むためにMolFromSmilesというメソッドが用意されていますので、これを使い分子を読み込みます。
+
+[source, python]
+----
+mol = Chem.MolFromSmiles("c1ccccc1")
+----
+
+続いて構造を描画しますが、単純にmolを評価するだけで構造が表示されます。
+
+[source, python]
+----
+mol
+----
+
+図のように構造が表示されているはずです。
+
+image::ch05/ch05_01.png[Depict benzene]
+
+== 複数の化合物を一度に取り扱うには？
+
+複数の化合物を一つのファイルに格納する方法にはいくつかありますが、sdfというファイル形式を利用するのが一般的です。
+
+.sdfフォーマットとは？
+****
+MDL社で開発された分子表現のためのフォーマットにMOL形式というものがあります。このMOL形式を拡張したものがSDF形式です。
+具体的にはMOL形式で表現されたものを"$$$$"という行で区切ることにより、複数の分子を取り扱えるようにしてあります。
+****
+
+=== sdfファイルをChEMBLからダウンロードする
+
+ここではlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL669726[トポイソメラーゼII阻害試験]の結果をsdfファイル形式でダウンロードします。
+
+ChEMBLの検索結果のページのcompound summayからDisplay All Recordsを選択します。
+
+image::ch05/ch05_02.png[Compound Summary]
+
+さらに、化合物表示画面からdownload sdfでsdfファイルをjupyter notebookを起動したディレクトリにダウンロードします。
+
+image::ch05/ch05_03.png[Download SDF]
+
+便宜上ch05_compounds.sdfという名前で保存しましたが、好きな名前で保存してください。
+
+=== RDKitでsdfを取り扱う
+
+RDKitでsdfファイルを読み込むにはSDMolSupplierというメソッドを利用します。複数の化合物を取り扱うことになるのでmolではなくmolsという変数に格納していることに注意
+
+[source, python]
+----
+mols = Chem.SDMolSupplier("ch05_compounds.sdf")
+----
+
+何件の分子が読み込まれたのか確認します。数を数えるにはlenを使います。
+
+[source, python]
+----
+len(mols)
+----
+
+34件でした。
+
+=== 分子の構造を描画する
+
+forループを使って、ひとつずつ分子を描画してもいいですが、RDKitには複数の分子を一度に並べて描画するメソッドが用意されているので、今回はそちらのMolsToGridImageメソッドを使います。
+
+[source, python]
+----
+Draw.MolsToGridImage(mols)
+----
+
+image::ch05/ch05_04.png[MolsToGridImage]
+
+==== (おまけ)参考までにループを回すやりかたも載せておきます。
+
+[source, python]
+----
+from IPython.core.display import display
+for mol in mols:
+    display(mol)
+----
+
+=== Q&A
+
+[qanda]
+変数名を分子の数でmolやmolsに変えるのはなぜですか？::
+  どういう変数を使うかの決まりはありませんが、見てわかりやすい変数名をつけることで余計なミスを減らし、生産性が上がります
+MolsToGridImageで一行に並べる分子の数を変更することはできますか？::
+  できます。molsPerRowというオプションが用意されています。Draw.MolsToGridImage(mols, molsPerRow=10)のように使います

@@ -1,0 +1,99 @@
+= コンピューターに化学構造を考えさせる
+:imagesdir: images
+
+Deep Learningがメディナルケミストリに大きなインパクトをもたらしたものの一つに生成モデルがあげられます。特にこの数年での生成モデルの進化は素晴らしいです。ここではlink:https://github.com/MarcusOlivecrona/REINVENT[Marcus Olivecronaにより開発されたREINVENT]を使って新規な合成案を提案させてみましょう。
+
+== 準備
+pytorchというディープラーニングのライブラリをcondaでインストールします。新しいバージョンでは動かないのでバージョンを指定してインストールします。
+
+.pytorchとは?
+keras同様TensorFlowをより便利に使うためのライブラリです。
+
+[source, bash]
+----
+$ conda install pytorch=0.3.1 -c pytorch
+----
+
+続いてREINVENT本体をGitHubからクローンします。
+
+[source, bash]
+----
+$ cd <path to your working directory>
+$ git clone https://github.com/MarcusOlivecrona/REINVENT.git
+----
+
+続いて、ChEMBLの110万件くらいのデータセットで予め訓練済みのモデルをダウンロードしてきて元のデータと置き換えます。
+このデータはGTX 1080TiGPUマシンを利用して5,6時間かかっていますのでもしトレーニングを自分で行うのであればGPUマシンは必須です。
+
+[source, bash]
+----
+$ wget https://github.com/Mishima-syk/13/raw/master/generator_handson/data.zip
+$ unzip data.zip
+$ mv data ./REINVENT/
+----
+
+これで準備が整いました。
+
+== 実例
+
+ここではlink:https://www.drugbank.ca/drugs/DB01261[Januvia]として知られる抗糖尿病薬sitagliptinの類似体を生成するようなモデルを作成してみます。
+
+まずはtanimoto係数をスコアとして類似度の高い構造を生成するようにモデルを訓練します。今回は3000ステップ訓練しますが、大体ちょっと前のMacbook Airで7,8時間かかるので気長に待ちましょう。待てない場合はlink:https://github.com/Mishima-syk/13/tree/master/generator_handson/sitagliptin_agent_3000[ここ]のデータを使ってください。
+
+
+
+[source, bash]
+----
+./main.py --scoring-function tanimoto --scoring-function-kwargs query_structure 'N[C@@H](CC(=O)N1CCn2c(C1)nnc2C(F)(F)F)Cc3cc(F)c(F)cc3F' --num-steps 3000 --sigma 80
+----
+
+ここからはjupyter notebookを立ち上げます。
+
+必要なライブラリを読みこみます。sys.path.appendはREINVENTのディレクトリを指定してください。
+
+[source, python]
+----
+%matplotlib inline
+import sys
+sys.path.append("[Your REINVENT DIR]")
+from rdkit import Chem
+from rdkit.Chem import AllChem, DataStructs, Draw
+import torch
+from model import RNN
+from data_structs import Vocabulary
+from utils import seq_to_smiles
+----
+
+続いて、トレーニングしたモデルから50化合物サンプリングします。
+
+[source, python]
+----
+voc = Vocabulary(init_from_file="/Users/kzfm/mishima_syk/REINVENT/data/Voc")
+Agent = RNN(voc)
+Agent.rnn.load_state_dict(torch.load("sitagliptin_agent_3000/Agent.ckpt"))
+seqs, agent_likelihood, entropy = Agent.sample(50)
+smiles = seq_to_smiles(seqs, voc)
+----
+
+実際にどんな構造が生成されたのか見てみましょう。
+
+[source, python]
+----
+mols = []
+for smi in smiles:
+    mol = Chem.MolFromSmiles(smi)
+    if mol is not None:
+        mols.append(mol)
+
+Draw.MolsToGridImage(mols, molsPerRow=3, subImgSize=(500,400))
+----
+
+まずまずといったところでしょうか？
+
+image::ch11/ch11_01.png[Sitagliptin analogues]
+
+== REINVENTについて簡単に説明
+
+link:https://arxiv.org/abs/1704.07555[元論文(Molecular De Novo Design through Deep Reinforcement Learning)]を読みましょう。
+
+（要説明）
