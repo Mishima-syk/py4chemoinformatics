@@ -36,31 +36,34 @@
 - 記述子、フィンガープリント
 - 類似度を計算する
 
-## 07 沢山の化合物を一度にみたい
+## 07 グラフ構造を利用した類似性の評価
 
-- Chemical Spaceとは
-- tSNEをつかったマッピング
 - 主要な骨格による分類(MCS)
 - Matched Molecular Pairによる化合物ネットワーク
 
-## 08 構造活性相関（QSAR）の基礎
+## 08 沢山の化合物を一度にみたい
+
+- Chemical Spaceとは
+- tSNEをつかったマッピング
+
+## 09 構造活性相関（QSAR）の基礎
 
 - 効果ありなしの原因を考えてみる（分類問題）
 - 薬の効き目を予測しよう（回帰問題）
 - R分解とFree wilson analysis
 - モデルの適用範囲(applicability domain)
 
-## 09 ディープラーニング入門
+## 10 ディープラーニング入門
 
 - TensorFlowとKerasについて
 - Google colab(ずっとフリーかわからないので要検討)
 - インストールしてみよう
 
-## 10 ディープラーニングを利用した構造活性相関
+## 11 ディープラーニングを利用した構造活性相関
 
 - 記述子を工夫してみる(neural fingerprint)
 - DNNを利用した予測モデル構築
 
-## [11 コンピューターに化学構造を考えさせる](ch11_generativemodels.asciidoc)
+## [12 コンピューターに化学構造を考えさせる](ch12_generativemodels.asciidoc)
 
 - Recurrent Neural Networkを利用した構造生成
