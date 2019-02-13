@@ -1,0 +1,96 @@
+= 化合物の類似性を評価してみる
+
+== 化合物が似ているとはどういうことか？
+
+２つの化合物が似ているとはどういうことでしょうか？なんとなんく形が似ている？という表現は科学的ではありません。
+ケモインフォマティクスでは類似度(一般的に0-100の値を取ります)や非類似度（距離）といった定量的な尺度により似ているか
+どうかを評価しますがここでは主に２つの代表的な測り方を紹介します。
+
+=== 記述子
+分子の全体的な特徴をあらわすもの、分子量や極性表面性（PSA）、分配係数(logP)などを分子記述子または単に記述子
+と呼び、現在までにかなりの数が提案されています。
+これらの記述子の類似性を評価することで２つの分子がどのくらい似ているかを表現することが可能ですが、いくつかの記述子に関しては市販ソフトでないと計算できない場合があります。また分子全体の特徴を一つの数字で表現するために局所的な特徴を表現できないといったデメリットもあります。
+
+=== フィンガープリント
+
+もう一つの方法としてフィンガープリントを利用することもできます。フィンガープリントとは分子の部分構造を0,1のバイナリーで表現したもので部分構造の有無とビットのon(1),off(0)を対応させたものです。
+フィンガープリントには固定長FPと可変長FPの二種類が存在し、古くはMACSKeyという固定長FP(予め部分構造とインデックスが決められているFP)が使われていましたが、現在ではECFP4(Morgan2)という可変長FPが利用されるのが普通です。
+
+（Morgan2のアルゴリズムの概略を載せる予定）
+
+今回はこのECFP4(Morgan2)を利用した類似性評価をしてみましょう。
+
+== 類似度を計算する
+
+まずは手始めに簡単な分子としてトルエンとクロロベンゼンの類似性を評価してみましょう。
+
+[source, python]
+----
+from rdkit import Chem, DataStructs
+from rdkit.Chem import AllChem, Draw
+from rdkit.Chem.Draw import IPythonConsole
+----
+
+smilesで分子を読み込みます。
+
+[source, python]
+----
+mol1 = Chem.MolFromSmiles("Cc1ccccc1")
+mol2 = Chem.MolFromSmiles("Clc1ccccc1")
+----
+
+一応目視で確認しておきます。
+
+[source, python]
+----
+Draw.MolsToGridImage([mol1, mol2])
+----
+
+類似度の評価にはタニモト係数を使います。
+
+[source, python]
+----
+DataStructs.TanimotoSimilarity(fp1, fp2)
+# 0.5384615384615384
+----
+
+== （おまけ）もう少しドラッグライクな分子の類似性を評価する
+
+ここでは抗凝固薬として上市されているapixaban, rivaroxiabanの類似性を評価します。
+構造を見るとわかりますが、なんとなく似ているとは思いますが、どの部分とどの部分が対応するか
+想像つくでしょうか？実はこの２つの化合物は両方共FXaというセリンプロテアーゼの同じポケットに
+同じような結合モードで結合することでプロテアーゼの働きを阻害することが知られています。興味があれば
+実際にPDBから複合体の結晶構造を探して眺めてみるといいかもしれません。
+（pymol入門まで拡張するか？要検討）
+
+SMILESはChEMBLのものを利用しています（要リンク？）。
+
+[source, python]
+----
+apx = Chem.MolFromSmiles("COc1ccc(cc1)n2nc(C(=O)N)c3CCN(C(=O)c23)c4ccc(cc4)N5CCCCC5=O")
+rvx = Chem.MolFromSmiles("Clc1ccc(s1)C(=O)NC[C@H]2CN(C(=O)O2)c3ccc(cc3)N4CCOCC4=O")
+----
+
+
+構造を眺めてみます。メトキシフェニルとクロロチオールは同じような結合様式をとるんでしょうか？このような結合の成分をきちんと評価する方法もあるのですが、本書の内容を超えるので説明はしません。もし興味があればFragment Molecular Orbital Methodで調べてみてください
+
+[source, python]
+----
+Draw.MolsToGridImage([apx, rvx], legends=["apixaban", "rivaroxaban"])
+----
+
+
+[source, python]
+----
+apx_fp = AllChem.GetMorganFingerprint(apx, 2, useFeatures=True)
+rvx_fp = AllChem.GetMorganFingerprint(rvx, 2, useFeatures=True)
+----
+
+
+[source, python]
+----
+DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
+# 0.40625
+----
+
+40%くらいの類似度ということになりました。
