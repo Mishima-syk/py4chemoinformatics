@@ -1,4 +1,5 @@
 = 沢山の化合物を一度にみたい
+:imagesdir: images
 
 沢山のデータがどのように分布しているのかを見るには適当な空間にマッピングするのが一般的です。特にケモインフォマティクスではケミカルスペースという言葉が使われます。
 
@@ -6,9 +7,100 @@
 
 ケミカルスペースとは化合物を何らかの尺度でn次元の空間に配置したものを指します。一般に、2次元または3次元が使われることが多いです（人間の理解のため）。尺度つまり類似性に関しては色々な手法が提案されていますが、うまく化合物の特徴を表すような距離が定義されるように決められることが多いです。
 
-ここではいくつかの尺度を用いてケミカルスペースを構築してみましょう。
+ここではいくつかの尺度を用いてケミカルスペースを構築してみましょう。使うデータはlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL3705525[ChEMBLのFXa酵素阻害アッセイに含まれる122化合物]です。
+
+アッセイから全化合物表示をします。
+
+image::ch08/ch08_1.png[Screenshot1]
+
+続いてタブ区切りテキストでダウンロードします。
+
+image::ch08/ch08_2.png[Screenshot2]
+
+この中にSMILES形式で構造情報が入っています。
 
 == ユークリッド距離を用いたマッピング
+
+描画ライブラリにはggplotを使います。まだインストールされていない場合はconda install ggplotでインストールしてください。主成分分析(PCA)を利用して、化合物が似ているものは近くになるように分布させて可視化します。
+
+[source, python]
+----
+from rdkit import Chem, DataStructs
+from rdkit.Chem import AllChem, Draw
+import numpy as np
+import pandas as pd
+from ggplot import *
+from sklearn.decomposition import PCA
+----
+
+タブ区切りテキストを読み込み、SMILESの領域を取り出してMolFromSmilesメソッドでmolオブジェクトに変換します。
+
+[source, python]
+----
+mols = []
+with open("ch08_compounds.txt") as f:
+    header = f.readline()
+    smiles_index = -1
+    for i, title in enumerate(header.split("\t")):
+        if title == "CANONICAL_SMILES":
+            smiles_index = i
+    for l in f:
+        smi = l.split("\t")[smiles_index]
+        mol = Chem.MolFromSmiles(smi)
+        mols.append(mol)
+----
+
+molオブジェクトからフィンガープリントを構築しますが、sklearnで取り扱えるようにnumpyアレイに変換します。
+rdkitのフィンガープリントをsklearnで取り扱う場合にはこの変換操作が必須なのでそういうものだとして覚えてしまうと
+よいです。
+
+[source, python]
+----
+fps = []
+for mol in mols:
+    fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2)
+    arr = np.zeros((1,))
+    DataStructs.ConvertToNumpyArray(fp, arr)
+    fps.append(arr)
+fps = np.array(fps)
+----
+
+これで主成分分析の用意が整ったので早速やりましょう。主成分の数はn_componentsで指定できます。
+
+[source, python]
+----
+pca = PCA(n_components=2)
+x = pca.fit_transform(fps)
+----
+
+描画します。
+
+[source, python]
+----
+d = pd.DataFrame(x)
+d.columns = ["PCA1", "PCA2"]
+g = ggplot(aes(x="PCA1", y="PCA2"), data=d) + geom_point() + xlab("PCA1") + ylab("PCA2")
+----
+
 == tSNEをつかったマッピング
-== 主要な骨格による分類(MCS)
-== Matched Molecular Pairによる化合物ネットワーク
+
+PCAよりもtSNEのほうが分離能がよく、メドケムの感覚により近いと言われています。
+
+[source, python]
+----
+from sklearn.manifold import TSNE
+tsne = TSNE(n_components=2, random_state=0)
+tx = tsne.fit_transform(fps)
+----
+
+描画します。
+
+[source, python]
+----
+d = pd.DataFrame(tx)
+d.columns = ["PCA1", "PCA2"]
+g = ggplot(aes(x="PCA1", y="PCA2"), data=d) + geom_point() + xlab("PCA1") + ylab("PCA2")
+----
+
+今回紹介したPCA,tSNEの他にも色々な描画方法があるので調べてみるとよいでしょう。
+

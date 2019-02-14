@@ -41,7 +41,7 @@
 - 主要な骨格による分類(MCS)
 - Matched Molecular Pairによる化合物ネットワーク
 
-## 08 沢山の化合物を一度にみたい
+## [08 沢山の化合物を一度にみたい](ch08_visualization.asciidoc)
 
 - Chemical Spaceとは
 - tSNEをつかったマッピング
