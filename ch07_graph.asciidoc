@@ -1,5 +1,90 @@
 = グラフ構造を利用した類似性の評価
 
+グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。ケモインフォマティクスで扱う分子は、原子群とそれらを結ぶ結合で表現できます。つまり原子をノード、結合をエッジとしたグラフ構造であると言えます。
+通常分子同士の類似性を評価するためには、06章で紹介したようなフィンガープリントをと使うことが多いですが、グラフ構造そのものを利用し、類似性を評価する手法もあります。例えば次に紹介するMCS（Maximum Common Substructure）は対象となる分子集合の共通部分構造のことを指します。共通部分構造が多いほとそれらの分子はより似ている、と言えます。
+
 == 主要な骨格による分類(MCS)
 
+最大共通部分構造Maximum Common Substructure(MCS)探索はケモインフォマティクスの分野でよく利用される手法です。これは、類似性探索、クラスタリング、分子のアライメントなどに有効です。
+MCS探索は様々なツールで実行することが可能です。ここでは最初にインストールしたRDKitでMCS探索を実際にやってみましょう。以下のコードはJupyter notebook上で実行すると構造を見ながら確認できます。
+
+[source, python]
+----
+import os
+from rdkit import Chem
+from rdkit.Chem import RDConfig
+from rdkit.Chem import rdFMCS
+from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem import Draw
+filepath = os.path.join(RDConfig.RDDocsDir, 'Book/data/cdk2.sdf')
+mols = [mol for mol in Chem.SDMolSupplier(filepath)]
+# 構造を確認します
+Draw.MolsToGridImage(mols[:7], molsPerRow=5)
+----
+
+読み込んだ分子を使ってMCSを取得してみましょう。RDKitにはMCSの取得方法に複数のオプションが指定できます。以下の例では、1デフォルト、2原子がなんであっても良い（構造とボンドの次数があっていれば良い）、3結合字数がなんでも良い（例えば、ベンゼンとシクロヘキサンは同じMCSとなる）という例を示します。
+
+[source, python]
+----
+result1 = rdFMCS.FindMCS(mols[:7])
+mcs1 = Chem.MolFromSmarts　(result1.smartsString)
+mcs1
+result2 = rdFMCS.FindMCS(mols[:7], atomCompare=rdFMCS.AtomCompare.CompareAny)
+mcs2 = Chem.MolFromSmarts(result2.smartsString)
+mcs2
+result3 = rdFMCS.FindMCS(mols[:7], bondCompare=rdFMCS.BondCompare.CompareAny)
+mcs3 = Chem.MolFromSmarts(result3.smartsString)
+mcs3
+print(result1.smartsString)
+print(result2.smartsString)
+print(result3.smartsString)
+#[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
+#[#6]-,:[#6]-,:[#6]-[#6]-[#8,#7]-[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
+#[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
+----
+
+また、RDKitにはMCSのコンセプトに近い、細かな変化には影響を受けにくい類似性評価のアルゴリズムFraggle Similarityというものも実装されています。以下に簡単てではありますがその利用例を示します。
+
+[source, python]
+----
+from rdkit.Chem.Fraggle import FraggleSim
+sim, match = FraggleSim.GetFraggleSimilarity(mols[0], mols[1])
+print(sim, match)
+#0.925764192139738 *C(C)C.*COc1nc(N)nc2[nH]cnc12
+match_st = Chem.MolFromSmiles(match)
+match_st
+----
+
+このようにFraggleSimilarityは類似性と、マッチした部分構造を返します。ECFPなどよりも微細な構造変化には寛容なアルゴリズムであり、場合によってはケミストの感覚に近いのではないでしょうか。
+
+参考リンク
+https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00036
+https://raw.github.com/rdkit/UGM_2013/master/Presentations/Hussain.Fraggle.pdf
+
 == Matched Molecular Pairによる化合物ネットワーク
+
+SARを進める上で起点となる化合物（リード化合物）からどのように構造を変換するかは非常に重要な問題です。またこれまでに展開してきたSARにてどの構造変換が活性や物性に影響を及ぼしたかを解析することも大切です。このような解析を行うためのアプローチの一つがMatched Molecular Pair Analyisis（MMPA)です。MMPAとは、二つの分子の活性や物性の変化と部分構造の変化を比較し解析する手法です。通常MMPでは比較する分子間の構造変化は一箇所の変化であるもののみに注目します。例えばフェニル基上に痴漢気があったとして、クロロ基をフルオロ基に変換した場合、活性面、物性面でどのような変化があったかを解析します。
+仮に変換の前後で活性は変化せず物性や動態のパラメータが大きく変化したらそれは生物等価体と見なせるでしょう。また、MMPは基本的には変換した部位に着目する解析手法ですので、大規模な評価データ、構造データを元にMMPAを実施することで、分子構造の変換ルールとそれに紐つく物性、動態パラメータの変動のトレンドの把握ができると期待されます。MMPAは分子をフラグメント化し、フラグメントの共通する部分、それ以外の変化した部分まとめることで作成します。
+ここではRDKitのContribに提供されているmmpaを使ってMMP解析を実際にやってみましょう。
+まず作業ディレクトリをRDKitインストール先の下にあるContrib/mmpaにします。
+ついで以下のようなコマンドを順次実行します。
+
+[source, python]
+----
+python rfrag.py <MMPAを実施したいSmilesFileの名前 >フラグメント化したデータの保存ファイル名
+# 例えば
+# python rfrag.py <data/sample.smi >data/sample_fragmented.txt
+
+python indexing.py <先のコマンドでできたフラグメントのファイル >MMP_アウトプットファイル.CSV
+# 例えば
+# python index.py <data/sample_fragmented.txt >data/mmp.csv
+----
+
+以上のコマンドを実行するとmmp.csvには分子A,分子B,分子AのID,分子BのID,変換された構造のSMIRKS,共通部分構造（context）が出力されます。ペアのIDが出力されていますのでこれに活性や物性などの評価値を紐つけることで構造変化と評価結果の変動の解析を実施することができます。
+冒頭に分子構造はグラフで表現できると申し上げました。MMPも変換前、変換後をノード、変換ルールをエッジと考えるとグラフ構造であると言えます。Cytoscapeなどのネットワーク化しかツールを利用するとMMPAの結果をより直感的に可視化することができるでしょう。興味のある方は参考リンクを参照に実施してみることをお勧めします。
+
+
+参考リンク
+https://github.com/rdkit/rdkit/tree/master/Contrib/mmpa
+https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025
+https://cytoscape.org/
