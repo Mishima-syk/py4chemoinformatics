@@ -1,0 +1,70 @@
+= 目次
+:imagesdir: images
+
+ちょっと追加した(2018.12.12)。web interfaceは入門の範囲を超えそうなのでどうするかは考える。
+
+- https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/#formatted-text[AsciiDoc Syntax Quick Reference]
+
+image::python_for_ci.png[py4chemoinformatics, width=250]
+
+== link:ch01_introduction.asciidoc[01 はじめに]
+
+- ケモインフォマティクスとは？
+
+== link:ch02_installation.asciidoc[02 ケモインフォマティクスのための環境を整えよう]
+
+- Anaconda(Python, Jupyter, scikit-learn)
+- RDKit
+
+== link:ch03_python.asciidoc[03 Pythonプログラミングの基礎]
+
+- Pythonの基礎
+- Jupyter notebookで便利に使おう
+
+== link:ch04_database.asciidoc[04 ケモインフォマティクスのための公開データベース]
+
+- ChEMBL
+- PubChem
+
+== link:ch05_rdkit.asciidoc[05 RDKitで構造情報を取り扱う]
+
+- SMILESとは？
+- 構造を描画してみよう
+- 複数の化合物を一度に取り扱うには？
+
+== link:ch06_similarity.asciidoc[06 化合物の類似性を評価してみる]
+
+- 記述子、フィンガープリント
+- 類似度を計算する
+
+== link:ch07_graph.asciidoc[07 グラフ構造を利用した類似性の評価]
+
+- 主要な骨格による分類(MCS)
+- Matched Molecular Pairによる化合物ネットワーク
+
+== link:ch08_visualization.asciidoc[08 沢山の化合物を一度にみたい]
+
+- Chemical Spaceとは
+- tSNEをつかったマッピング
+
+== link:ch09_qsar.asciidoc[09 構造活性相関（QSAR）の基礎]
+
+- 効果ありなしの原因を考えてみる（分類問題）
+- 薬の効き目を予測しよう（回帰問題）
+- R分解とFree-Wilson Analysis
+- モデルの適用範囲(applicability domain)
+
+== 10 ディープラーニング入門
+
+- TensorFlowとKerasについて
+- Google colab(ずっとフリーかわからないので要検討)
+- インストールしてみよう
+
+== 11 ディープラーニングを利用した構造活性相関
+
+- 記述子を工夫してみる(neural fingerprint)
+- DNNを利用した予測モデル構築
+
+== link:ch12_generativemodels.asciidoc[12 コンピューターに化学構造を考えさせる]
+
+- Recurrent Neural Networkを利用した構造生成

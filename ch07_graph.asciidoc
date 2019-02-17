@@ -1,12 +1,13 @@
 = グラフ構造を利用した類似性の評価
 
-グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。ケモインフォマティクスで扱う分子は、原子群とそれらを結ぶ結合で表現できます。つまり原子をノード、結合をエッジとしたグラフ構造であると言えます。
-通常分子同士の類似性を評価するためには、06章で紹介したようなフィンガープリントをと使うことが多いですが、グラフ構造そのものを利用し、類似性を評価する手法もあります。例えば次に紹介するMCS（Maximum Common Substructure）は対象となる分子集合の共通部分構造のことを指します。共通部分構造が多いほとそれらの分子はより似ている、と言えます。
+グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
+
+通常、06章で紹介したようなフィンガープリントを使い分子同士の類似性を評価することが多いですが、グラフ構造を利用して類似性を評価する手法もあります。次に紹介するMCS（Maximum Common Substructure）は対象となる分子集合の共通部分構造のことを指します。共通部分構造が多いほとそれらの分子はより似ていると考えます。
 
 == 主要な骨格による分類(MCS)
 
 最大共通部分構造Maximum Common Substructure(MCS)探索はケモインフォマティクスの分野でよく利用される手法です。これは、類似性探索、クラスタリング、分子のアライメントなどに有効です。
-MCS探索は様々なツールで実行することが可能です。ここでは最初にインストールしたRDKitでMCS探索を実際にやってみましょう。以下のコードはJupyter notebook上で実行すると構造を見ながら確認できます。
+MCS探索は様々なツールで実行することが可能ですが、ここではRDKitを用いてMCS探索をやってみましょう。
 
 [source, python]
 ----
@@ -22,7 +23,13 @@ mols = [mol for mol in Chem.SDMolSupplier(filepath)]
 Draw.MolsToGridImage(mols[:7], molsPerRow=5)
 ----
 
-読み込んだ分子を使ってMCSを取得してみましょう。RDKitにはMCSの取得方法に複数のオプションが指定できます。以下の例では、1デフォルト、2原子がなんであっても良い（構造とボンドの次数があっていれば良い）、3結合次数がなんでも良い（例えば、ベンゼンとシクロヘキサンは同じMCSとなる）という例を示します。
+読み込んだ分子を使ってMCSを取得します。RDKitではMCSの取得方法に複数のオプションが指定できます。
+
+以下にそれぞれのオプションでの例を示します。
+
+. デフォルト
+. 原子がなんであっても良い（構造とボンドの次数があっていれば良い）
+. 結合次数がなんでも良い（例えば、ベンゼンとシクロヘキサンは同じMCSとなる）
 
 [source, python]
 ----
@@ -43,7 +50,7 @@ print(result3.smartsString)
 #[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
 ----
 
-また、RDKitにはMCSのコンセプトに近い、細かな変化には影響を受けにくい類似性評価のアルゴリズムFraggle Similarityというものも実装されています。以下に簡単てではありますがその利用例を示します。
+また、RDKitにはMCSのコンセプトに近い、細かな変化には影響を受けにくい類似性評価のアルゴリズムFraggle Similarityというものも実装されています。以下に簡単ではありますがその利用例を示します。
 
 [source, python]
 ----
@@ -55,11 +62,12 @@ match_st = Chem.MolFromSmiles(match)
 match_st
 ----
 
-このようにFraggleSimilarityは類似性と、マッチした部分構造を返します。ECFPなどよりも微細な構造変化には寛容なアルゴリズムであり、場合によってはケミストの感覚に近いのではないでしょうか。
+このようにFraggleSimilarityは類似性及びマッチした部分構造を返します。ECFPを利用した類似性よりもケミストの感覚に近いことが多いです。
 
 参考リンク
-https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00036
-https://raw.github.com/rdkit/UGM_2013/master/Presentations/Hussain.Fraggle.pdf
+
+- https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00036[Efficient Heuristics for Maximum Common Substructure Search]
+- https://raw.github.com/rdkit/UGM_2013/master/Presentations/Hussain.Fraggle.pdf[Fraggle – A new similarity searching algorithm]
 
 == Matched Molecular Pairによる化合物ネットワーク
 
@@ -85,6 +93,7 @@ python indexing.py <先のコマンドでできたフラグメントのファイ
 
 
 参考リンク
-https://github.com/rdkit/rdkit/tree/master/Contrib/mmpa
-https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025
-https://cytoscape.org/
+
+- https://github.com/rdkit/rdkit/tree/master/Contrib/mmpa[RDKit/Contrib/MMPA]
+- https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025[Cytoscapeでchemoinformatics]
+- https://cytoscape.org/[Cytoscape]
