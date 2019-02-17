@@ -65,8 +65,9 @@ match_st
 このようにFraggleSimilarityは類似性及びマッチした部分構造を返します。ECFPを利用した類似性よりもケミストの感覚に近いことが多いです。
 
 参考リンク
-https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00036
-https://raw.github.com/rdkit/UGM_2013/master/Presentations/Hussain.Fraggle.pdf
+
+- https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00036[Efficient Heuristics for Maximum Common Substructure Search]
+- https://raw.github.com/rdkit/UGM_2013/master/Presentations/Hussain.Fraggle.pdf[Fraggle – A new similarity searching algorithm]
 
 == Matched Molecular Pairによる化合物ネットワーク
 
@@ -92,6 +93,7 @@ python indexing.py <先のコマンドでできたフラグメントのファイ
 
 
 参考リンク
-https://github.com/rdkit/rdkit/tree/master/Contrib/mmpa
-https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025
-https://cytoscape.org/
+
+- https://github.com/rdkit/rdkit/tree/master/Contrib/mmpa[RDKit/Contrib/MMPA]
+- https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025[Cytoscapeでchemoinformatics]
+- https://cytoscape.org/[Cytoscape]
