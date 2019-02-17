@@ -47,11 +47,11 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 - Chemical Spaceとは
 - tSNEをつかったマッピング
 
-== 09 構造活性相関（QSAR）の基礎
+== link:ch09_qsar.asciidoc[09 構造活性相関（QSAR）の基礎]
 
 - 効果ありなしの原因を考えてみる（分類問題）
 - 薬の効き目を予測しよう（回帰問題）
-- R分解とFree wilson analysis
+- R分解とFree-Wilson Analysis
 - モデルの適用範囲(applicability domain)
 
 == 10 ディープラーニング入門
