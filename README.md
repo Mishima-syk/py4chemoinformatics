@@ -15,7 +15,7 @@
 - Anaconda(Python, Jupyter, scikit-learn)
 - RDKit
 
-## 03 Pythonプログラミングの基礎
+## [03 Pythonプログラミングの基礎](ch03_python.asciidoc)
 
 - Pythonの基礎（必要だったら）
 - Jupyter notebookで便利に使おう

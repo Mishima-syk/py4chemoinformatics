@@ -1,19 +1,59 @@
-=
+= Pythonプログラミングの基礎
 
-== Pythonの基礎
+この章ではPythonに触れたことのない読者のために**効率的に勉強するため**のサイトや本などを紹介していこうと思います。
+もしこれ以降の章でわからないことなどがあったら、この章のサイトや本を参考に学んでみてください。
 
+=== Pythonを本で学びたい
+
+https://www.amazon.co.jp/dp/4774196436/[Pythonスタートブック増補改訂版]::
+プログラミング自体が初心者であればこの本が良いと思います。
+
+https://www.amazon.co.jp/dp/B01NCOIC2P/[みんなのPython 第4版]::
+Javascript,Javaなどのなにかプログラミングを少しかじっていて、これからPythonを覚えたいのであればこちらの本をおすすめします。
+
+=== Pythonを本以外で学びたい
+
+https://www.pycon.jp/support/bootcamp.html[Python Boot Camp(初心者向けPythonチュートリアル)]::
+一般社団法人PyCon JPが開催している初心者向けPythonチュートリアルイベントです。全国各地で行われているので近くで開催される場合には参加するとよいと思います。
+
+https://connpass.com/category/Python/[その他ローカルコミュニティなど]::
+あちこちで入門者向けからガチのヒト向けまでの勉強会やコミュニティのあつまりなどもあるので、そういうのに参加してモチベーションを高めるのもよいと思います。
+
+https://www.udemy.com/topic/python/[udemy/python]::
+オンライン学習サービスを利用するのも効果的な手段のひとつだと思いますが、筆者は試したことがないのでわかりません。
+周りの評判を効いてみても良いでしょう。YouTubeを探すのもありだと思います。
+
+=== 本書でわからないことがあったら
+
+https://github.com/Mishima-syk/py4chemoinformatics/issues[py4chemoinformaticsのissues]::
+py4chemoinformaticsのissuesに質問していただければお答えします。わかりにくい場合だったら修正しますので、よりよくなってみんなハッピー。
+
+https://qiita.com/[Qiita]::
+Qiitaで探せば大抵答えが見つかると思います。
+
+https://stackoverflow.com/[stackoverflow]::
+それでも答えが見つからなかったらsofで探すか質問しましょう
+
+http://mishima-syk.github.io/[Mishima.syk]::
+本書を書いている人たちが集まるコミュニティです。特に話題をPythonに限定していませんが、Pythonを使ったネタが多めです。かなりガチですが、初心者対応も万全でハンズオンに定評があります。質問されれば大体答えられます。
 
 == Jupyter notebookで便利に使おう
 
-Jupyter notebookを利用すると、インタラクティブにコードを書き結果を確認するということがとても簡単にできるようになります。Jupyter notebookは下記のような特徴があります。
+link:https://jupyter.org/[Jupyter notebook]を利用すると、コードを書いて結果を確認するということがとても簡単にできるようになります。Jupyter notebookは下記のような特徴があります。
 
-* Webアプリケーション
-  - Jupyter notebookはWebブラウザーベースのツールであす。コードのみならずリッチテキスト、数式、なども同時にノートブックに埋め込めます。また結果を非常に綺麗な図として可視化することも容易にできます。
-  - ブラウザ上でコードを書くとシンタックスハイライトや、インデント挿入を自動で行います。
-  - 計算の結果をHTML, LaTex, PNG, SVGなどを利用して高品質な画像などで出力可能です。
-  - Markdwon記法にも対応しており、コメントをみやすく入れることができます。
-  - LaTex記法を利用し数式を描画することも可能です。
+- Jupyter notebookはWebブラウザーベースのツールであす。コードだけではなくリッチテキスト、数式、なども同時にノートブックに埋め込めます。また結果を非常に綺麗な図として可視化することも容易にできます。
+- ブラウザ上でコードを書くとシンタックスハイライトや、インデント挿入を自動で行います。
+- 計算の結果をHTML, LaTex, PNG, SVGなどを利用して高品質な画像などで出力できます。
+- Markdwon記法に対応しているので、コメントを入れてコードが解釈しやすくなります。
+- LaTex記法を利用し数式を綺麗にかけます
 
-* Notebook documents
-  - Notebook とはJupyter notebook上にある、見えているコンテツのことを指します。コード、説明文、数式、図、動画なども含まれます。
-  - 
+=== 使い方
+
+anacondaをインストール済みであればterminal(Windowsではanaconda prompt)から
+
+[source, bash]
+----
+$ jupyter notebook
+----
+
+と打てばjupyter notebookが立ち上がります。本書ではこれ以降特に断らない限りjupyter notebook上でのコードを実行することとします。
