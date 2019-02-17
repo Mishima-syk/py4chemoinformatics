@@ -17,7 +17,7 @@
 
 ## [03 Pythonプログラミングの基礎](ch03_python.asciidoc)
 
-- Pythonの基礎（必要だったら）
+- Pythonの基礎
 - Jupyter notebookで便利に使おう
 
 ## [04 ケモインフォマティクスのための公開データベース](ch04_database.asciidoc)
