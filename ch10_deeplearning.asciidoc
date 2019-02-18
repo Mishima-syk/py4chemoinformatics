@@ -9,23 +9,17 @@
 Pythonでディープラーニングを行う場合、複数のフレームワークがあります。主なものを挙げると
 
 - Theano
-- Tensorflow
-- Keras
+- link:https://www.tensorflow.org/[Tensorflow]
+- link:https://keras.io/[Keras]
 - MXNet
 - Chainer
 - PyTorch
 
 これを使えば絶対間違い無いというものはありませんが、本書ではGoogle社が開発しているフレームワークのTensorflow/Kerasを使います。
 
-Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報も少ないので、1.x系でまずは試すのが良いかと思います。また同じ1.x版でもバージョンによってAPIが少し変更されていますので、今後動かしたいコードがあった時にどのバージョンで書かれているかなども気をつける必要があります。
+Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報も少ないので、1.x系でまずは試すのが良いかと思います。また同じ1.xでもバージョンによってAPIが少し変更されていますので、今後動かしたいコードがあった時にどのバージョンで書かれているかに気をつける必要があります。
 
 KerasはTensoflowなどの低レベルフレームワークをバックエンドに動く高レベルAPIで、Kerasを利用することでテンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので本書ではTensorflowに統合されたKerasを利用します。
-
-
-参考リンク
-
-- https://www.tensorflow.org/
-- https://keras.io/
 
 == Google colabについて
 

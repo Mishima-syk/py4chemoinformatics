@@ -57,7 +57,7 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 == link:ch10_deeplearning.asciidoc[10 ディープラーニング入門]
 
 - TensorFlowとKerasについて
-- Google colab(ずっとフリーかわからないので要検討)
+- Google colab
 - インストールしてみよう
 
 == 11 ディープラーニングを利用した構造活性相関
