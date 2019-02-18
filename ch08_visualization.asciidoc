@@ -84,7 +84,7 @@ g = ggplot(aes(x="PCA1", y="PCA2"), data=d) + geom_point() + xlab("PCA1") + ylab
 
 == tSNEをつかったマッピング
 
-PCAよりもtSNEのほうが分離能がよく、メドケムの感覚により近いと言われています。
+PCAよりもtSNEのほうが分離能がよく、メディシナルケミストの感覚により近いと言われています。
 
 [source, python]
 ----
