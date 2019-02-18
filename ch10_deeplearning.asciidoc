@@ -1,28 +1,32 @@
 = ディープラーニング入門
 
-この章では、ディープラーニグの概要に関して説明し、それを実行するためのフレームワークであるTensorflow/Kerasをインストールしてみます。
+この章では、ディープラーニグの概要に関して説明し、それを実行するためのフレームワークであるTensorflow/Kerasをインストールします。
+
 生物の脳には神経細胞が存在し、それらがネットワークを形成することで情報を伝達したり、記憶や学習しています。このネットワーク構造を数理モデル化し、機械学習へ応用したものがArtificial Neural Network(ANN)です。一般的なANNは、学習のための情報を入れる**入力層**、入力情報のパターンを元に反応するかしないか（神経シナプスの発火に対応）を学習する**中間層（または隠れ層）**、最後の**出力層**の三層から構成されます。ディープラーニングはこの隠れ層の部分が分岐なども含む多層構造になっています。近年盛んに研究されている分野であり、上記のような多層構造を持つという単純なモデルのみではなく様々な構造のモデルが日々論文に報告されています。それらすべてのフォローは本書の範囲を超えるので記載はしません。
 
 == TensorFlowとKerasについて
 
-Pythonでディープラーニングを行いたい場合、複数のフレームワークがあります。Theano, Tensorflow, Keras, MXNet, Chainer, PyTorch、、、色々あり、これを使えば絶対間違い無いというものは正直無いのですが、今回はGoogle社が開発しているフレームワークのTensorflow, Kerasを使ってみましょう。
-Tensorflowは最近1.xから2.xにメジャーアップデートをしています。2.x版はまだ登場したばかりで参考情報も少ないので、1.x系でまずは試すのが良いかと思います。また同じ1.x版でもバージョンによってAPIが少しづつ変わっていますので、今後動かしたいコードがあった時にどのバージョンで書かれているかなども気をつけると良いです。
+Pythonでディープラーニングを行う場合、複数のフレームワークがあります。主なものを挙げると
 
-KerasはTensoflowなどをバックエンドに動く高レベルニューラルネットワークAPIです。Tensorflowは低レベルなAPIを提供しているので、ご自身で細かい部分まで実装したいというニーズにはぴったりですが、実験的にちょっと試してみたいという時にはKerasを利用するとテンポよくコードが書けるでしょう。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので筆者は最近Tensorflowに統合されたKerasを利用するようにしました。
+- Theano
+- link:https://www.tensorflow.org/[Tensorflow]
+- link:https://keras.io/[Keras]
+- MXNet
+- Chainer
+- PyTorch
 
+これを使えば絶対間違い無いというものはありませんが、本書ではGoogle社が開発しているフレームワークのTensorflow/Kerasを使います。
 
-参考リンク
+Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報も少ないので、1.x系でまずは試すのが良いかと思います。また同じ1.xでもバージョンによってAPIが少し変更されていますので、今後動かしたいコードがあった時にどのバージョンで書かれているかに気をつける必要があります。
 
-- https://www.tensorflow.org/
-- https://keras.io/
+KerasはTensoflowなどの低レベルフレームワークをバックエンドに動く高レベルAPIで、Kerasを利用することでテンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので本書ではTensorflowに統合されたKerasを利用します。
 
-== Google colabについて（保留中）
+== Google colabについて
 
 == インストールしてみよう
 
 では早速Tensorflow と　Kerasをインストールしてみましょう。
-anacondaを利用しインストールする場合、GPU対応バージョンを使うか、CPUバージョンを使うかでコマンドが少し異なります。現時点の最新版では残念ながらMacOs用パッケージではGPUサポートは無いようです。
-以下の例ではcondaコマンドを利用しインストールしていますが、pipコマンドを利用しインストールすることもできます。公式のドキュメントにも記載がありますが基本的にはCondaで環境を作ったらCondaでパッケージを入れることが望ましいでしょう。
+anacondaを利用しインストールする場合、GPU対応バージョンを使うか、CPUバージョンを使うかでコマンドが少し異なります。現時点の最新版では残念ながらMacOS用パッケージではGPUサポートは無いようです。
 
 [source, bash]
 ----
@@ -37,10 +41,11 @@ $ conda install -c anaconda tensorflow-gpu
 $ conda install -c conda-forge keras 
 ----
 
+この例ではcondaコマンドを利用しインストールしていますが、pipコマンドを利用しインストールすることもできますので、その場合はlink:https://www.tensorflow.org/install[公式ドキュメント]を参照してください。しかしながら基本的にはCondaで環境を作ったらCondaでパッケージを入れることが望ましいでしょう。
+
 
 参考リンク
 
-- https://www.tensorflow.org/install
 - https://keras.io/#installation
 - https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html
 
