@@ -7,10 +7,12 @@
 
 Pythonでディープラーニングを行いたい場合、複数のフレームワークがあります。Theano, Tensorflow, Keras, MXNet, Chainer, PyTorch、、、色々あり、これを使えば絶対間違い無いというものは正直無いのですが、今回はGoogle社が開発しているフレームワークのTensorflow, Kerasを使ってみましょう。
 Tensorflowは最近1.xから2.xにメジャーアップデートをしています。2.x版はまだ登場したばかりで参考情報も少ないので、1.x系でまずは試すのが良いかと思います。また同じ1.x版でもバージョンによってAPIが少しづつ変わっていますので、今後動かしたいコードがあった時にどのバージョンで書かれているかなども気をつけると良いです。
+
 KerasはTensoflowなどをバックエンドに動く高レベルニューラルネットワークAPIです。Tensorflowは低レベルなAPIを提供しているので、ご自身で細かい部分まで実装したいというニーズにはぴったりですが、実験的にちょっと試してみたいという時にはKerasを利用するとテンポよくコードが書けるでしょう。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので筆者は最近Tensorflowに統合されたKerasを利用するようにしました。
 
 
 参考リンク
+
 - https://www.tensorflow.org/
 - https://keras.io/
 
@@ -37,6 +39,8 @@ $ conda install -c conda-forge keras
 
 
 参考リンク
+
 - https://www.tensorflow.org/install
 - https://keras.io/#installation
 - https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html
+
