@@ -1,4 +1,5 @@
 = グラフ構造を利用した類似性の評価
+:imagesdir: images
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
@@ -95,10 +96,71 @@ python indexing.py <先のコマンドでできたフラグメントのファイ
 以上のコマンドを実行するとmmp.csvに分子A,分子B,分子AのID,分子BのID,変換された構造のSMIRKS,共通部分構造（context）が出力されます。ペアのIDが出力されていますのでこれに活性や物性などの評価値を紐つけることで構造変化と評価結果の変動の解析を実施することができます。
 MMPは変換前、変換後の情報をノード、変換ルールをエッジと考えるとグラフ構造です。Cytoscapeなどのネットワーク可視化ツールを利用するとMMPAの結果をより直感的に把握することができます。
 
-興味のある方は参考リンクを参照に実施してみるとよいでしょう。（いずれ追記予定）
+興味のある方はさらに読みすすめてください。
 
+== Cytoscapeを使ってMMPネットワークを可視化する
 
-参考リンク
+WARNING: この内容は入門の内容を超えるので興味がなければ飛ばしてください
 
-- https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025[Cytoscapeでchemoinformatics]
-- https://cytoscape.org/[Cytoscape]
+RDKitには先に紹介したMMPAの他にlink:https://github.com/rdkit/mmpdb[mmpdb]という別プロジェクトがあります。
+こちらはコマンドラインのツール群とデータベースシステムとして提供されているため、長期的な管理がしやすいという特徴があります。本セクションではこのmmpdbとCytoscapeを利用したMMPの可視化を紹介します。
+
+=== Cytoscapeのインストール
+
+link:https://cytoscape.org/[Cytoscape]はオープンソースのネットワーク可視化ソフトで色々なシーンで広く使われています。化合物の構造表示用プラグインを使うことで構造のネットワークを表示することができます。
+
+インストールは簡単でlink:https://cytoscape.org/download.html[ダウンロードサイト]から対応するOSのインストーラをダウンロードして指示のとおりにインストールするだけです。
+
+インストールが完了したらCytoscapeを起動して化合物構造描画用のChemviz2プラグインをインストールします。手順は簡単でApps->App Managerからchemviz2を選択してインストールします。
+
+image::ch07/chemviz2.png[AppManager, width=400]
+
+=== mmpdbからgmlファイルを作成する
+
+今回利用するデータはlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL930273[<Inhibition of recombinant GSK3-beta> J. Med. Chem. (2008) 51:2062-2077]の151化合物です。MMPAを行うにはHTSのような探索データではなくて構造最適化のようにスキャフォールドが決まっているものを使うのが原則です。
+
+コマンドの流れを載せておきます。smilesのtextと活性や物性値のデータは別々にデータベースに登録する必要があります。
+
+[source, bash]
+----
+$ mmpdb fragment smiles.txt -o CHEMBL930273.fragments     # fragmentation
+$ mmpdb index CHEMBL930273.fragments -o CHEMBL930273.db   # make db
+$ mmpdb loadprops -p act.txt CHEMBL930273.db              # load properties
+----
+
+そのあとCytoscapeで読み込むためのgmlファイルを作成しますが、これは本書の範囲を超えるので割愛します。もし興味があるのであればlink:https://github.com/Mishima-syk/12/tree/master/kzfm[コード]を直接読んでもらうといいのですが
+流れは以下のとおりです。
+
+. link:https://github.com/Mishima-syk/12/blob/master/kzfm/mmp2gml.py[mmpdbからpython-igraphをつかてgmlファイルを作る]
+. link:https://github.com/Mishima-syk/12/blob/master/kzfm/CHEMBL930273.gml[gmlファイル]をCytoscapeで読み込む
+. Cytoscapeで属性をいい感じにいじる
+.. ノードの大きさを物性値に対応
+.. エッジの色を活性差に対応
+.. chemviz2 pluginで構造を描画してノードに貼り付ける
+
+=== 解釈する
+
+さてMMPネットワークを見てみましょう。あまり活性差のないMMPが左上の方に固まっています。右下の方にはエッジが赤い（活性差が大きい）ものが観測されます。このような小さな置換基変化が大きな活性差を生むもMMPをActivity Cliffと呼びます。一般的にActivity Cliffは創薬プロジェクトにおいてブレークスルーとなることが多いのでこういう活性変化を見逃さないことが大切です。
+
+image::ch07/mmp01.png[MMPN, width=600]
+
+実際にどういう置換が行われたのかを確認すると、OH基をMeO基に置換することで活性が消失しています。
+
+image::ch07/mmp02.png[MMPN, width=600]
+
+MMPだけではこのように単純に事実しかわかりませんが、今回はもう少し深く考察するために類似体の複合体結晶構造を探してみました。するとlink:https://www.rcsb.org/structure/5OY4[PDBID:5OY4]というGSK3βと類似化合物の複合体が見つかりました。
+
+image::ch07/mmp03.png[MMPN, width=600]
+
+OH基をMeO基に置換するとポケットの壁にぶつかりそうですね。したがってこのActivity Cliffはリガンドと蛋白質の立体障害
+により引き起こされたと考察されます。
+
+image::ch07/mmp04.png[MMPN, width=600]
+
+MMPを視覚化して解釈する例を紹介しました。Activity Cliffの解釈は純粋にサイエンティフィックに楽しいのでみなさんもどんどんチャレンジしてみてください。
+
+=== 参考資料
+
+- link:https://github.com/Mishima-syk/12/tree/master/kzfm[MMP visualization with Cytoscape]
+- link:https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025[Cytoscapeでchemoinformatics]
+- link:https://chemrxiv.org/articles/mmpdb_An_Open_Source_Matched_Molecular_Pair_Platform_for_Large_Multi-Property_Datasets/5999375[mmpdb: An Open Source Matched Molecular Pair Platform for Large Multi-Property Datasets]
