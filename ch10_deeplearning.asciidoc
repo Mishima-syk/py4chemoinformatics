@@ -22,6 +22,7 @@ KerasはTensoflowなどの低レベルフレームワークをバックエンド
 
 == Google colabについて
 
+link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]はクラウド上で実行できるJupyter notebook環境です。Theano, Thensorflow, Keras, Pytorchなどのディープラーニング用のフレームワークがインストールされています。それ以外にも数多くのパッケージが最初から入っています。また時間の制限はありますがGPU、TPUも無料で利用可能です。気軽にGPUが使え、かつローカルの環境を汚染しないという点は非常に魅力的です。利用にはGoogleのアカウントを作成する必要があります。もしGoogleアカウントを持っておらず興味がある方は是非この機会にアカウントを取得し利用してみましょう。
 
 
 == インストールしてみよう
