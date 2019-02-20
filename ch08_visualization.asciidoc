@@ -11,11 +11,11 @@
 
 アッセイから全化合物表示をします。
 
-image::ch08/ch08_1.png[Screenshot1]
+image::ch08/ch08_1.png[Screenshot1, size=500]
 
 続いてタブ区切りテキストでダウンロードします。
 
-image::ch08/ch08_2.png[Screenshot2]
+image::ch08/ch08_2.png[Screenshot2, size=500]
 
 この中にSMILES形式で構造情報が入っています。
 
@@ -82,6 +82,8 @@ d.columns = ["PCA1", "PCA2"]
 g = ggplot(aes(x="PCA1", y="PCA2"), data=d) + geom_point() + xlab("PCA1") + ylab("PCA2")
 ----
 
+image::ch08/pca.png[PCA, size=500]
+
 == tSNEをつかったマッピング
 
 PCAよりもtSNEのほうが分離能がよく、メディシナルケミストの感覚により近いと言われています。
@@ -101,6 +103,8 @@ d = pd.DataFrame(tx)
 d.columns = ["PCA1", "PCA2"]
 g = ggplot(aes(x="PCA1", y="PCA2"), data=d) + geom_point() + xlab("PCA1") + ylab("PCA2")
 ----
+
+image::ch08/tsne.png[PCA, size=500]
 
 今回紹介したPCA,tSNEの他にも色々な描画方法があるので調べてみるとよいでしょう。
 
