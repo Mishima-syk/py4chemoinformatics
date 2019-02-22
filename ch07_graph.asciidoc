@@ -7,10 +7,9 @@
 
 == 主要な骨格による分類(MCS)
 
-最大共通部分構造Maximum Common Substructure(MCS)探索はケモインフォマティクスの分野でよく利用される手法です。これは、類似性探索、クラスタリング、分子のアライメントなどに有効です。
-MCS探索は様々なツールで実行することが可能ですが、ここではRDKitを用いてMCS探索をやってみましょう。
- 以下はnotebooksにあるコードの抜粋です。今回はRDKitに添付されているcdk2.sdfというファイルを利用します。RDConfig.RDDocsDirというコマンドを利用すると、みなさんが構築した環境に応じたインストール先を踏まえたパスを取ることができますので、ファイルの場所を絶対パスで指定するより簡便です。その後ろに追加でBooks/data/cdk2.sdfをつけることで目的とするファイルにアクセスすることができます。
-別のファイルで試したい場合はファイルパスの部分を適宜変更してください。
+最大共通部分構造Maximum Common Substructure(MCS)とは与えられた化学構造群において共通する最大の部分構造のことです。RDKitではMCS探索のためにす。RDKitではMCS探索のためにrdFMCSというモジュールが用意されています。
+
+今回はMCS探索のサンプルデータとしてrdkitに用意されているcdk2.sdfというファイルを利用します。RDConfig.RDDocsDirが、サンプルデータのディレクトリを表す変数で、そのディレクトリ以下のBooks/data/にcdk2.sdfというファイルが存在するので、os.path.joinメソッドでファイルパスを設定します。尚、os.path.joinはosのパスの違いを吸収するためのpythonの組み込みモジュールです。
 
 [source, python]
 ----
@@ -20,14 +19,15 @@ from rdkit.Chem import RDConfig
 from rdkit.Chem import rdFMCS
 from rdkit.Chem.Draw import IPythonConsole
 from rdkit.Chem import Draw
-filepath = os.path.join(RDConfig.RDDocsDir, 'Book/data/cdk2.sdf')
+filepath = os.path.join(RDConfig.RDDocsDir, 'Book', 'data', 'cdk2.sdf')
 mols = [mol for mol in Chem.SDMolSupplier(filepath)]
 # 構造を確認します
 Draw.MolsToGridImage(mols[:7], molsPerRow=5)
 ----
 
-読み込んだ分子を使ってMCSを取得します。RDKitではMCSの取得方法に複数のオプションが指定できます。
+image::ch07/mcs01.png[compounds]
 
+読み込んだ分子を使ってMCSを取得します。RDKitではMCSの取得方法に複数のオプションが指定できます。
 以下にそれぞれのオプションでの例を示します。
 
 . デフォルト
@@ -39,22 +39,38 @@ Draw.MolsToGridImage(mols[:7], molsPerRow=5)
 result1 = rdFMCS.FindMCS(mols[:7])
 mcs1 = Chem.MolFromSmarts　(result1.smartsString)
 mcs1
-result2 = rdFMCS.FindMCS(mols[:7], atomCompare=rdFMCS.AtomCompare.CompareAny)
-mcs2 = Chem.MolFromSmarts(result2.smartsString)
-mcs2
-result3 = rdFMCS.FindMCS(mols[:7], bondCompare=rdFMCS.BondCompare.CompareAny)
-mcs3 = Chem.MolFromSmarts(result3.smartsString)
-mcs3
 print(result1.smartsString)
-print(result2.smartsString)
-print(result3.smartsString)
-#[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
-#[#6]-,:[#6]-,:[#6]-[#6]-[#8,#7]-[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
 #[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
 ----
 
-MCSは分子同士の最大公約数と言えます。つまり、MCSが大きいほどその分子同士は似ている言えます。しかしながら谷本係数のような数値として評価する指標はあまりありません。MCSに基づく類似性がスコア化できたらクラスタリングや、それ以外の解析においても有用では無いでしょうか。
-幸運なことに、RDKitにはMCSのコンセプトに近い、細かな変化には影響を受けにくい類似性評価のアルゴリズムFraggle Similarityというものも実装されています。以下に簡単ではありますがその利用例を示します。
+image::ch07/mcs02.png[MCS01]
+
+[source, python]
+----
+result2 = rdFMCS.FindMCS(mols[:7], atomCompare=rdFMCS.AtomCompare.CompareAny)
+mcs2 = Chem.MolFromSmarts(result2.smartsString)
+mcs2
+print(result2.smartsString)
+#[#6]-,:[#6]-,:[#6]-[#6]-[#8,#7]-[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
+----
+
+image::ch07/mcs03.png[MCS02]
+
+[source, python]
+----
+result3 = rdFMCS.FindMCS(mols[:7], bondCompare=rdFMCS.BondCompare.CompareAny)
+mcs3 = Chem.MolFromSmarts(result3.smartsString)
+mcs3
+print(result3.smartsString)
+#[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
+----
+
+image::ch07/mcs04.png[MCS03]
+
+RDKitではMCSに基づく類似性を数値化するアルゴリズムのひとつにFraggle Similarityが実装されています。これを利用することでクラスタリングや、類似性に基づいた解析が行なえます。
+
+caution:: Fraggle Similarityはフィンタープリントに比べて細かな変化には影響を受けにくい?
+
 
 [source, python]
 ----
@@ -65,6 +81,8 @@ print(sim, match)
 match_st = Chem.MolFromSmiles(match)
 match_st
 ----
+
+image::ch07/mcs05.png[FraggleSimilarity]
 
 このようにFraggleSimilarityは類似性及びマッチした部分構造を返します。ECFPを利用した類似性よりもケミストの感覚に近いことが多いです。
 
