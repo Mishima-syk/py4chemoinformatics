@@ -7,7 +7,7 @@
 
 == 主要な骨格による分類(MCS)
 
-最大共通部分構造Maximum Common Substructure(MCS)とは与えられた化学構造群において共通する最大の部分構造のことです。RDKitではMCS探索のためにす。RDKitではMCS探索のためにrdFMCSというモジュールが用意されています。
+最大共通部分構造Maximum Common Substructure(MCS)とは与えられた化学構造群において共通する最大の部分構造のことです。RDKitではMCS探索のためにrdFMCSというモジュールが用意されています。
 
 今回はMCS探索のサンプルデータとしてrdkitに用意されているcdk2.sdfというファイルを利用します。RDConfig.RDDocsDirが、サンプルデータのディレクトリを表す変数で、そのディレクトリ以下のBooks/data/にcdk2.sdfというファイルが存在するので、os.path.joinメソッドでファイルパスを設定します。尚、os.path.joinはosのパスの違いを吸収するためのpythonの組み込みモジュールです。
 
