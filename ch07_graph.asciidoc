@@ -1,11 +1,11 @@
-= グラフ構造を利用した類似性の評価
+== グラフ構造を利用した類似性の評価
 :imagesdir: images
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
 通常、06章で紹介したようなフィンガープリントを使い分子同士の類似性を評価することが多いですが、グラフ構造を利用して類似性を評価する手法もあります。次に紹介するMCS（Maximum Common Substructure）は対象となる分子集合の共通部分構造のことを指します。共通部分構造が多いほとそれらの分子はより似ていると考えます。
 
-== 主要な骨格による分類(MCS)
+=== 主要な骨格による分類(MCS)
 
 最大共通部分構造Maximum Common Substructure(MCS)とは与えられた化学構造群において共通する最大の部分構造のことです。RDKitではMCS探索のためにrdFMCSというモジュールが用意されています。
 
@@ -91,7 +91,7 @@ image::ch07/mcs05.png[FraggleSimilarity]
 - https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00036[Efficient Heuristics for Maximum Common Substructure Search]
 - https://raw.github.com/rdkit/UGM_2013/master/Presentations/Hussain.Fraggle.pdf[Fraggle – A new similarity searching algorithm]
 
-== Matched Molecular Pairによる化合物ネットワーク
+=== Matched Molecular Pairによる化合物ネットワーク
 
 創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造を変換していくかは非常に重要な問題です。加えてステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することも大切です。
 
@@ -117,14 +117,14 @@ MMPは変換前、変換後の情報をノード、変換ルールをエッジ�
 
 興味のある方はさらに読みすすめてください。
 
-== Cytoscapeを使ってMMPネットワークを可視化する
+=== Cytoscapeを使ってMMPネットワークを可視化する
 
 WARNING: この内容は入門の内容を超えるので興味がなければ飛ばしてください
 
 RDKitには先に紹介したMMPAの他にlink:https://github.com/rdkit/mmpdb[mmpdb]という別プロジェクトがあります。
 こちらはコマンドラインのツール群とデータベースシステムとして提供されているため、長期的な管理がしやすいという特徴があります。本セクションではこのmmpdbとCytoscapeを利用したMMPの可視化を紹介します。
 
-=== Cytoscapeのインストール
+==== Cytoscapeのインストール
 
 link:https://cytoscape.org/[Cytoscape]はオープンソースのネットワーク可視化ソフトで色々なシーンで広く使われています。化合物の構造表示用プラグインを使うことで構造のネットワークを表示することができます。
 
@@ -134,7 +134,7 @@ link:https://cytoscape.org/[Cytoscape]はオープンソースのネットワー
 
 image::ch07/chemviz2.png[AppManager, width=400]
 
-=== mmpdbからgmlファイルを作成する
+==== mmpdbからgmlファイルを作成する
 
 今回利用するデータはlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL930273[<Inhibition of recombinant GSK3-beta> J. Med. Chem. (2008) 51:2062-2077]の151化合物です。MMPAを行うにはHTSのような探索データではなくて構造最適化のようにスキャフォールドが決まっているものを使うのが原則です。
 
@@ -157,7 +157,7 @@ $ mmpdb loadprops -p act.txt CHEMBL930273.db              # load properties
 .. エッジの色を活性差に対応
 .. chemviz2 pluginで構造を描画してノードに貼り付ける
 
-=== 解釈する
+==== 解釈する
 
 さてMMPネットワークを見てみましょう。あまり活性差のないMMPが左上の方に固まっています。右下の方にはエッジが赤い（活性差が大きい）ものが観測されます。このような小さな置換基変化が大きな活性差を生むもMMPをActivity Cliffと呼びます。一般的にActivity Cliffは創薬プロジェクトにおいてブレークスルーとなることが多いのでこういう活性変化を見逃さないことが大切です。
 
@@ -178,8 +178,10 @@ image::ch07/mmp04.png[MMPN, width=600]
 
 MMPを視覚化して解釈する例を紹介しました。
 
-=== 参考資料
+==== 参考資料
 
 - link:https://github.com/Mishima-syk/12/tree/master/kzfm[MMP visualization with Cytoscape]
 - link:https://www.slideshare.net/KazufumiOhkawa/mishimasyk141025[Cytoscapeでchemoinformatics]
 - link:https://chemrxiv.org/articles/mmpdb_An_Open_Source_Matched_Molecular_Pair_Platform_for_Large_Multi-Property_Datasets/5999375[mmpdb: An Open Source Matched Molecular Pair Platform for Large Multi-Property Datasets]
+
+<<<

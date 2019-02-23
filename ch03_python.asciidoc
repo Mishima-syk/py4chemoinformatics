@@ -1,4 +1,4 @@
-= Pythonプログラミングの基礎
+== Pythonプログラミングの基礎
 
 この章ではPythonに触れたことのない読者のために**効率的に勉強するため**のサイトや本などを紹介します。
 もしこれ以降の章でわからないことなどがあったら、この章のサイトや本を参考に学んでみてください。
@@ -37,7 +37,7 @@ https://stackoverflow.com/[stackoverflow]::
 http://mishima-syk.github.io/[Mishima.syk]::
 本書を書いている人たちが集まるコミュニティです。特に話題をPythonに限定していませんが、Pythonを使ったネタが多めです。かなりガチですが、初心者対応も万全でハンズオンに定評があります。質問されれば大体答えられます。
 
-== Jupyter notebookで便利に使おう
+=== Jupyter notebookで便利に使おう
 
 link:https://jupyter.org/[Jupyter notebook]を利用すると、コードを書いて結果を確認するということがとても簡単にできるようになります。Jupyter notebookは下記のような特徴があります。
 
@@ -57,3 +57,5 @@ $ jupyter notebook
 ----
 
 と打てばjupyter notebookが立ち上がります。本書ではこれ以降特に断らない限りjupyter notebook上でのコードを実行することとします。
+
+<<<
