@@ -3,12 +3,11 @@
 v0.1(Draft) 2019/02/23
 :toc:
 :toc-title: 目次
-
 :lang: ja
 :doctype: book
 :docname: AI創薬のためのケモインフォマティクス入門
-:imagesdir: images
+:imagesdir: ./images
 :pdf-fontsdir: fonts
 :pdf-style: py4c-theme.yml
 :source-highlighter: coderay
-:title-logo-image: image:python_for_ci.png[]
+:title-logo-image: image::mishimasyk.png[mishima.syk]
