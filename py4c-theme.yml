@@ -1,6 +1,16 @@
 font:
   catalog:
     # Noto Serif supports Latin, Latin-1 Supplement, Latin Extended-A, Greek, Cyrillic, Vietnamese & an assortment of symbols
+    AozoraMincho:
+      normal: AozoraMinchoRegular.ttf
+      italic: AozoraMinchoMedium.ttf
+      bold: AozoraMinchoHeavy.ttf
+      bold_italic: AozoraMinchoBlack.ttf
+    RictyDiminished:
+      normal: RictyDiminished-Regular.ttf
+      italic: RictyDiminished-Oblique.ttf
+      bold: RictyDiminished-Bold.ttf
+      bold_italic: RictyDiminished-BoldOblique.ttf
     Noto Serif:
       normal: notoserif-regular-subset.ttf
       bold: notoserif-bold-subset.ttf
@@ -40,8 +50,8 @@ base:
   #font_color: [0, 0, 0, 92%]
   font_family: Noto Serif
   # choose one of these font_size/line_height_length combinations
-  #font_size: 14
-  #line_height_length: 20
+  font_size: 10
+  line_height_length: 15
   #font_size: 11.25
   #line_height_length: 18
   #font_size: 11.2

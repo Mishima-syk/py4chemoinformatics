@@ -11,4 +11,4 @@ ch09_qsar.asciidoc \
 ch10_deeplearning.asciidoc \
 ch11_dlqsar.asciidoc \
 ch12_generativemodels.asciidoc > py4c.asciidoc
-asciidoctor-pdf -r asciidoctor-pdf-cjk -a pdf-style=py4c-theme.yml -o pdf/py4chemoinformatics.pdf py4c.asciidoc
+asciidoctor-pdf -r asciidoctor-pdf-cjk -a pdf-fontsdir=fonts -a pdf-style=py4c-theme.yml -o pdf/py4chemoinformatics.pdf py4c.asciidoc
