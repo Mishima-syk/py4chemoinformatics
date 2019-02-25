@@ -69,9 +69,6 @@ image::ch07/mcs04.png[MCS03]
 
 RDKitではMCSに基づく類似性を数値化するアルゴリズムのひとつにFraggle Similarityが実装されています。これを利用することでクラスタリングや、類似性に基づいた解析が行なえます。
 
-caution:: Fraggle Similarityはフィンタープリントに比べて細かな変化には影響を受けにくい?
-
-
 [source, python]
 ----
 from rdkit.Chem.Fraggle import FraggleSim
@@ -84,7 +81,7 @@ match_st
 
 image::ch07/mcs05.png[FraggleSimilarity]
 
-このようにFraggleSimilarityは類似性及びマッチした部分構造を返します。ECFPを利用した類似性よりもケミストの感覚に近いことが多いです。
+このようにFraggleSimilarityは類似性及びマッチした部分構造を返します。ECFPを利用した類似性よりもケミストの感覚に近いことが多いです。詳しくは参考リンクを参照してください。
 
 参考リンク
 
@@ -94,6 +91,8 @@ image::ch07/mcs05.png[FraggleSimilarity]
 === Matched Molecular Pairによる化合物ネットワーク
 
 創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造を変換していくかは非常に重要な問題です。加えてステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することも大切です。
+
+TIP: 興味があればlink:https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf[https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf]を読むとよいです。
 
 このような解析を行うためのアプローチの一つがMatched Molecular Pair Analyisis（MMPA)です。MMPAでは、二つの分子の活性、物性の変化と部分構造の変化を比較し解析します。例えばフェニル基上に置換基、Cl基->F基に変換した場合、活性、物性にどのような変化があるかを調べます。もし変換の前後で活性は変化せず物性パラメータが大きく変化したらそれは生物等価体と見なせます。MMPは基本的には変換した部位に着目する解析手法であり、大規模なデータを利用することでパラメータの変動のトレンドの把握ができます。
 
