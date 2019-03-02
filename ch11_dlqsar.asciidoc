@@ -180,7 +180,7 @@ plt.plot(np.arange(np.min(y_test2)-0.5, np.max(y_test2)+0.5), np.arange(np.min(y
 
 さて、ここまで分子のフィンガープリントを入力としてRandomForestやDNNのモデルを作成してきました。DNNが大きく注目を浴びた理由の一つに、人が特徴量を抽出しないでもモデルが特徴量を認識してくれる。という点が挙げられます。例えば画像の分類においては、画像データピクセルの情報からlink:https://en.wikipedia.org/wiki/Scale-invariant_feature_transform[SIFT]という特徴量を人が定義し、これを入力としたモデルが作られていましたが、現在のDNNにおいては基本的に画像のピクセル情報そのものを利用しています。
 私たちが学んでいるケモインフォマティクスに置き換えてみると、SIFTは分子のフィンガープリントに相当します。ですのでここ(入力)をもっとPrimitiveな表現に変えることでDNNの性能が上がるのではないか、そのような入力はないのか。と考えるのは至極当然の流れです。2015年、Harvard大学の, Alan Aspuru-Guzikらのグループは一つのチャレンジとしてlink:https://arxiv.org/pdf/1509.09292.pdf[Neural Finger print/NFP]というものを提唱しました。
-今まで利用してきたECFPとNFPと何が違うのかですが、彼らの論文中の図を描きに引用して維持します。
+今まで利用してきたECFPとNFPと何が違うのかですが、彼らの論文中の図を下記に引用して示します。
 
 image::ch11/ch11_nfp.png[Neural Finger Print]
 
