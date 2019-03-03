@@ -20,6 +20,7 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 
 - Pythonの基礎
 - Jupyter notebookで便利に使おう
+- Pythonで機械学習をするために
 
 == link:ch04_database.asciidoc[04 ケモインフォマティクスのための公開データベース]
 
