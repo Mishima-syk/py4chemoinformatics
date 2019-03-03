@@ -76,11 +76,11 @@ x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_stat
 
 入力が2048次元、300ニューロンの全結合層が三層、最後の出力層が2となるニューラルネットワークを作成します。活性化関数にはReLU, 出力層には二次元の多クラス分類のためにSoftmaxを用いました。
 
-TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
-
 Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。
 
 Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いました。
+
+TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
 
 TIP: link:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
@@ -102,9 +102,9 @@ model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accu
 
 NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意おり、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
 
-モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
+NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackprobagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
 
-NOTE:　DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackprobagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
+モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
 
 [source, python]
 ----
