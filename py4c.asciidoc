@@ -27,21 +27,38 @@ v0.1(Draft) 2019/02/23
 
 === RDKitとは
 
-warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。ただし「申し上げる」とか「踏まえて」とか「であると言えるでしょう」とかのまわりくどい言い回しは避けること。ただし、もし自称を「拙者」に統一するなら「ござる」調で書いても構いません。
+warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。下書き段階での「申し上げる」とか「踏まえて」等の言い回しをそのまま生かし、自称を「拙者」にして「ござる」調が＠iwatobipen風文体です。
+
+拙者、本書の一部を執筆する＠iwatobipenと申す。ここではRDKitに関して熱く語ってみようと思うでござる。
+
+RDKitのRDはなんなのか？実は**Rational Discovery**の略省であり現在のオープンソースの前身となるフレームワークは2000年に開発されたでござる。随分と古いでござるね。その後、2006年にコードがオープンソースになりsourceforgeから公開されたでござる。PythonのケモインフォマティクスツールキットはRDKit以外にOpenBabelもあるぞと思われる読者もござろう。OpenBabelは2005年に最初のリリースがなされておる。いずれも、もう10年以上の歴史があるツールキットでござる。拙者がこの辺りに興味を持ち始めた2012年ころはどちらかというとOpenBabelの方がメジャーだったように記憶しておる。当時、日本語の記事はほぼ皆無であり、拙者は本書共著者であり業界のパイオニアでもある@fmkz___殿のlink:https://kzfm.hatenablog.com/archive[ケモインフォクックブック]などを参考にRDKitのコードを書いて試行錯誤していたでござるよ。なお、ケモインフォ関連のヒストリを追いたい御仁はこちらのlink:http://blog.kzfmix.com/entry/1542711744[記事]を一読されるとよかろう。
+
+おっと話が横道に逸れてしまった。本題に戻ろう。
 
 開発者のGreg Landorum氏いわく
 
 [quote, Greg Landorum]
 RDKitはケモインフォマティクスにおけるSwiss Army Knifeであり、様々な機能ピースの集合体である
 
-これはまさに的を得た表現でlink:https://www.rdkit.org/docs/[公式ドキュメント]を見ればわかりますが、既に色々な機能が用意されています。RDkitは開発やユーザーコミュニティの活動も活発で、どんどん機能追加がされています。最近では日本語での解説サイトも増えてきており初学者の導入のハードルも低くなってきています。
+これはまさに的を得た表現でござる。link:https://www.rdkit.org/docs/[公式ドキュメント]を見ればわかるでござろうが、既に色々な機能が用意されておるのだ。
+化合物情報の読み込み、書き込みに始まり、構造の描画、３次元構造配座発生、Rグループ分解、記述子、フィンガープリント計算、ファーマコフォア算出などなど、挙げればきりがないほどの機能が実装されておる。解析から可視化まで幅広い範囲をカバーできるのだ。
+さらにContributerらがRDKitを利用して開発したツール群がその熱い想いとともにlink:https://github.com/rdkit/rdkit/tree/master/Contrib[Contrib]フォルダーに詰められておるのだ。どうじゃ使ってみたくならんか？。拙者はもう書きながらも早くRDKitに触りたくなってきたでござる。
+
+RDKitは開発やユーザーコミュニティの活動も活発で、どんどん機能追加がされておる。世界中の有能な研究者が全体で盛り上げ開発していくスタイルはオープンソースの強みであり、魅力であろう。もしチャンスがあれば毎年開催されるRDKit User Group Meetingへの参加を検討するのもよかろう。Face2Faceでユーザー同士議論ができるのは何事にも代え難いものがあるでござる。
+また、先ほど拙者が使い始めた当時は日本語の情報ほぼ皆無であったと申したが、近年は非常に良質な日本語記事もたくさん増えておる。下記に何個か例を挙げたでござる。Qiitaにも多くの記事が掲載されているでござるよ。
+
+また、有志によるlink:http://rdkit-users.jp/[RDKit-users-jp]も立ち上がっておる。英語での質問がちょっと、、、と思われる御仁はこちらに質問を投げかけるとよかろう。また、最新版のRDKitのリポジトリには日本語のドキュメントもマージされておる。こちらも参考になるであろう。
+本書ではRDKitの一部の機能しか使わん。それでも非常に多くのことができると感じていただけるはずじゃ。興味持ちはじめの一歩を踏み出したら後はどんどん自分の興味、意欲のままに足を進めていけばよかろう。何かわからないことがあれば上記のコミュニティに問いかけ、本書のリポジトリへIssueとして投稿してみるのもよかろう。
+**さあそれでは始めよう！**
 
 ==== 主な日本語解説サイト
 
-- link
-- link
-- link
-- link
+- link:http://rdkit-users.jp/[rdkit-users.jp]
+- link:https://magattaca.github.io/RDKit_unofficial_translation_JP/[RDKitドキュメンテーション非公式日本語版サイト]
+- link:https://future-chem.com/[化学の新しいカタチ]
+
+
+
 
 === 対象読者
 
@@ -533,9 +550,6 @@ image::ch07/mcs04.png[MCS03]
 
 RDKitではMCSに基づく類似性を数値化するアルゴリズムのひとつにFraggle Similarityが実装されています。これを利用することでクラスタリングや、類似性に基づいた解析が行なえます。
 
-caution:: Fraggle Similarityはフィンタープリントに比べて細かな変化には影響を受けにくい?
-
-
 [source, python]
 ----
 from rdkit.Chem.Fraggle import FraggleSim
@@ -548,7 +562,7 @@ match_st
 
 image::ch07/mcs05.png[FraggleSimilarity]
 
-このようにFraggleSimilarityは類似性及びマッチした部分構造を返します。ECFPを利用した類似性よりもケミストの感覚に近いことが多いです。
+このようにFraggleSimilarityは類似性及びマッチした部分構造を返します。ECFPを利用した類似性よりもケミストの感覚に近いことが多いです。詳しくは参考リンクを参照してください。
 
 参考リンク
 
@@ -558,6 +572,8 @@ image::ch07/mcs05.png[FraggleSimilarity]
 === Matched Molecular Pairによる化合物ネットワーク
 
 創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造を変換していくかは非常に重要な問題です。加えてステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することも大切です。
+
+TIP: 興味があればlink:https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf[https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf]を読むとよいです。
 
 このような解析を行うためのアプローチの一つがMatched Molecular Pair Analyisis（MMPA)です。MMPAでは、二つの分子の活性、物性の変化と部分構造の変化を比較し解析します。例えばフェニル基上に置換基、Cl基->F基に変換した場合、活性、物性にどのような変化があるかを調べます。もし変換の前後で活性は変化せず物性パラメータが大きく変化したらそれは生物等価体と見なせます。MMPは基本的には変換した部位に着目する解析手法であり、大規模なデータを利用することでパラメータの変動のトレンドの把握ができます。
 
@@ -1003,6 +1019,223 @@ $ conda install -c conda-forge keras
 - https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html
 
 <<<
+== ディープラーニングを利用した構造活性相関
+:imagesdir: images
+
+link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[１０章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をしてみましょう。
+
+=== DNNを利用した予測モデル構築
+
+まずはじめに、DNNを利用したシンプルな予測モデルを構築してみましょう。９章と同じデータを使います。まず最初に分類モデルを作成してみましょう。以下の例ではPositiveのラベルを[0, 1], Negativeのラベルを[1, 0]というように二次元のOneHotベクトル表現にしてモデルを作成します。KerasのModelオブジェクトを利用してモデルを作成した場合、上記の二次元のそれぞれの期待値、すなわちPosiの可能性、とNegaの可能性が予測値として得られます。従ってあとでクラスに変換するにはNumpyのArgmax関数を使い二次元のうちの最大のIndexを取るという手順を取ります。（*このアプローチは次元が増えても同じです１０クラスの分類なら10次元で各クラスの期待値が帰ってきますので同じくArgmaxを使うことで最も期待値が大きいクラスのインデックスを取得できます。）
+ではまず必要なライブラリをインポートしましょう。
+
+
+[source, python]
+----
+from rdkit import Chem, DataStructs
+from rdkit.Chem import AllChem, Draw
+from rdkit.Chem.Draw import IPythonConsole
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, f1_score
+# DNN用のライブラリを読み込みます。
+from keras.layers import Input
+from keras.layers import Dense
+from keras.layers import Dropout
+from keras.layers import Activation
+from keras.models import Model
+----
+
+次にデータを読み込みます。先に述べましたように９章は”POS”/”NEG”をlabelsというリストに入れたので一次元の表現でしたが今回はここが二次元になっています。
+
+[source, python]
+----
+mols = []
+labels = []
+with open("ch09_compounds.txt") as f:
+    header = f.readline()
+    smiles_index = -1
+    for i, title in enumerate(header.split("\t")):
+        if title == "CANONICAL_SMILES":
+            smiles_index = i
+        elif title == "STANDARD_VALUE":
+            value_index = i
+    for l in f:
+        ls = l.split("\t")
+        mol = Chem.MolFromSmiles(ls[smiles_index])
+        mols.append(mol)
+        val = float(ls[value_index])
+        if val < 1000:
+            labels.append([0,1]) # Positive
+        else:
+            labels.append([1,0]) # Negative
+labels = np.array(labels)
+----
+
+データの準備ができたので、分類モデルと回帰モデルを順次作成してみましょう。
+まずは回帰モデルです。予測モデルの入力は９章と同じくECFPを利用しています。DNNの構築には入力のデータの次元を明示的に指定する必要がありますので、nBitsという変数を定義していますが後の手順は全く同じです。 train_test_splitにrandom_stateで適当な整数を指定すると毎回同じデータが得られるので検証の再現に有用です。
+
+[source, python]
+----
+nBits = 2048
+fps = []
+for mol in mols:
+    fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2, nBits=nBits)
+    arr = np.zeros((1,))
+    DataStructs.ConvertToNumpyArray(fp, arr)
+    fps.append(arr)
+fps = np.array(fps)
+
+x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_state=794)
+----
+
+以下の例は入力が2048次元、300ニューロンの全結合層が三層、最後の出力層が2となるニューラルネットワークの例です。活性化関数にはReLU, 出力層にはSoftmaxを用いています。link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるメリットがあることが知られております。また出力層にsoftmaxを用いているのは今回二次元の多クラス分類をするためです。
+
+Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルというものもあり、下記の例（Functional API）よりもシンプルにネットワークを記述する方法もあります。今回あえてFunctional APIでモデルを定義したのはこちらに慣れておくと、入力が複数の場合やより複雑なモデルの構築にも対応しやすいと思ったからです。公式サイトやQiitaなどにも色々な例がありますのでもしSequentialの書き方に興味がある方は是非調べてみてください。
+Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。Kerasはモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて各種変更することができます。多クラス分類は今回利用している'categorical_crossentropy'がよいです。link:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
+
+[source, python]
+----
+# Define DNN classifier model
+epochs = 10
+inputlayer1 = Input(shape=(nBits, ))
+x1 = Dense(300, activation='relu')(inputlayer1)
+x1 = Dropout(0.2)(x1)
+x1 = Dense(300, activation='relu')(x1)
+x1 = Dropout(0.2)(x1)
+x1 = Dense(300, activation='relu')(x1)
+output1 = Dense(2, activation='softmax')(x1)
+model1 = Model(inputs=[inputlayer1], outputs=[output1])
+
+model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+----
+
+モデルができたら後はScikit-learnと同じ感覚でFit/Predictが使えます。DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較しその差（LOSS)を減らすように重みを更新する（Backprobagation）という手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので冗長に長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
+
+[source, python]
+----
+hist1 = model1.fit(x_train1, y_train1, epochs=epochs)
+----
+
+最後に結果を可視化してみます。
+
+[source, python]
+----
+%matplotlib inline
+import matplotlib.pyplot as plt
+plt.plot(range(epochs), hist1.history['acc'], label='acc')
+plt.legend()
+plt.plot(range(epochs), hist1.history['loss'], label='loss')
+plt.legend()
+----
+
+今回の例ではだいたい6Epochくらいでモデルが良い制度になっているようですね。
+
+次にテストデータで検証します。
+
+[source, python]
+----
+y_pred1 = model1.predict(x_test1)
+y_pred_cls1 = np.argmax(y_pred1, axis=1)
+y_test_cls1 =np.argmax(y_test1, axis=1)
+confusion_matrix(y_test_cls1, y_pred_cls1)
+----
+
+ちょっと微妙でしょうか、、、
+
+さあ次は回帰モデルを作ってみましょう！
+基本的には先ほどと同じです。今度は回帰ですので最後の出力層は値そのもの、つまり一次元になります。また活性化関数はSigmoidなどでは０〜１になってしまうのでLinearとしています。学習データは９章のコードを流用しています。
+
+[source, python]
+----
+from math import log10
+from sklearn.metrics import r2_score
+pIC50s = []
+with open("ch09_compounds.txt") as f:
+    header = f.readline()
+    for i, title in enumerate(header.split("\t")):
+        if title == "STANDARD_VALUE":
+            value_index = i
+    for l in f:
+        ls = l.split("\t")
+        val = float(ls[value_index])
+        pIC50 = 9 - log10(val)
+        pIC50s.append(pIC50)
+
+pIC50s = np.array(pIC50s)
+x_train2, x_test2, y_train2, y_test2 = train_test_split(fps, pIC50s, random_state=794)
+----
+
+次にモデルを定義します。Lossの部分が先ほどの分類モデルとは異なるMSEになっていることに注意して下さい。
+
+[source, python]
+----
+epochs = 50
+inputlayer2 = Input(shape=(nBits, ))
+x2 = Dense(300, activation='relu')(inputlayer2)
+x2 = Dropout(0.2)(x2)
+x2 = Dense(300, activation='relu')(x2)
+x2 = Dropout(0.2)(x2)
+x2 = Dense(300, activation='relu')(x2)
+output2 = Dense(1, activation='linear')(x2)
+model2 = Model(inputs=[inputlayer2], outputs=[output2])
+model2.compile(optimizer='adam', loss='mean_squared_error')
+----
+
+ここまでできたら後は同じです。
+
+[source, python]
+----
+hist = model2.fit(x_train2, y_train2, epochs=epochs)
+y_pred2 = model2.predict(x_test2)
+r2_score(y_test2, y_pred2)
+plt.scatter(y_test2, y_pred2)
+plt.xlabel('exp')
+plt.ylabel('pred')
+plt.plot(np.arange(np.min(y_test2)-0.5, np.max(y_test2)+0.5), np.arange(np.min(y_test2)-0.5, np.max(y_test2)+0.5))
+----
+
+いかがでしょうか。予測モデルはちょっとUnderEstimate気味ですかね。DNNは重ねるレイヤーの数、ドロップアウトの割合、隠れ層のニューロンの数、活性化関数の種類など数多くのパラメータをチューニングする必要があります。今回の例は決め打ちでしたが、色々パラメータを変えてモデルの性能を比較してみるのも面白いのではないでしょうか。
+
+=== 記述子を工夫してみる(neural fingerprint)
+
+さて、ここまで分子のフィンガープリントを入力としてRandomForestやDNNのモデルを作成してきました。DNNが大きく注目を浴びた理由の一つに、人が特徴量を抽出しないでもモデルが特徴量を認識してくれる。という点が挙げられます。例えば画像の分類においては、画像データピクセルの情報からlink:https://en.wikipedia.org/wiki/Scale-invariant_feature_transform[SIFT]という特徴量を人が定義し、これを入力としたモデルが作られていましたが、現在のDNNにおいては基本的に画像のピクセル情報そのものを利用しています。
+私たちが学んでいるケモインフォマティクスに置き換えてみると、SIFTは分子のフィンガープリントに相当します。ですのでここ(入力)をもっとPrimitiveな表現に変えることでDNNの性能が上がるのではないか、そのような入力はないのか。と考えるのは至極当然の流れです。2015年、Harvard大学の, Alan Aspuru-Guzikらのグループは一つのチャレンジとしてlink:https://arxiv.org/pdf/1509.09292.pdf[Neural Finger print/NFP]というものを提唱しました。
+今まで利用してきたECFPとNFPと何が違うのかですが、彼らの論文中の図を下記に引用して示します。
+
+image::ch11/ch11_nfp.png[Neural Finger Print]
+
+ECFP(Circular Fingerprints)は入力の分子それぞれの原子からN近傍（Nは任意）までの原子までの情報をHash関数（この例ではMod）任意の値に変換、で固定長のベクトルに直すといったものでした。ざっくりいうと部分構造の有無を0/1のビット情報に直したものを利用するといったイメージです。一方、今回紹介するNFPはECFPにコンセプトは似ているのですが、Hash関数の部分がSigmoidに、Modで離散化する部分がSoftmaxになっています。従って入力されるデータセットによりECFPよりも柔軟に分子のフィンガープリントを生成することが期待されます。
+
+この論文が発表されて以降、数多くの実装がGithubに公開されています。各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないとごかなかったりと意外と今回構築した環境で動くものがありません。
+ということで、Keras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
+興味のある方は利用してみてください。コードは下記のコマンドでご自身のPCにCloneできると思います。
+
+[source, python]
+----
+git clone https://github.com/iwatobipen/keras-neural-graph-fingerprint.git
+----
+
+ここにexample.pyというファイルがありこれを眺めるとなんとなく雰囲気がつかめると思います。分子の表現は、これまでの例はフィンガープリントでしたが、今回はこのフィンガープリントそのものをDNNが学習します。
+ということで、分子をグラフとして表現したものが入力になります。Atom_matrixとして(max_atoms, num_atom_features)を
+Edge_matrixとして(max_atoms, max_degree)を
+bond_tensorとして(max_atoms, max_degree, num_bond_features)という三つの行列を使います。分子はそれぞれ原子数が異なりますのでmax_atomsで最大限指数を定義しています。こうしないと分子ごとに異なる行列サイズの入力となりバッチ学習に向かなくなります。
+とりあえずExampleを実行するのであれば下記のコマンドでOKです。
+
+[source, python]
+----
+python example.py
+----
+
+参考リンク
+link:https://arxiv.org/abs/1509.09292[NGF-paper]
+link:https://arxiv.org/abs/1611.03199[DeepChem-paper]
+link:http://www.keiserlab.org/[keiserlab]
+link:https://github.com/HIPS/neural-fingerprint[HIPS NFP]
+link:https://github.com/debbiemarkslab/neural-fingerprint-theano[Theano base]
+link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
+link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
+link:https://github.com/deepchem/deepchem[DeepChem]
 == コンピューターに化学構造を考えさせる
 :imagesdir: images
 
