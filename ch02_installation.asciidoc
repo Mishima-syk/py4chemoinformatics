@@ -41,6 +41,7 @@ $ source activate py4chemoinformatis
 $ conda install -c conda-forge rdkit
 $ conda install -c conda-forge seaborn
 $ conda install -c conda-forge ggplot
+$ conda install -c conda-forge git
 ----
 
 === インストールしたパッケージの説明
@@ -56,6 +57,10 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 ==== ggplot
 
 グラフ描画パッケージの一つで**一貫性のある文法で合理的に描ける**ことが特徴です。もともとはRという統計解析言語のために開発されましたが、yhatという会社によりlink:http://ggplot.yhathq.com/[Pythonに移植]されました。
+
+==== git
+
+バージョン管理システムです。本書ではgitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
 
 === Condaについてもう少し詳しく
 

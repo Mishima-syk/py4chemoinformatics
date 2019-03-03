@@ -1,13 +1,16 @@
 == ディープラーニングを利用した構造活性相関
 :imagesdir: images
 
-link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[１０章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をしてみましょう。
+link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[10章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をします。
 
 === DNNを利用した予測モデル構築
 
-まずはじめに、DNNを利用したシンプルな予測モデルを構築してみましょう。９章と同じデータを使います。まず最初に分類モデルを作成してみましょう。以下の例ではPositiveのラベルを[0, 1], Negativeのラベルを[1, 0]というように二次元のOneHotベクトル表現にしてモデルを作成します。KerasのModelオブジェクトを利用してモデルを作成した場合、上記の二次元のそれぞれの期待値、すなわちPosiの可能性、とNegaの可能性が予測値として得られます。従ってあとでクラスに変換するにはNumpyのArgmax関数を使い二次元のうちの最大のIndexを取るという手順を取ります。（*このアプローチは次元が増えても同じです１０クラスの分類なら10次元で各クラスの期待値が帰ってきますので同じくArgmaxを使うことで最も期待値が大きいクラスのインデックスを取得できます。）
-ではまず必要なライブラリをインポートしましょう。
+はじめにDNNを利用したシンプルな予測モデルを構築してみます。ここでは9章と同じデータを使います。最初に分類モデルを作成し、Positiveのラベルを[0, 1], Negativeのラベルを[1, 0]の二次元のOneHotベクトルで表します。KerasのModelオブジェクトを利用してモデルを作成した場合、上記の二次元のそれぞれの期待値が得られます。どちらのクラスに属する可能性が高いかを知るにはNumpyのArgmax関数を使えばよいです。
 
+TIP: このアプローチは次元が増えても同じで、１０クラス分類であれば10次元で各クラスの期待値が返ってくるので同様にArgmaxを使うことで最も期待値が大きいクラスのインデックスを取得できます。
+
+
+必要なライブラリをインポートします。
 
 [source, python]
 ----
@@ -25,7 +28,7 @@ from keras.layers import Activation
 from keras.models import Model
 ----
 
-次にデータを読み込みます。先に述べましたように９章は”POS”/”NEG”をlabelsというリストに入れたので一次元の表現でしたが今回はここが二次元になっています。
+次にデータを読み込みます。9章では”POS”/”NEG”をlabelsというリストに入れたので一次元表現でしたが、今回はここが二次元になっています。
 
 [source, python]
 ----
@@ -51,8 +54,11 @@ with open("ch09_compounds.txt") as f:
 labels = np.array(labels)
 ----
 
-データの準備ができたので、分類モデルと回帰モデルを順次作成してみましょう。
-まずは回帰モデルです。予測モデルの入力は９章と同じくECFPを利用しています。DNNの構築には入力のデータの次元を明示的に指定する必要がありますので、nBitsという変数を定義していますが後の手順は全く同じです。 train_test_splitにrandom_stateで適当な整数を指定すると毎回同じデータが得られるので検証の再現に有用です。
+続いて分類モデルと回帰モデルを順次作成します。
+
+まずは回帰モデルで、入力は9章と同じECFPを利用しています。DNNの構築には入力データの次元を明示的に指定する必要があるためnBitsという変数を定義しています。 
+
+TIP: train_test_splitにrandom_stateで適当な整数を指定すると毎回同じデータが得られるので検証の際に有用です。
 
 [source, python]
 ----
@@ -68,10 +74,15 @@ fps = np.array(fps)
 x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_state=794)
 ----
 
-以下の例は入力が2048次元、300ニューロンの全結合層が三層、最後の出力層が2となるニューラルネットワークの例です。活性化関数にはReLU, 出力層にはSoftmaxを用いています。link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるメリットがあることが知られております。また出力層にsoftmaxを用いているのは今回二次元の多クラス分類をするためです。
+入力が2048次元、300ニューロンの全結合層が三層、最後の出力層が2となるニューラルネットワークを作成します。活性化関数にはReLU, 出力層には二次元の多クラス分類のためにSoftmaxを用いました。
 
-Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルというものもあり、下記の例（Functional API）よりもシンプルにネットワークを記述する方法もあります。今回あえてFunctional APIでモデルを定義したのはこちらに慣れておくと、入力が複数の場合やより複雑なモデルの構築にも対応しやすいと思ったからです。公式サイトやQiitaなどにも色々な例がありますのでもしSequentialの書き方に興味がある方は是非調べてみてください。
-Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。Kerasはモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて各種変更することができます。多クラス分類は今回利用している'categorical_crossentropy'がよいです。link:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
+TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
+
+Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。
+
+Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いました。
+
+TIP: link:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 [source, python]
 ----
@@ -89,7 +100,11 @@ model1 = Model(inputs=[inputlayer1], outputs=[output1])
 model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 ----
 
-モデルができたら後はScikit-learnと同じ感覚でFit/Predictが使えます。DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較しその差（LOSS)を減らすように重みを更新する（Backprobagation）という手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので冗長に長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
+NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意おり、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
+
+モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
+
+NOTE:　DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackprobagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
 
 [source, python]
 ----
@@ -108,7 +123,7 @@ plt.plot(range(epochs), hist1.history['loss'], label='loss')
 plt.legend()
 ----
 
-今回の例ではだいたい6Epochくらいでモデルが良い制度になっているようですね。
+今回の例ではだいたい6Epochくらいでモデルが良い制度になりました。
 
 次にテストデータで検証します。
 
@@ -122,8 +137,7 @@ confusion_matrix(y_test_cls1, y_pred_cls1)
 
 ちょっと微妙でしょうか、、、
 
-さあ次は回帰モデルを作ってみましょう！
-基本的には先ほどと同じです。今度は回帰ですので最後の出力層は値そのもの、つまり一次元になります。また活性化関数はSigmoidなどでは０〜１になってしまうのでLinearとしています。学習データは９章のコードを流用しています。
+回帰モデルも基本的には先ほどの分類問題と同じです。今度は回帰なので最後の出力層は値そのもの、つまり一次元になります。また活性化関数はSigmoidなどでは0-1になってしまうのでLinearとしています。学習データは9章のコードを流用しています。
 
 [source, python]
 ----
@@ -145,7 +159,7 @@ pIC50s = np.array(pIC50s)
 x_train2, x_test2, y_train2, y_test2 = train_test_split(fps, pIC50s, random_state=794)
 ----
 
-次にモデルを定義します。Lossの部分が先ほどの分類モデルとは異なるMSEになっていることに注意して下さい。
+次にモデルを定義します。Lossの部分が先ほどの分類モデルとは異なり、MSEになっていることに注意して下さい。
 
 [source, python]
 ----
@@ -174,32 +188,34 @@ plt.ylabel('pred')
 plt.plot(np.arange(np.min(y_test2)-0.5, np.max(y_test2)+0.5), np.arange(np.min(y_test2)-0.5, np.max(y_test2)+0.5))
 ----
 
-いかがでしょうか。予測モデルはちょっとUnderEstimate気味ですかね。DNNは重ねるレイヤーの数、ドロップアウトの割合、隠れ層のニューロンの数、活性化関数の種類など数多くのパラメータをチューニングする必要があります。今回の例は決め打ちでしたが、色々パラメータを変えてモデルの性能を比較してみるのも面白いのではないでしょうか。
+いかがでしょうか。予測モデルはちょっとUnderEstimate気味ですかね。DNNは重ねるレイヤーの数、ドロップアウトの割合、隠れ層のニューロンの数、活性化関数の種類など数多くのパラメータをチューニングする必要があります。今回の例は決め打ちでしたが、色々パラメータを変えてモデルの性能を比較してみるのも面白いです。
 
 === 記述子を工夫してみる(neural fingerprint)
 
-さて、ここまで分子のフィンガープリントを入力としてRandomForestやDNNのモデルを作成してきました。DNNが大きく注目を浴びた理由の一つに、人が特徴量を抽出しないでもモデルが特徴量を認識してくれる。という点が挙げられます。例えば画像の分類においては、画像データピクセルの情報からlink:https://en.wikipedia.org/wiki/Scale-invariant_feature_transform[SIFT]という特徴量を人が定義し、これを入力としたモデルが作られていましたが、現在のDNNにおいては基本的に画像のピクセル情報そのものを利用しています。
-私たちが学んでいるケモインフォマティクスに置き換えてみると、SIFTは分子のフィンガープリントに相当します。ですのでここ(入力)をもっとPrimitiveな表現に変えることでDNNの性能が上がるのではないか、そのような入力はないのか。と考えるのは至極当然の流れです。2015年、Harvard大学の, Alan Aspuru-Guzikらのグループは一つのチャレンジとしてlink:https://arxiv.org/pdf/1509.09292.pdf[Neural Finger print/NFP]というものを提唱しました。
-今まで利用してきたECFPとNFPと何が違うのかですが、彼らの論文中の図を下記に引用して示します。
+さて、ここまで分子のフィンガープリントを入力としてRandomForestやDNNのモデルを作成してきました。DNNが大きく注目を浴びた理由の一つに人が特徴量を抽出しなくてもモデルが特徴量を認識してくれるということが挙げられます。
+
+例えば画像の分類においては、からlink:https://en.wikipedia.org/wiki/Scale-invariant_feature_transform[SIFT]という特徴量を人が定義し、これを入力としたモデルが作られていましたが、現在のDNNにおいては基本的に画像のピクセル情報そのものを利用しています。
+
+ケモインフォマティクスに置き換えてみると、SIFTは分子のフィンガープリントに相当します。ですのでここ(入力)をもっとPrimitiveな表現に変えることでDNNの性能が上がるのではないか？と考えるのは至極当然の流れです。2015年、Harvard大学の, Alan Aspuru-Guzikらのグループは一つのチャレンジとしてlink:https://arxiv.org/pdf/1509.09292.pdf[Neural Finger print/NFP]というものを提唱しました。
+
+今まで利用してきたECFPとNFPとの違いを、彼らの論文中の図を引用して示します。
 
 image::ch11/ch11_nfp.png[Neural Finger Print]
 
 ECFP(Circular Fingerprints)は入力の分子それぞれの原子からN近傍（Nは任意）までの原子までの情報をHash関数（この例ではMod）任意の値に変換、で固定長のベクトルに直すといったものでした。ざっくりいうと部分構造の有無を0/1のビット情報に直したものを利用するといったイメージです。一方、今回紹介するNFPはECFPにコンセプトは似ているのですが、Hash関数の部分がSigmoidに、Modで離散化する部分がSoftmaxになっています。従って入力されるデータセットによりECFPよりも柔軟に分子のフィンガープリントを生成することが期待されます。
 
-この論文が発表されて以降、数多くの実装がGithubに公開されています。各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないとごかなかったりと意外と今回構築した環境で動くものがありません。
-ということで、Keras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
-興味のある方は利用してみてください。コードは下記のコマンドでご自身のPCにCloneできると思います。
+この論文が発表されて以降、数多くの実装がGithubに公開されていますが、各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないと動作しなかったりと意外と環境依存のものが多く扱いにくい状況になっています。残念なことに今回構築した環境で動作するものが公開されていませんのでKeras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
 
 [source, python]
 ----
 git clone https://github.com/iwatobipen/keras-neural-graph-fingerprint.git
 ----
 
-ここにexample.pyというファイルがありこれを眺めるとなんとなく雰囲気がつかめると思います。分子の表現は、これまでの例はフィンガープリントでしたが、今回はこのフィンガープリントそのものをDNNが学習します。
-ということで、分子をグラフとして表現したものが入力になります。Atom_matrixとして(max_atoms, num_atom_features)を
-Edge_matrixとして(max_atoms, max_degree)を
-bond_tensorとして(max_atoms, max_degree, num_bond_features)という三つの行列を使います。分子はそれぞれ原子数が異なりますのでmax_atomsで最大限指数を定義しています。こうしないと分子ごとに異なる行列サイズの入力となりバッチ学習に向かなくなります。
-とりあえずExampleを実行するのであれば下記のコマンドでOKです。
+example.pyというファイルのコードを眺めるとなんとなく雰囲気がつかめると思います。分子の表現は、これまでの例はフィンガープリントをRDKitを使い生成していましたが、今回はこのフィンガープリントそのものをDNNが学習します。
+
+ということで、分子をグラフとして表現したものが入力になります。Atom_matrixとして(max_atoms, num_atom_features)をEdge_matrixとして(max_atoms, max_degree)をbond_tensorとして(max_atoms, max_degree, num_bond_features)という三つの行列を使います。分子はそれぞれ原子数が異なるためmax_atomsで最大原子数を定義しています。こうすることで分子ごとに同一の行列サイズの入力となりバッチ学習が可能となります。
+
+Exampleを実行するのであれば下記のコマンドを入力してください。
 
 [source, python]
 ----
@@ -207,11 +223,11 @@ python example.py
 ----
 
 参考リンク
-link:https://arxiv.org/abs/1509.09292[NGF-paper]
-link:https://arxiv.org/abs/1611.03199[DeepChem-paper]
-link:http://www.keiserlab.org/[keiserlab]
-link:https://github.com/HIPS/neural-fingerprint[HIPS NFP]
-link:https://github.com/debbiemarkslab/neural-fingerprint-theano[Theano base]
-link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
-link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
-link:https://github.com/deepchem/deepchem[DeepChem]
+- link:https://arxiv.org/abs/1509.09292[NGF-paper]
+- link:https://arxiv.org/abs/1611.03199[DeepChem-paper]
+- link:http://www.keiserlab.org/[keiserlab]
+- link:https://github.com/HIPS/neural-fingerprint[HIPS NFP]
+- link:https://github.com/debbiemarkslab/neural-fingerprint-theano[Theano base]
+- link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
+- link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
+- link:https://github.com/deepchem/deepchem[DeepChem]
