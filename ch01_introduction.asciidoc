@@ -71,7 +71,7 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 まず、本書を書くきっかけとなったlink:https://twitter.com/bonohu[@bonohu]に感謝したいと思います。@bonohuのlink:https://www.amazon.co.jp/dp/4895929019[Dr. Bonoの生命科学データ解析]の出版後のMishima.sykのミーティングで「Bono本のChemoinformatics版あったらいいよね」という話がどこからともなくでた際に、「書けばええんちゃう、むしろなんで書かんの？」と言ってくれたことが本書を執筆するきっかけであることは間違いありません。またlink:https://twitter.com/souyakuchan[@souyakuchan]のlink:https://adventar.org/calendars/3041[創薬 Advent Calendar 2018]も執筆のいい刺激になりました。というより、ここで章立てしなかったら具体的に動き出さなかったと思います。
 
-また、忘れてはいけないのはy-samaの存在です。link:http://mishima-syk.github.io/[Mishima.syk]を初期から盛り上げてきたy-samaは2019/01/06に永眠されました。彼はlink:https://qiita.com/y\__sama/items/5b62d31cb7e6ed50f02c[データサイエンティストを目指す人のpython環境構築 2016]やlink:https://medium.com/@y__sama/druglikeness%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E3%82%88%E3%82%82%E3%82%84%E3%81%BE%E8%A9%B1-8310cec5ffc6[Druglikenessについてのよもやま話]といった素晴らしいエントリを残しました。彼が存命であればきっと3人で執筆していたし、内容ももっと充実していたことでしょう。この出来事も我々に執筆しようという強い動機を与えました。
+また、忘れてはいけないのはy-samaの存在です。link:http://mishima-syk.github.io/[Mishima.syk]を初期から盛り上げてきたy-samaは2019/01/06に永眠されました。彼はlink:https://qiita.com/y\__sama/items/5b62d31cb7e6ed50f02c[データサイエンティストを目指す人のpython環境構築 2016]やlink:https://medium.com/@y__sama/druglikeness%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E3%82%88%E3%82%82%E3%82%84%E3%81%BE%E8%A9%B1-8310cec5ffc6[Druglikenessについてのよもやま話]といった素晴らしいエントリを残しました。彼が存命であればきっと3人で執筆していたし、内容ももっと充実していたことでしょう。この出来事も我々に執筆しようという強い動機を与えました。
 
 最後にMishima.sykに参加して美味しいワインやビールを飲みなから毎度熱い議論を交わしていただいた参加者の方々にも感謝します。いくつかのコンテンツはMishima.sykでの発表をもとにしており、みなさんのフィードバックをもとに加筆訂正してあります。
 

@@ -10,6 +10,9 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 == link:ch01_introduction.asciidoc[01 はじめに]
 
 - ケモインフォマティクスとは？
+- RDKitとは？
+- 対象読者
+- 謝辞
 
 == link:ch02_installation.asciidoc[02 ケモインフォマティクスのための環境を整えよう]
 
