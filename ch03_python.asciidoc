@@ -1,9 +1,11 @@
 == Pythonプログラミングの基礎
 
+=== Pythonの基礎
+
 この章ではPythonに触れたことのない読者のために**効率的に勉強するため**のサイトや本などを紹介します。
 もしこれ以降の章でわからないことなどがあったら、この章のサイトや本を参考に学んでみてください。
 
-=== Pythonを本で学びたい
+==== Pythonを本で学びたい
 
 https://www.amazon.co.jp/dp/4774196436/[Pythonスタートブック増補改訂版]::
 プログラミング自体が初心者であればこの本が良いでしょう。
@@ -11,7 +13,7 @@ https://www.amazon.co.jp/dp/4774196436/[Pythonスタートブック増補改訂�
 https://www.amazon.co.jp/dp/B01NCOIC2P/[みんなのPython 第4版]::
 Javascript,Javaなどのなにかプログラミングを少しかじっていて、これからPythonを覚えたいのであればこちらの本をおすすめします。
 
-=== Pythonを本以外で学びたい
+==== Pythonを本以外で学びたい
 
 https://www.pycon.jp/support/bootcamp.html[Python Boot Camp(初心者向けPythonチュートリアル)]::
 一般社団法人PyCon JPが開催している初心者向けPythonチュートリアルイベントです。全国各地で行われているので近くで開催される場合には参加するとよいでしょう
@@ -23,7 +25,7 @@ https://www.udemy.com/topic/python/[udemy/python]::
 オンライン学習サービスを利用するのも効果的な手段のひとつですが、筆者は試したことがないのでわかりません。
 周りの評判を効いてみても良いでしょう。YouTubeを探すのもありです。
 
-=== 本書でわからないことがあったら
+==== 本書でわからないことがあったら
 
 https://github.com/Mishima-syk/py4chemoinformatics/issues[py4chemoinformaticsのissues]::
 py4chemoinformaticsのissuesに質問していただければお答えします。わかりにくい場合だったら修正しますので、よりよくなってみんなハッピー。
@@ -39,17 +41,13 @@ http://mishima-syk.github.io/[Mishima.syk]::
 
 === Jupyter notebookで便利に使おう
 
-link:https://jupyter.org/[Jupyter notebook]を利用すると、コードを書いて結果を確認するということがとても簡単にできるようになります。Jupyter notebookは下記のような特徴があります。
+link:https://jupyter.org/[Jupyter notebook]を利用すると、コードを書いて結果を確認するということがとても簡単にできるようになります。
 
-- Jupyter notebookはWebブラウザーベースのツールであす。コードだけではなくリッチテキスト、数式、なども同時にノートブックに埋め込めます。また結果を非常に綺麗な図として可視化することも容易にできます。
-- ブラウザ上でコードを書くとシンタックスハイライトや、インデント挿入を自動で行います。
-- 計算の結果をHTML, LaTex, PNG, SVGなどを利用して高品質な画像などで出力できます。
-- Markdwon記法に対応しているので、コメントを入れてコードが解釈しやすくなります。
-- LaTex記法を利用し数式を綺麗にかけます
+Jupyter notebookはWebブラウザーベースのツールで、コードだけではなくリッチテキスト、数式、なども同時にノートブックに埋め込めます。また結果を非常に綺麗な図として可視化することも容易にできます。つまり、化学構造やグラフも描画できるため、ケモインフォマティクスのためのプラットフォームとして使いやすいです。さらに、プログラミングの生産性を上げるような、ブラウザ上でコードを書くとシンタックスハイライトや、インデント挿入を自動で行ってくれたりという便利な機能もついているので、特に初学者は積極的に使うべきでしょう。
 
-=== 使い方
+==== 使い方
 
-anacondaをインストール済みであればterminal(Windowsではanaconda prompt)から
+terminal(Windowsではanaconda prompt)から
 
 [source, bash]
 ----
@@ -57,5 +55,15 @@ $ jupyter notebook
 ----
 
 と打てばjupyter notebookが立ち上がります。本書ではこれ以降特に断らない限りjupyter notebook上でのコードを実行することとします。
+
+=== Pythonで機械学習をするために
+
+chemoinformaticsに限らず、インフォマティクスを学ぶにあたり、機械学習は外せません。本書でもある程度の機械学習の知識があることを前提に進めていきます。Pythonで機械学習をするにはlink:https://scikit-learn.org/stable/[Scikit-learn]というライブラリを利用するのが定番であり、本書でも特に説明せずに利用していきますが、初学者のために参考となる書籍などをすすめておきます。
+
+link:https://www.amazon.co.jp/dp/4873117984/[Pythonではじめる機械学習 ―scikit-learnで学ぶ特徴量エンジニアリングと機械学習の基礎]::
+Pythonで機械学習をやるための基礎を学べます。数学的な表現があまりないので読みやすいです。
+
+link:https://github.com/Mishima-syk/sklearn-tutorial[sklearn-tutorial]::
+y-samaによるsklearnのチュートリアルハンズオンのjupyter notebookです。
 
 <<<
