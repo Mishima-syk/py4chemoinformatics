@@ -61,7 +61,7 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 - Google colab
 - インストールしてみよう
 
-== link:ch11_dlqsar.asciidoc[ディープラーニングを利用した構造活性相関]
+== link:ch11_dlqsar.asciidoc[11 ディープラーニングを利用した構造活性相関]
 
 - 記述子を工夫してみる(neural fingerprint)
 - DNNを利用した予測モデル構築
