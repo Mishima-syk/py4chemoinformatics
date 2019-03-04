@@ -106,9 +106,9 @@ heading:
 title_page:
   align: right
   logo:
-    top: 5%
+    top: 30%
   title:
-    top: 70%
+    top: 80%
     font_size: $heading_h1_font_size
     font_color: 999999
     line_height: 0.9
