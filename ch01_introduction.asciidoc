@@ -79,7 +79,10 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 
 === おまけ2
 
-NOTE: もしあなたが創薬研究のインフォマティクスに携わっているのであればchemoinformatics, bioinformaticsと括る必要はありません。むしろ創薬の枠組みのなかでどちらもできる方が懐が深くなり、より深い考察ができるようになるので両方できるようになりましょう。そのほうが絶対楽しいです。link:https://www.amazon.co.jp/dp/4780909201/[DRY解析教本]やlink:https://www.amazon.co.jp/dp/4297103192[生命科学データ解析を支える情報技術]もきっとあなたのキャリアの助けになるでしょう。
+.Chemoinformatics or Bioinformatics?
+****
+もしあなたが創薬研究のインフォマティクスに携わっているのであればchemoinformatics, bioinformaticsと括る必要はありません。むしろ創薬の枠組みのなかでどちらもできる方が懐が深くなり、より深い考察ができるようになるので両方できるようになりましょう。そのほうが絶対楽しいです。link:https://www.amazon.co.jp/dp/4780909201/[DRY解析教本]やlink:https://www.amazon.co.jp/dp/4297103192[生命科学データ解析を支える情報技術]もきっとあなたのキャリアの助けになるでしょう。
+****
 
 === 謝辞
 
