@@ -62,6 +62,13 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 
 バージョン管理システムです。本書ではgitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
 
+「はじめに」でも説明しましたが、以下のコマンドでpdfを含む全てのデータがダウンロードされますので必要に応じてダウンロードしてください。
+
+[source, bash]
+----
+$ git https://github.com/Mishima-syk/py4chemoinformatics.git
+----
+
 === Condaについてもう少し詳しく
 
 先に説明したAnacondaでインストールされるデフォルトのPythonのージョンは3.7ですが、本書執筆時点でconda-forgeで配布されているRDKitのパッケージが要求するPythonのバージョンが3.6となっています。このためcondaで仮想環境を構築しました。

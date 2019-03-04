@@ -16,7 +16,7 @@
 もう一つの方法としてフィンガープリントを利用することもできます。フィンガープリントとは分子の部分構造を0,1のバイナリーで表現したもので部分構造の有無とビットのon(1),off(0)を対応させたものです。
 フィンガープリントには固定長FPと可変長FPの二種類が存在し、古くはMACSKeyという固定長FP(予め部分構造とインデックスが決められているFP)が使われていましたが、現在ではECFP4(Morgan2)という可変長FPが利用されるのが普通です。
 
-RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf[Gregさんのスライド]が詳しいので熟読してください。
+RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf[開発者のGregさんのスライド]が詳しいので熟読してください。
 
 今回はこのECFP4(Morgan2)を利用した類似性評価をしてみましょう。
 
@@ -56,21 +56,18 @@ DataStructs.TanimotoSimilarity(fp1, fp2)
 
 === （おまけ）もう少しドラッグライクな分子の類似性を評価する
 
-ここでは抗凝固薬として上市されているapixaban, rivaroxiabanの類似性を評価します。
+ここでは抗凝固薬として上市されているlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL231779/[apixaban], link:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL198362/[rivaroxiaban]の類似性を評価します。
 構造を見るとわかりますが、なんとなく似ていますが、どの部分とどの部分が対応するか
 想像つくでしょうか？実はこの２つの化合物は両方共FXaというセリンプロテアーゼの同じポケットに
 同じような結合モードで結合することでプロテアーゼの働きを阻害することが知られています。興味があれば
 実際にPDBから複合体の結晶構造を探して眺めてみるといいかもしれません。
 （pymol入門まで拡張するか？要検討）
 
-SMILESはChEMBLのものを利用しています（要リンク？）。
-
 [source, python]
 ----
 apx = Chem.MolFromSmiles("COc1ccc(cc1)n2nc(C(=O)N)c3CCN(C(=O)c23)c4ccc(cc4)N5CCCCC5=O")
 rvx = Chem.MolFromSmiles("Clc1ccc(s1)C(=O)NC[C@H]2CN(C(=O)O2)c3ccc(cc3)N4CCOCC4=O")
 ----
-
 
 構造を眺めてみます。メトキシフェニルとクロロチオールは同じような結合様式をとるんでしょうか？このような結合の成分をきちんと評価する方法もあるのですが、本書の内容を超えるので説明はしません。もし興味があればFragment Molecular Orbital Methodで調べてみてください
 
