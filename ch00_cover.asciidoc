@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.10001(Draft) 2019/03/04
+v0.10010(Draft) 2019/03/04
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -10,4 +10,4 @@ v0.10001(Draft) 2019/03/04
 :pdf-fontsdir: fonts
 :pdf-style: py4c-theme.yml
 :source-highlighter: coderay
-:title-logo-image: image::mishimasyk.png[mishima.syk]
+:title-logo-image: image::souyakuchan.png[mishima.syk]
