@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.1(Draft) 2019/02/23
+v0.10001(Draft) 2019/03/04
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -11,7 +11,7 @@ v0.1(Draft) 2019/02/23
 :pdf-style: py4c-theme.yml
 :source-highlighter: coderay
 :title-logo-image: image::mishimasyk.png[mishima.syk]
-== はじめに
+== 1章: はじめに
 
 ケモインフォマティクス(Chemoinformatics)とは、主に化学に関連するデータをコンピュータを用いて解析し、様々な課題を解くために用いる方法論のことです。ケモインフォマティクスという言葉は1990年終わりから2000年はじめに定義され、現在では製薬業界でも薬学系のアカデミアで一般的に利用されている技術となっています。
 
@@ -27,7 +27,7 @@ v0.1(Draft) 2019/02/23
 
 === RDKitとは
 
-warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。下書き段階での「申し上げる」とか「踏まえて」等の言い回しをそのまま生かし、自称を「拙者」にして「ござる」調が＠iwatobipen風文体です。
+warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。下書き段階での「申し上げる」とか「踏まえて」等の言い回しをそのまま生かし、自称を「拙者」にして「ござる」調の＠iwatobipen風文体です。
 
 拙者、本書の一部を執筆する＠iwatobipenと申す。ここではRDKitに関して熱く語ってみようと思うでござる。
 
@@ -69,6 +69,18 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 - 突然企業でケモインフォマティクス要員にアサインされた方
 - AI創薬に興味があるがなにからはじめたらいいかわからない人
 
+=== 本書のコードについて
+
+本書で使用したプログラミングコードは全てlink:https://github.com/Mishima-syk/py4chemoinformatics[Mishima.sykのpy4chemoinformaticsリポジトリ]のnotebooksディレクトリに置いてありますので利用してください。
+
+2章のインストールを行うとgitコマンドがつかえるようになっていますので以下のコマンドでpdfを含む全てのデータがダウンロードされます。
+
+[source, bash]
+----
+$ git https://github.com/Mishima-syk/py4chemoinformatics.git
+----
+
+
 === おまけ1
 
 .Chemoinformatics or Cheminformatics?
@@ -80,31 +92,28 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 === 謝辞
 
-(編集できる謝辞w)
+(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___)
 
 まず、本書を書くきっかけとなったlink:https://twitter.com/bonohu[@bonohu]に感謝したいと思います。@bonohuのlink:https://www.amazon.co.jp/dp/4895929019[Dr. Bonoの生命科学データ解析]の出版後のMishima.sykのミーティングで「Bono本のChemoinformatics版あったらいいよね」という話がどこからともなくでた際に、「書けばええんちゃう、むしろなんで書かんの？」と言ってくれたことが本書を執筆するきっかけであることは間違いありません。またlink:https://twitter.com/souyakuchan[@souyakuchan]のlink:https://adventar.org/calendars/3041[創薬 Advent Calendar 2018]も執筆のいい刺激になりました。というより、ここで章立てしなかったら具体的に動き出さなかったと思います。
 
-また、忘れてはいけないのはy-samaの存在です。link:http://mishima-syk.github.io/[Mishima.syk]を初期から盛り上げてきたy-samaは2019/01/06に永眠されました。彼はlink:https://qiita.com/y\__sama/items/5b62d31cb7e6ed50f02c[データサイエンティストを目指す人のpython環境構築 2016]やlink:https://medium.com/@y__sama/druglikeness%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E3%82%88%E3%82%82%E3%82%84%E3%81%BE%E8%A9%B1-8310cec5ffc6[Druglikenessについてのよもやま話]といった素晴らしいエントリを残しました。彼が存命であればきっと3人で執筆していたし、内容ももっと充実していたことでしょう。この出来事も我々に執筆しようという強い動機を与えました。
+また、忘れてはいけないのはy-samaの存在です。link:http://mishima-syk.github.io/[Mishima.syk]を初期から盛り上げてきたy-samaは2019/01/06に永眠しました。彼はlink:https://qiita.com/y\__sama/items/5b62d31cb7e6ed50f02c[データサイエンティストを目指す人のpython環境構築 2016]やlink:https://medium.com/@y__sama/druglikeness%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E3%82%88%E3%82%82%E3%82%84%E3%81%BE%E8%A9%B1-8310cec5ffc6[Druglikenessについてのよもやま話]といった素晴らしいエントリを残しました。彼が存命であればきっと3人で執筆していたし、内容ももっと充実していたことでしょう。この出来事も我々に執筆しようという強い動機を与えました。
 
 最後にMishima.sykに参加して美味しいワインやビールを飲みなから毎度熱い議論を交わしていただいた参加者の方々にも感謝します。いくつかのコンテンツはMishima.sykでの発表をもとにしており、みなさんのフィードバックをもとに加筆訂正してあります。
 
 もし、本書を読んで、ケモインフォマティクスって面白いなと感じたり、創薬やってみたいなと感じる方がいたら、是非Mishima.sykに参加してみてください。きっと楽しいと思います。今後の創薬研究では所属を超えてお互いにプッシュしあって自身のスキルを高めていくことが重要になるでしょう。というより、既にそういう社会になっているのだと思います。本書が皆さんの楽しい研究生活を送る役に立てば幸いです。
 
 [quote, y__sama]
-やりたいことをやって生きてきて 私自身は自分の人生に後悔はありません。
-人生は楽しんだもの勝ち。
+やりたいことをやって生きてきて 私自身は自分の人生に後悔はありません
+人生は楽しんだもの勝ち
 皆さんも嫌なことは嫌だと言って自分の喜びを最大限に追い求めて人生を満喫した方が楽しいと思いますよ
-
-Best regards,
-
-@fmkz___
+皆様の人生に幸多い事を願っています
 
 === おまけ2
 
 NOTE: もしあなたが創薬研究のインフォマティクスに携わっているのであればchemoinformatics,bioinformaticsと括る必要はありません。むしろ創薬の枠組みのなかでどちらもできる方が懐が深くなり、より深い考察ができるようになるので両方できるようになりましょう。そのほうが絶対楽しいです。link:https://www.amazon.co.jp/dp/4780909201/[DRY解析教本]やlink:https://www.amazon.co.jp/dp/4297103192[生命科学データ解析を支える情報技術]もきっとあなたのキャリアの助けになるでしょう。
 
 <<<
-== ケモインフォマティクスのための環境を整えよう
+== 2章: ケモインフォマティクスのための環境を整えよう
 
 本書を読み進めるにあたり必要な環境構築を行いましょう。
 本書の実行環境はPython3.6を想定しています。
@@ -207,7 +216,7 @@ $ conda list
 ----
 
 <<<
-== Pythonプログラミングの基礎
+== 3章: Pythonプログラミングの基礎
 
 === Pythonの基礎
 
@@ -276,7 +285,7 @@ link:https://github.com/Mishima-syk/sklearn-tutorial[sklearn-tutorial]::
 y-samaによるsklearnのチュートリアルハンズオンのjupyter notebookです。
 
 <<<
-== ケモインフォマティクスのための公開データベース
+== 4章: ケモインフォマティクスのための公開データベース
 
 この章ではケモインフォマティクスでよく使うデータベースを紹介します。
 
@@ -311,10 +320,10 @@ QSARをやりたい場合にはやはりChEMBLのデータを利用すること�
 のちほど追記していきます。IssueやPRでも受け付けてます。
 
 <<<
-== RDKitで構造情報を取り扱う
+== 5章: RDKitで構造情報を取り扱う
 :imagesdir: images
 
-この章ではRDKitを使って分子の読み込みの基本を覚えます。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_rdkit.ipynb[本章のjupyter notebook]
+この章ではRDKitを使って分子の読み込みの基本を覚えます。
 
 === SMILESとは
 
@@ -420,7 +429,7 @@ MolsToGridImageで一行に並べる分子の数を変更することはでき�
   できます。molsPerRowというオプションが用意されています。Draw.MolsToGridImage(mols, molsPerRow=10)のように使います
 
 <<<
-== 化合物の類似性を評価してみる
+== 6章: 化合物の類似性を評価してみる
 
 === 化合物が似ているとはどういうことか？
 
@@ -518,7 +527,7 @@ DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 40%くらいの類似度ということになりました。
 
 <<<
-== グラフ構造を利用した類似性の評価
+== 7章: グラフ構造を利用した類似性の評価
 :imagesdir: images
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
@@ -704,7 +713,7 @@ MMPを視覚化して解釈する例を紹介しました。
 - link:https://chemrxiv.org/articles/mmpdb_An_Open_Source_Matched_Molecular_Pair_Platform_for_Large_Multi-Property_Datasets/5999375[mmpdb: An Open Source Matched Molecular Pair Platform for Large Multi-Property Datasets]
 
 <<<
-== 沢山の化合物を一度にみたい
+== 8章: 沢山の化合物を一度にみたい
 :imagesdir: images
 
 沢山のデータがどのように分布しているのかを見るには適当な空間にマッピングするのが一般的です。特にケモインフォマティクスではケミカルスペースという言葉が使われます。
@@ -815,7 +824,7 @@ image::ch08/tsne.png[PCA, size=500]
 今回紹介したPCA,tSNEの他にも色々な描画方法があるので調べてみるとよいでしょう。
 
 <<<
-== 構造活性相関（QSAR）の基礎
+== 9章: 構造活性相関（QSAR）の基礎
 
 化学構造と生物学的活性における相関関係をStructure Activity Relationship(SAR)またはQuantative SAR(QSAR)と呼びます。一般的には**似たような化合物は似たような生物学的活性を示す**ことが知られており、この相関関係を理解しドラッグデザインに活かすことが創薬研究において大変重要です。
 
@@ -992,7 +1001,7 @@ applicability domainはトレーニングセットの類似性からその予測
 筆者はHugo Kubinyi先生の**似ている化合物は果たして似た活性を示すのか？**という疑問を、estradiolのOH基がMetxy基に変換すると活性が消失する例を上げて説明されているコメントに感銘を受けたのを覚えています。J.M.Cだと思うんですが、探しても見つからないのでもしご存知でしたら教えてください。
 
 <<<
-== ディープラーニング入門
+== 10章: ディープラーニング入門
 
 link:ch09_qsar.asciidoc[9章]でRandomForestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupportVectorMachine(SVM), LogisticRegiression, ArtificialNeuralNetwork(ANN)などといったものが利用されています。
 
@@ -1024,13 +1033,6 @@ Tensorflowは最近1.xから2.xにメジャーアップデートをしていま�
 
 KerasはTensoflowなどの低レベルフレームワークをバックエンドに動く高レベルAPIで、Kerasを利用することでテンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので本書ではTensorflowに統合されたKerasを利用します。
 
-=== Google colabについて
-
-link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]はクラウド上で実行できるJupyter notebook環境です。Theano, Thensorflow, Keras, Pytorchなどのディープラーニング用のフレームワークがインストール済みなのと時間の制限はありますがGPUが使えるため、手元にGPUマシンがなくてもディープラーニングを利用できる点が非常に魅力的です。
-
-利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみましょう。
-
-
 === インストールしてみよう
 
 Tensorflow とKerasをインストールしてみましょう。
@@ -1057,8 +1059,15 @@ $ conda install -c conda-forge keras
 - https://keras.io/#installation
 - https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html
 
+.Google colabについて
+****
+link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]はクラウド上で実行できるJupyter notebook環境です。Theano, Thensorflow, Keras, Pytorchなどのディープラーニング用のフレームワークがインストール済みなのと時間の制限はありますがGPUが使えるため、手元にGPUマシンがなくてもディープラーニングを利用できる点が非常に魅力的です。
+
+利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみると良いでしょう。
+****
+
 <<<
-== ディープラーニングを利用した構造活性相関
+== 11章: ディープラーニングを利用した構造活性相関
 :imagesdir: images
 
 link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[10章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をします。
@@ -1291,7 +1300,7 @@ python example.py
 - link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
 - link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
 - link:https://github.com/deepchem/deepchem[DeepChem]
-== コンピューターに化学構造を考えさせる
+== 12章: コンピューターに化学構造を考えさせる
 :imagesdir: images
 
 Deep Learningがメディナルケミストリに大きなインパクトをもたらしたものの一つに生成モデルがあげられます。特にこの数年での生成モデルの進化は素晴らしいです。ここではlink:https://github.com/MarcusOlivecrona/REINVENT[Marcus Olivecronaにより開発されたREINVENT]を使って新規な合成案を提案させてみましょう。
