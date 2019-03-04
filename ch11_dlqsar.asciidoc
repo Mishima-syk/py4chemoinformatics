@@ -231,3 +231,5 @@ python example.py
 - link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
 - link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
 - link:https://github.com/deepchem/deepchem[DeepChem]
+
+<<<
