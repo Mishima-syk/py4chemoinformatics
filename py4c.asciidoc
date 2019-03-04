@@ -31,7 +31,7 @@ warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクショ
 
 拙者、本書の一部を執筆する＠iwatobipenと申す。ここではRDKitに関して熱く語ってみようと思うでござる。
 
-RDKitのRDはなんなのか？実は**Rational Discovery**の略省であり現在のオープンソースの前身となるフレームワークは2000年に開発されたでござる。随分と古いでござるね。その後、2006年にコードがオープンソースになりsourceforgeから公開されたでござる。PythonのケモインフォマティクスツールキットはRDKit以外にOpenBabelもあるぞと思われる読者もござろう。OpenBabelは2005年に最初のリリースがなされておる。いずれも、もう10年以上の歴史があるツールキットでござる。拙者がこの辺りに興味を持ち始めた2012年ころはどちらかというとOpenBabelの方がメジャーだったように記憶しておる。当時、日本語の記事はほぼ皆無であり、拙者は本書共著者であり業界のパイオニアでもある@fmkz___殿のlink:https://kzfm.hatenablog.com/archive[ケモインフォクックブック]などを参考にRDKitのコードを書いて試行錯誤していたでござるよ。なお、ケモインフォ関連のヒストリを追いたい御仁はこちらのlink:http://blog.kzfmix.com/entry/1542711744[記事]を一読されるとよかろう。
+RDKitのRDはなんなのか？実は**Rational Discovery**の略称であり現在のオープンソースの前身となるフレームワークは2000年に開発されたでござる。随分と古いでござるね。その後、2006年にコードがオープンソースになりsourceforgeから公開されたでござる。PythonのケモインフォマティクスツールキットはRDKit以外にOpenBabelもあるぞと思われる読者もござろう。OpenBabelは2005年に最初のリリースがなされておる。いずれも、もう10年以上の歴史があるツールキットでござる。拙者がこの辺りに興味を持ち始めた2012年ころはどちらかというとOpenBabelの方がメジャーだったように記憶しておる。当時、日本語の記事はほぼ皆無であり、拙者は本書共著者であり業界のパイオニアでもある@fmkz___殿のlink:https://kzfm.hatenablog.com/archive[ケモインフォクックブック]などを参考にRDKitのコードを書いて試行錯誤していたでござるよ。なお、ケモインフォ関連のヒストリを追いたい御仁はこちらのlink:http://blog.kzfmix.com/entry/1542711744[記事]を一読されるとよかろう。
 
 おっと話が横道に逸れてしまった。本題に戻ろう。
 
@@ -85,9 +85,9 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 
 .Chemoinformatics or Cheminformatics?
 ****
-もともとはBioに対してChemoと語感を合わせて登場してきたように記憶しているが、link:https://jcheminf.biomedcentral.com/[Journal of Cheminformatics]の創刊により一時期Chemに大きく離されていた。
+もともとはBioに対してChemoと語感を合わせて登場してきたように記憶しているが、link:https://jcheminf.biomedcentral.com/[Journal of Cheminformatics]の創刊により一時期Chemに大きく離されていました。
 
-最近のlink:https://trends.google.co.jp/trends/explore?date=all&q=chemoinformatics,cheminformatics[Google trend]によるとどちらでもいいようですが個人的にはRhymeは重視したほうが良いと思うので本書ではChemoの方を使うことにします。
+最近のlink:https://trends.google.co.jp/trends/explore?date=all&q=chemoinformatics,cheminformatics[Google trend]によるとどちらでもいいようですが個人的にはRhymeを重視したほうが良いと思うので本書ではChemoの方を使うことにします。
 ****
 
 === 謝辞
@@ -176,6 +176,13 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 ==== git
 
 バージョン管理システムです。本書ではgitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
+
+「はじめに」でも説明しましたが、以下のコマンドでpdfを含む全てのデータがダウンロードされますので必要に応じてダウンロードしてください。
+
+[source, bash]
+----
+$ git https://github.com/Mishima-syk/py4chemoinformatics.git
+----
 
 === Condaについてもう少し詳しく
 
@@ -291,7 +298,7 @@ y-samaによるsklearnのチュートリアルハンズオンのjupyter notebook
 
 .化合物関連データベースの歴史
 ****
-そもそも公共の化合物関連のデータベースというものは歴史が浅いです。では化合物関連データベース自体の歴史が浅いのかと言われれば全然そんなことはなく、昔から色々なデータベースが存在しました。問題はほぼ全てが商用のサービスであったということで、オープンな化合物データベースが登場したのは実はごく最近のことです。アミノ酸、塩基配列、蛋白質結晶構造などのデータベースがかなり以前から無償で提供されていたのに比べると、公開データベースがないという状況はオープンネスを失わせる要員の一つであったと言えるでしょう。
+そもそも公共の化合物関連のデータベースというものは歴史が浅いです。化合物関連データベース自体の歴史が浅いのかと言われれば全然そんなことはなく、実は昔から色々なデータベースが存在しましたがほぼ全てが商用のサービスでした。オープンな化合物データベースが登場したのは実はごく最近のことです。アミノ酸、塩基配列、蛋白質結晶構造などのデータベースはかなり以前から無償で提供されていたのとは全く異なる状況だったと言えます。公開データベースがないという状況はオープンネスを失わせる要員の一つでした。
 ****
 
 === ChEMBL
@@ -309,7 +316,7 @@ ChEMBLはもともとはstARLITeという商用のデータベースだったは
 
 link:https://pubchem.ncbi.nlm.nih.gov/[PubChem]はNCBIにより維持管理されている低分子化合物とその生物学的活性データを収録している公開リポジトリです。5000万件以上の化合物情報と、100万件を超えるアッセイデータを含みそのデータ量の多さが特徴とも言えます。もうひとつの特徴はデータをアカデミアからの化合物登録やアッセイ結果の登録により成長することであり、ここが先のChEMBLとの大きな違いであるといえます。
 
-特にPubChemは初期スクリーニングのデータが多いため、そのようなデータに対しなんらかのマイニングや分析を行いたい場合は有用だと考えられる。
+特にPubChemは初期スクリーニングのデータが多いため、そのようなデータに対しなんらかのマイニングや分析を行いたい場合は有用だと考えられます。
 
 === どちらを使うべき?
 
@@ -358,6 +365,8 @@ mol
 
 image::ch05/ch05_01.png[Depict benzene]
 
+NOTE: 余談ですが、jupyter notebookを使うとコードを書きながら構造を確認することが簡単にできるのでケモインフォマティクスにおいては重宝されます。
+
 === 複数の化合物を一度に取り扱うには？
 
 複数の化合物を一つのファイルに格納する方法にはいくつかありますが、sdfというファイル形式を利用するのが一般的です。
@@ -369,6 +378,8 @@ MDL社で開発された分子表現のためのフォーマットにMOL形式�
 ****
 
 ==== sdfファイルをChEMBLからダウンロードする
+
+(ここは新バージョンのUIに変更する予定。または4章でChEMBLの使い方を丁寧に説明する)
 
 ここではlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL669726[トポイソメラーゼII阻害試験]の結果をsdfファイル形式でダウンロードします。
 
@@ -447,7 +458,7 @@ MolsToGridImageで一行に並べる分子の数を変更することはでき�
 もう一つの方法としてフィンガープリントを利用することもできます。フィンガープリントとは分子の部分構造を0,1のバイナリーで表現したもので部分構造の有無とビットのon(1),off(0)を対応させたものです。
 フィンガープリントには固定長FPと可変長FPの二種類が存在し、古くはMACSKeyという固定長FP(予め部分構造とインデックスが決められているFP)が使われていましたが、現在ではECFP4(Morgan2)という可変長FPが利用されるのが普通です。
 
-RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf[Gregさんのスライド]が詳しいので熟読してください。
+RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf[開発者のGregさんのスライド]が詳しいので熟読してください。
 
 今回はこのECFP4(Morgan2)を利用した類似性評価をしてみましょう。
 
@@ -487,21 +498,18 @@ DataStructs.TanimotoSimilarity(fp1, fp2)
 
 === （おまけ）もう少しドラッグライクな分子の類似性を評価する
 
-ここでは抗凝固薬として上市されているapixaban, rivaroxiabanの類似性を評価します。
+ここでは抗凝固薬として上市されているlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL231779/[apixaban], link:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL198362/[rivaroxiaban]の類似性を評価します。
 構造を見るとわかりますが、なんとなく似ていますが、どの部分とどの部分が対応するか
 想像つくでしょうか？実はこの２つの化合物は両方共FXaというセリンプロテアーゼの同じポケットに
 同じような結合モードで結合することでプロテアーゼの働きを阻害することが知られています。興味があれば
 実際にPDBから複合体の結晶構造を探して眺めてみるといいかもしれません。
 （pymol入門まで拡張するか？要検討）
 
-SMILESはChEMBLのものを利用しています（要リンク？）。
-
 [source, python]
 ----
 apx = Chem.MolFromSmiles("COc1ccc(cc1)n2nc(C(=O)N)c3CCN(C(=O)c23)c4ccc(cc4)N5CCCCC5=O")
 rvx = Chem.MolFromSmiles("Clc1ccc(s1)C(=O)NC[C@H]2CN(C(=O)O2)c3ccc(cc3)N4CCOCC4=O")
 ----
-
 
 構造を眺めてみます。メトキシフェニルとクロロチオールは同じような結合様式をとるんでしょうか？このような結合の成分をきちんと評価する方法もあるのですが、本書の内容を超えるので説明はしません。もし興味があればFragment Molecular Orbital Methodで調べてみてください
 
@@ -532,7 +540,7 @@ DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
-通常、06章で紹介したようなフィンガープリントを使い分子同士の類似性を評価することが多いですが、グラフ構造を利用して類似性を評価する手法もあります。次に紹介するMCS（Maximum Common Substructure）は対象となる分子集合の共通部分構造のことを指します。共通部分構造が多いほとそれらの分子はより似ていると考えます。
+通常、6章で紹介したようなフィンガープリントを使い分子同士の類似性を評価することが多いですが、グラフ構造を利用して類似性を評価する手法もあります。次に紹介するMCS（Maximum Common Substructure）は対象となる分子集合の共通部分構造のことを指します。共通部分構造が多いほとそれらの分子はより似ていると考えます。
 
 === 主要な骨格による分類(MCS)
 
