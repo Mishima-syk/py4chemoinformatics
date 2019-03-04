@@ -90,9 +90,18 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 最近のlink:https://trends.google.co.jp/trends/explore?date=all&q=chemoinformatics,cheminformatics[Google trend]によるとどちらでもいいようですが個人的にはRhymeを重視したほうが良いと思うので本書ではChemoの方を使うことにします。
 ****
 
+=== おまけ2
+
+NOTE: もしあなたが創薬研究のインフォマティクスに携わっているのであればchemoinformatics, bioinformaticsと括る必要はありません。むしろ創薬の枠組みのなかでどちらもできる方が懐が深くなり、より深い考察ができるようになるので両方できるようになりましょう。そのほうが絶対楽しいです。link:https://www.amazon.co.jp/dp/4780909201/[DRY解析教本]やlink:https://www.amazon.co.jp/dp/4297103192[生命科学データ解析を支える情報技術]もきっとあなたのキャリアの助けになるでしょう。
+
 === 謝辞
 
-(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___)
+本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた方々に感謝します。
+
+link:https://github.com/nankos[nankos], link:https://twitter.com/torusengoku[@torusengoku], 
+
+
+ここから先は(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___ 2019/03/03)
 
 まず、本書を書くきっかけとなったlink:https://twitter.com/bonohu[@bonohu]に感謝したいと思います。@bonohuのlink:https://www.amazon.co.jp/dp/4895929019[Dr. Bonoの生命科学データ解析]の出版後のMishima.sykのミーティングで「Bono本のChemoinformatics版あったらいいよね」という話がどこからともなくでた際に、「書けばええんちゃう、むしろなんで書かんの？」と言ってくれたことが本書を執筆するきっかけであることは間違いありません。またlink:https://twitter.com/souyakuchan[@souyakuchan]のlink:https://adventar.org/calendars/3041[創薬 Advent Calendar 2018]も執筆のいい刺激になりました。というより、ここで章立てしなかったら具体的に動き出さなかったと思います。
 
@@ -107,10 +116,6 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 人生は楽しんだもの勝ち
 皆さんも嫌なことは嫌だと言って自分の喜びを最大限に追い求めて人生を満喫した方が楽しいと思いますよ
 皆様の人生に幸多い事を願っています
-
-=== おまけ2
-
-NOTE: もしあなたが創薬研究のインフォマティクスに携わっているのであればchemoinformatics,bioinformaticsと括る必要はありません。むしろ創薬の枠組みのなかでどちらもできる方が懐が深くなり、より深い考察ができるようになるので両方できるようになりましょう。そのほうが絶対楽しいです。link:https://www.amazon.co.jp/dp/4780909201/[DRY解析教本]やlink:https://www.amazon.co.jp/dp/4297103192[生命科学データ解析を支える情報技術]もきっとあなたのキャリアの助けになるでしょう。
 
 <<<
 == 2章: ケモインフォマティクスのための環境を整えよう
