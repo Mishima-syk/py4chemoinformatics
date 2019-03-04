@@ -101,7 +101,7 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 
 本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた方々に感謝します。
 
-link:https://github.com/nankos[nankos], link:https://twitter.com/torusengoku[@torusengoku], 
+link:https://twitter.com/ski_nanko[@ski_nanko], link:https://twitter.com/torusengoku[@torusengoku]
 
 
 ここから先は(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___ 2019/03/03)
