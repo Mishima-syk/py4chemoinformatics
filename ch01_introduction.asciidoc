@@ -18,7 +18,7 @@ warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクショ
 
 拙者、本書の一部を執筆する＠iwatobipenと申す。ここではRDKitに関して熱く語ってみようと思うでござる。
 
-RDKitのRDはなんなのか？実は**Rational Discovery**の略省であり現在のオープンソースの前身となるフレームワークは2000年に開発されたでござる。随分と古いでござるね。その後、2006年にコードがオープンソースになりsourceforgeから公開されたでござる。PythonのケモインフォマティクスツールキットはRDKit以外にOpenBabelもあるぞと思われる読者もござろう。OpenBabelは2005年に最初のリリースがなされておる。いずれも、もう10年以上の歴史があるツールキットでござる。拙者がこの辺りに興味を持ち始めた2012年ころはどちらかというとOpenBabelの方がメジャーだったように記憶しておる。当時、日本語の記事はほぼ皆無であり、拙者は本書共著者であり業界のパイオニアでもある@fmkz___殿のlink:https://kzfm.hatenablog.com/archive[ケモインフォクックブック]などを参考にRDKitのコードを書いて試行錯誤していたでござるよ。なお、ケモインフォ関連のヒストリを追いたい御仁はこちらのlink:http://blog.kzfmix.com/entry/1542711744[記事]を一読されるとよかろう。
+RDKitのRDはなんなのか？実は**Rational Discovery**の略称であり現在のオープンソースの前身となるフレームワークは2000年に開発されたでござる。随分と古いでござるね。その後、2006年にコードがオープンソースになりsourceforgeから公開されたでござる。PythonのケモインフォマティクスツールキットはRDKit以外にOpenBabelもあるぞと思われる読者もござろう。OpenBabelは2005年に最初のリリースがなされておる。いずれも、もう10年以上の歴史があるツールキットでござる。拙者がこの辺りに興味を持ち始めた2012年ころはどちらかというとOpenBabelの方がメジャーだったように記憶しておる。当時、日本語の記事はほぼ皆無であり、拙者は本書共著者であり業界のパイオニアでもある@fmkz___殿のlink:https://kzfm.hatenablog.com/archive[ケモインフォクックブック]などを参考にRDKitのコードを書いて試行錯誤していたでござるよ。なお、ケモインフォ関連のヒストリを追いたい御仁はこちらのlink:http://blog.kzfmix.com/entry/1542711744[記事]を一読されるとよかろう。
 
 おっと話が横道に逸れてしまった。本題に戻ろう。
 
@@ -72,9 +72,9 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 
 .Chemoinformatics or Cheminformatics?
 ****
-もともとはBioに対してChemoと語感を合わせて登場してきたように記憶しているが、link:https://jcheminf.biomedcentral.com/[Journal of Cheminformatics]の創刊により一時期Chemに大きく離されていた。
+もともとはBioに対してChemoと語感を合わせて登場してきたように記憶しているが、link:https://jcheminf.biomedcentral.com/[Journal of Cheminformatics]の創刊により一時期Chemに大きく離されていました。
 
-最近のlink:https://trends.google.co.jp/trends/explore?date=all&q=chemoinformatics,cheminformatics[Google trend]によるとどちらでもいいようですが個人的にはRhymeは重視したほうが良いと思うので本書ではChemoの方を使うことにします。
+最近のlink:https://trends.google.co.jp/trends/explore?date=all&q=chemoinformatics,cheminformatics[Google trend]によるとどちらでもいいようですが個人的にはRhymeを重視したほうが良いと思うので本書ではChemoの方を使うことにします。
 ****
 
 === 謝辞
