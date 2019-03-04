@@ -1,4 +1,4 @@
-== RDKitで構造情報を取り扱う
+== 5章: RDKitで構造情報を取り扱う
 :imagesdir: images
 
 この章ではRDKitを使って分子の読み込みの基本を覚えます。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_rdkit.ipynb[本章のjupyter notebook]

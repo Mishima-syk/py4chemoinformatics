@@ -1,4 +1,4 @@
-== ディープラーニング入門
+== 10章: ディープラーニング入門
 
 link:ch09_qsar.asciidoc[9章]でRandomForestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupportVectorMachine(SVM), LogisticRegiression, ArtificialNeuralNetwork(ANN)などといったものが利用されています。
 
@@ -30,13 +30,6 @@ Tensorflowは最近1.xから2.xにメジャーアップデートをしていま�
 
 KerasはTensoflowなどの低レベルフレームワークをバックエンドに動く高レベルAPIで、Kerasを利用することでテンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので本書ではTensorflowに統合されたKerasを利用します。
 
-=== Google colabについて
-
-link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]はクラウド上で実行できるJupyter notebook環境です。Theano, Thensorflow, Keras, Pytorchなどのディープラーニング用のフレームワークがインストール済みなのと時間の制限はありますがGPUが使えるため、手元にGPUマシンがなくてもディープラーニングを利用できる点が非常に魅力的です。
-
-利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみましょう。
-
-
 === インストールしてみよう
 
 Tensorflow とKerasをインストールしてみましょう。
@@ -62,5 +55,12 @@ $ conda install -c conda-forge keras
 
 - https://keras.io/#installation
 - https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html
+
+.Google colabについて
+****
+link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]はクラウド上で実行できるJupyter notebook環境です。Theano, Thensorflow, Keras, Pytorchなどのディープラーニング用のフレームワークがインストール済みなのと時間の制限はありますがGPUが使えるため、手元にGPUマシンがなくてもディープラーニングを利用できる点が非常に魅力的です。
+
+利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみると良いでしょう。
+****
 
 <<<
