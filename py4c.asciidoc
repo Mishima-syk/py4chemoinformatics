@@ -27,7 +27,7 @@ v0.10010(Draft) 2019/03/04
 
 === RDKitとは
 
-warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。下書き段階での「申し上げる」とか「踏まえて」等の言い回しをそのまま生かし、自称を「拙者」にして「ござる」調の＠iwatobipen風文体です。
+warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。下書き段階での「申し上げる」とか「踏まえて」等の言い回しをそのまま生かし、自称が「拙者」で「ござる」調が＠iwatobipen風文体です。
 
 拙者、本書の一部を執筆する＠iwatobipenと申す。ここではRDKitに関して熱く語ってみようと思うでござる。
 
@@ -77,7 +77,7 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 [source, bash]
 ----
-$ git https://github.com/Mishima-syk/py4chemoinformatics.git
+$ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 ----
 
 
@@ -189,7 +189,7 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 
 [source, bash]
 ----
-$ git https://github.com/Mishima-syk/py4chemoinformatics.git
+$ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 ----
 
 === Condaについてもう少し詳しく
