@@ -60,7 +60,7 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 
 ==== Git
 
-バージョン管理システムです。本書ではgitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
+バージョン管理システムです。本書ではGitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
 
 「はじめに」でも説明しましたが、以下のコマンドでpdfを含む全てのデータがダウンロードされますので必要に応じてダウンロードしてください。
 
