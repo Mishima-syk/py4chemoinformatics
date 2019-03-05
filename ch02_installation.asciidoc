@@ -16,7 +16,7 @@ Pythonには大きく2.x系のバージョンと3.x系のバージョンとが�
 
 === Anacondaのインストール方法
 
-では早速Anacondaをインストールしましょう。link:https://www.anaconda.com/[アナコンダの公式サイト]にアクセスし、ご自身の環境にあったインストーラー(Python3.7version(201901現在))をダウンロードします。　ついでLinuxであれば、ターミナルからインストーラーを実行します。
+では早速Anacondaをインストールしましょう。link:https://www.anaconda.com/[公式サイト]にアクセスし、ご自身の環境にあったインストーラー(Python3.7version(201901現在))をダウンロードします。OSがLinuxであればターミナルからインストーラーを実行します。
 
 [source, bash]
 ----
@@ -48,7 +48,7 @@ $ conda install -c conda-forge git
 
 ==== RDKit
 
-RDKitはケモインフォマティクスの分野で最近よく用いられるツールキットの一つです。オープンソースソフトウェア（OSS)と呼ばれるものの一つで、無償で利用することが可能です。詳しくはlink:ch01_introduction.asciidoc[はじめに]を参照してください。
+RDKitはケモインフォマティクスの分野で最近よく用いられるツールキットの一つです。オープンソースソフトウェア(OSS)と呼ばれるものの一つで、無償で利用することが可能です。詳しくはlink:ch01_introduction.asciidoc[はじめに]を参照してください。
 
 ==== seaborn
 
@@ -58,7 +58,7 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 
 グラフ描画パッケージの一つで**一貫性のある文法で合理的に描ける**ことが特徴です。もともとはRという統計解析言語のために開発されましたが、yhatという会社によりlink:http://ggplot.yhathq.com/[Pythonに移植]されました。
 
-==== git
+==== Git
 
 バージョン管理システムです。本書ではgitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
 
@@ -71,40 +71,23 @@ $ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 
 === Condaについてもう少し詳しく
 
-先に説明したAnacondaでインストールされるデフォルトのPythonのージョンは3.7ですが、本書執筆時点でconda-forgeで配布されているRDKitのパッケージが要求するPythonのバージョンが3.6となっています。このためcondaで仮想環境を構築しました。
+先に説明したAnacondaでインストールされるデフォルトのPythonのージョンは3.7ですが、本書執筆時点で配布されている最新のRDKitはPython3.6を必要とします。このためcondaで仮想環境を構築し、必要なバージョンのPythonをインストールしました。
 
 なぜ仮想環境を作るのでしょうか::
  いくつかのシステムでは様々な機能を提供するために内部的にPythonを利用しているため、特定のパッケージのためにPythonのバージョンを変更してしまうと問題が起こることがあります。仮想環境はこのような問題を解決します。もし、パッケージが異なるライブラリのバージョンを要求しても仮想的なPython環境を準備して試行錯誤できます。不要になれば仮想環境を簡単に削除でき、もとの環境にトラブルを持ちこむこともありません。このように、ひとつのシステム内にそれぞれ個別の開発環境を作成できるようにすることで開発時によく起こるライブラリの依存問題やPythonのバージョンの違いに悩まされることがなくなります。
 
-よく利用するcondaのサブコマンドを挙げておきます。
+本書では本書用に一つだけ仮想環境を用意しますが、実際はいくつもの仮想環境をつくって開発することが多いです。そのため、よく利用するcondaのサブコマンドを挙げておきます。
 
 [source, bash]
 ----
-# install package
-$ conda install <package name>
- 
-# 仮想環境の作成。
-$ conda create -n 仮想環境の名前 python=バージョン
- 
-# 作った仮想環境一覧の表示
-$ conda info -e
- 
-# 仮想環境の削除
-$ conda remove -n 仮想環境の名前
- 
-# 仮想環境を使う
-# mac/linuxの場合
-$ source activate 仮想環境の名前
- 
-# 仮想環境を使う
-# windowsの場合
-$ activate 仮想環境の名前
- 
-# 仮想環境から出る
-$ source deactivate
- 
-# 今使っている仮想環境にインストールされているライブラリの一覧を表示
-$ conda list
+$ conda install <package name>　# install package
+$ conda create -n 仮想環境の名前 python=バージョン　# 仮想環境の作成。
+$ conda info -e # 作った仮想環境一覧の表示
+$ conda remove -n 仮想環境の名前 # 仮想環境の削除
+$ source activate 仮想環境の名前 # 仮想環境を使う(mac/linux)
+$ activate 仮想環境の名前 # 仮想環境を使う(Windows)
+$ source deactivate # 仮想環境から出る
+$ conda list # 今使っている仮想環境にインストールされているライブラリの一覧を表示
 ----
 
 <<<
