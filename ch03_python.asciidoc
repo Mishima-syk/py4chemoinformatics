@@ -11,7 +11,7 @@ https://www.amazon.co.jp/dp/4774196436/[Pythonスタートブック増補改訂�
 プログラミング自体が初心者であればこの本が良いでしょう。
 
 https://www.amazon.co.jp/dp/B01NCOIC2P/[みんなのPython 第4版]::
-Javascript,Javaなどのなにかプログラミングを少しかじっていて、これからPythonを覚えたいのであればこちらの本をおすすめします。
+JavascriptやJavaなどのなにかプログラミングを少しかじっていて、これからPythonを覚えたいのであればこちらの本をおすすめします。
 
 ==== Pythonを本以外で学びたい
 
@@ -19,11 +19,11 @@ https://www.pycon.jp/support/bootcamp.html[Python Boot Camp(初心者向けPytho
 一般社団法人PyCon JPが開催している初心者向けPythonチュートリアルイベントです。全国各地で行われているので近くで開催される場合には参加するとよいでしょう
 
 https://connpass.com/category/Python/[その他ローカルコミュニティなど]::
-あちこちで入門者向けからガチのヒト向けまでの勉強会やコミュニティのあつまりなどもあるので、そういうのに参加してモチベーションを高めるのもよい方法です。
+あちこちで入門者向けからガチのヒト向けまでの勉強会やコミュニティなどもあるので、そういうのに参加してモチベーションを高めるのもよい方法です。
 
 https://www.udemy.com/topic/python/[udemy/python]::
 オンライン学習サービスを利用するのも効果的な手段のひとつですが、筆者は試したことがないのでわかりません。
-周りの評判を効いてみても良いでしょう。YouTubeを探すのもありです。
+周りの評判を聞いてみても良いでしょう。YouTubeを探すのもありです。
 
 ==== 本書でわからないことがあったら
 
@@ -31,7 +31,7 @@ https://github.com/Mishima-syk/py4chemoinformatics/issues[py4chemoinformaticsの
 py4chemoinformaticsのissuesに質問していただければお答えします。わかりにくい場合だったら修正しますので、よりよくなってみんなハッピー。
 
 https://qiita.com/[Qiita]::
-Qiitaで探せば大抵答えが見つかるとはずです。
+Qiitaで探せば大抵答えが見つかるはずです。
 
 https://stackoverflow.com/[stackoverflow]::
 それでも答えが見つからなかったらsofで探すか質問しましょう
@@ -54,11 +54,11 @@ terminal(Windowsではanaconda prompt)から
 $ jupyter notebook
 ----
 
-と打てばjupyter notebookが立ち上がります。本書ではこれ以降特に断らない限りjupyter notebook上でのコードを実行することとします。
+と打てばJupyter Notebookが立ち上がります。本書ではこれ以降特に断らない限りJupyter Notebook上でのコードを実行することとします。
 
 === Pythonで機械学習をするために
 
-chemoinformaticsに限らず、インフォマティクスを学ぶにあたり、機械学習は外せません。本書でもある程度の機械学習の知識があることを前提に進めていきます。Pythonで機械学習をするにはlink:https://scikit-learn.org/stable/[Scikit-learn]というライブラリを利用するのが定番であり、本書でも特に説明せずに利用していきますが、初学者のために参考となる書籍などをすすめておきます。
+ケモインフォマティクスに限らず、インフォマティクスを学ぶにあたり、機械学習は外せません。本書でもある程度の機械学習の知識があることを前提に進めていきます。Pythonで機械学習をするにはlink:https://scikit-learn.org/stable/[Scikit-learn]というライブラリを利用するのが定番であり、本書でも特に説明せずに利用していきますが、初学者のために参考となる書籍などをすすめておきます。
 
 link:https://www.amazon.co.jp/dp/4873117984/[Pythonではじめる機械学習 ―scikit-learnで学ぶ特徴量エンジニアリングと機械学習の基礎]::
 Pythonで機械学習をやるための基礎を学べます。数学的な表現があまりないので読みやすいです。
