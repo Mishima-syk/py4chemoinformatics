@@ -12,6 +12,7 @@ v0.10011(Draft) 2019/03/05
 :source-highlighter: coderay
 :title-logo-image: image::souyakuchan.png[mishima.syk]
 == 1章: はじめに
+:imagesdir: ./images
 
 ケモインフォマティクス(Chemoinformatics)とは、主に化学に関連するデータをコンピュータを用いて解析し、様々な課題を解くために用いる方法論のことです。ケモインフォマティクスという言葉は1990年終わりから2000年はじめに定義され、現在では製薬業界でも薬学系のアカデミアで一般的に利用されている技術となっています。
 
@@ -100,9 +101,11 @@ $ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 
 === 謝辞
 
-本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた方々に感謝します。
+本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた以下の方々に感謝いたします。
 
-link:https://twitter.com/ski_nanko[@ski_nanko], link:https://twitter.com/torusengoku[@torusengoku]
+link:https://twitter.com/ReLuTropy[@ReLuTropy],
+link:https://twitter.com/ski_nanko[@ski_nanko],
+link:https://twitter.com/torusengoku[@torusengoku]
 
 
 ここから先は(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___ 2019/03/03)
@@ -120,6 +123,15 @@ link:https://twitter.com/ski_nanko[@ski_nanko], link:https://twitter.com/torusen
 人生は楽しんだもの勝ち
 皆さんも嫌なことは嫌だと言って自分の喜びを最大限に追い求めて人生を満喫した方が楽しいと思いますよ
 皆様の人生に幸多い事を願っています
+
+=== License
+
+This document is copyright (C) 2019 by @fmkz___ and @iwatobipen
+
+This document is link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/LICENSE[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+Public License].
+
+image::by-nc-sa.png[CC-BY-NC-SA, width=100]
 
 <<<
 == 2章: ケモインフォマティクスのための環境を整えよう
@@ -184,7 +196,7 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 
 ==== Git
 
-バージョン管理システムです。本書ではgitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
+バージョン管理システムです。本書ではGitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
 
 「はじめに」でも説明しましたが、以下のコマンドでpdfを含む全てのデータがダウンロードされますので必要に応じてダウンロードしてください。
 
