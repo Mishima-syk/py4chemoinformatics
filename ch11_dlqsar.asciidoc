@@ -22,12 +22,19 @@ from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, f1_score
-# DNN用のライブラリを読み込みます。
-from keras.layers import Input
-from keras.layers import Dense
-from keras.layers import Dropout
-from keras.layers import Activation
-from keras.models import Model
+# DNN用のライブラリを読み込みます。 tensorflowに統合されたKerasを使うように変えました(20190306)
+# from keras.layers import Input
+# from keras.layers import Dense
+# from keras.layers import Dropout
+# from keras.layers import Activation
+# from keras.models import Model
+from thensorflow.python.keras.layers import Iput
+from thensorflow.python.keras.layers import Dense
+from thensorflow.python.keras.layers import Dropout
+from thensorflow.python.keras.layers import Activation
+from thensorflow.python.keras.Model import Model
+
+
 ----
 
 次にデータを読み込みます。9章では”POS”/”NEG”をlabelsというリストに入れたので一次元表現でしたが、今回はここが二次元になっています。
@@ -125,7 +132,7 @@ plt.plot(range(epochs), hist1.history['loss'], label='loss')
 plt.legend()
 ----
 
-今回の例ではだいたい6Epochくらいでモデルが良い制度になりました。
+今回の例ではだいたい6Epochくらいでモデルが良い精度になりました。
 
 次にテストデータで検証します。
 
@@ -225,6 +232,7 @@ python example.py
 ----
 
 参考リンク
+
 - link:https://arxiv.org/abs/1509.09292[NGF-paper]
 - link:https://arxiv.org/abs/1611.03199[DeepChem-paper]
 - link:http://www.keiserlab.org/[keiserlab]
