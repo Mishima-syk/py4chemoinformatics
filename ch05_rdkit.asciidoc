@@ -1,6 +1,8 @@
 == 5章: RDKitで構造情報を取り扱う
 :imagesdir: images
 
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_rdkit.ipynb"]
+
 この章ではRDKitを使って分子の読み込みの基本を覚えます。
 
 === SMILESとは

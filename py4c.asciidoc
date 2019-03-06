@@ -80,7 +80,7 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 === 本書のコードについて
 
-本書で使用したプログラミングコードは全てlink:https://github.com/Mishima-syk/py4chemoinformatics[Mishima.sykのpy4chemoinformaticsリポジトリ]のnotebooksディレクトリに置いてありますので利用してください。
+本書で使用したプログラミングコードは全てlink:https://github.com/Mishima-syk/py4chemoinformatics[Mishima.sykのpy4chemoinformaticsリポジトリ]のnotebooksディレクトリに置いてありますので利用してください。またそれぞれの章の最初のimage:jupyter.png[width="20"]にその章のJupyter notebooへのリンクを張っていますので適宜参照してください。
 
 2章のインストールを行うとgitコマンドがつかえるようになっていますので以下のコマンドでpdfを含む全てのデータがダウンロードされます。
 
@@ -329,6 +329,8 @@ QSARをやりたい場合にはやはりChEMBLのデータを利用すること�
 == 5章: RDKitで構造情報を取り扱う
 :imagesdir: images
 
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_rdkit.ipynb"]
+
 この章ではRDKitを使って分子の読み込みの基本を覚えます。
 
 === SMILESとは
@@ -440,6 +442,7 @@ MolsToGridImageで一行に並べる分子の数を変更することはでき�
 
 <<<
 == 6章: 化合物の類似性を評価してみる
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch06_rdkit.ipynb"]
 
 === 化合物が似ているとはどういうことか？
 
@@ -536,6 +539,8 @@ DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 <<<
 == 7章: グラフ構造を利用した類似性の評価
 :imagesdir: images
+
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_rdkit.ipynb"]
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
@@ -723,6 +728,8 @@ MMPを視覚化して解釈する例を紹介しました。
 == 8章: 沢山の化合物を一度にみたい
 :imagesdir: images
 
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch08_rdkit.ipynb"]
+
 沢山のデータがどのように分布しているのかを見るには適当な空間にマッピングするのが一般的です。特にケモインフォマティクスではケミカルスペースという言葉が使われます。
 
 === Chemical Spaceとは
@@ -832,6 +839,8 @@ image::ch08/tsne.png[PCA, size=500]
 
 <<<
 == 9章: 構造活性相関（QSAR）の基礎
+
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch09_rdkit.ipynb"]
 
 化学構造と生物学的活性における相関関係をStructure Activity Relationship(SAR)またはQuantative SAR(QSAR)と呼びます。一般的には**似たような化合物は似たような生物学的活性を示す**ことが知られており、この相関関係を理解しドラッグデザインに活かすことが創薬研究において大変重要です。
 
@@ -1104,6 +1113,8 @@ image::ch10/ch10_2.png[NoteBook]
 <<<
 == 11章: ディープラーニングを利用した構造活性相関
 :imagesdir: images
+
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch11_rdkit.ipynb"]
 
 link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[10章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をします。
 

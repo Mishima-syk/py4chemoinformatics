@@ -1,4 +1,5 @@
 == 6章: 化合物の類似性を評価してみる
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch06_rdkit.ipynb"]
 
 === 化合物が似ているとはどういうことか？
 
