@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.10010(Draft) 2019/03/04
+v0.10012(Draft) 2019/03/06
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -12,22 +12,31 @@ v0.10010(Draft) 2019/03/04
 :source-highlighter: coderay
 :title-logo-image: image::souyakuchan.png[mishima.syk]
 == 1章: はじめに
+:imagesdir: ./images
 
 ケモインフォマティクス(Chemoinformatics)とは、主に化学に関連するデータをコンピュータを用いて解析し、様々な課題を解くために用いる方法論のことです。ケモインフォマティクスという言葉は1990年終わりから2000年はじめに定義され、現在では製薬業界でも薬学系のアカデミアで一般的に利用されている技術となっています。
 
-ケモインフォマティクスは薬剤の効果と化合物の形状との関連性を解析したり、大量の化合物情報の可視化、化合物の類似性に基づいたクラスタリングなどの多岐にわたるプロセスで活用されていますが、近年ではディープラーニング(Deep Learning)の創薬応用がライフサイエンス分野でのトレンドとなっています。
+ケモインフォマティクスは薬剤の効果と化合物の形状との関連性を解析したり、大量の化合物情報の可視化、化合物の類似性に基づいたクラスタリングなどの多岐にわたるプロセスで活用されていますが、近年ではディープラーニング(Deep Learning)の創薬応用がライフサイエンス分野でのトレンドとなっています。特に創薬化学の領域では、活性や物性を予測するQSAR（構造活性相関）への適用だけではなく、**新規デザインへの応用**や**合成経路提案**への適用といった従来のケモインフォマティクスではあまり扱わなかった領域においても応用研究が盛んに行われています。
 
-特に創薬化学の領域では、活性や物性を予測するQSAR（構造活性相関）への適用だけではなく、**新規デザインへの応用**や**合成経路提案**への適用といった従来のケモインフォマティクスではあまり扱わなかった領域においても応用研究が盛んに行われています。
+.化合物デザインはイノベーティブ
+****
+そもそも**どのような化合物を作るべきか?、またそれをどのように合成するか?**を考えるプロセスは背景知識と想像力が求められる領域であり、従来は人以外が担うのは難しい領域であると認識されていましたが、そういう領域に対してもAIと呼ばれるものの進出がここ数年(2017-2019)で急速に進みました。
+****
 
-そもそも**どのような化合物を作るべきか、どのように化合物を合成するか**、を考えるプロセスは背景知識と想像力が求められる領域であるため、従来は人以外が担うのは難しい領域であると認識されていましたが、そういう領域に対してもAIと呼ばれるものが進出がここ数年(2017-2019)で急速に進みました。
+ケモインフォマティクスはすでに様々な場面で利用されていますが関連情報はあまりありませんでした。この理由として考えられることはいくつかありますが、オープンソースのツールキットがずっと存在しなかったこととオープンなデータベースが存在しなかったという二点が最も大きな原因なのは間違いありません。しかし、RDKitというオープンソースのケモインフォマティクスツールキットとChEMBLという公開データベースの登場により、この点は急速に解消しました。
 
-ケモインフォマティクスはすでに様々な場面で利用されていますが、これまでは活用するための情報があまり見つかりませんでした。この理由として考えられることはいくつかあります。ケモインフォマティクス自体の進化の速度が早いことも一因ですが、やはりオープンソースのツールが存在しなかったというのが最も大きな原因と考えています。しかし、RDKitというオープンソースのケモインフォマティクスツールキットの登場により、この点は急速に解消しつつあります。近年では、ケモインフォマティクスもバイオインフォマティクス同様、だれでも自由に使えるデータベースが充実してきています。このため現在ではウェブで検索すれば多くの情報がすぐに得られ、自己学習することは十分可能となっています。
+.化合物関連データベースの歴史
+****
+そもそも公共の化合物関連のデータベースというものは歴史が浅いです。化合物関連データベース自体の歴史が浅いのかと言われれば全然そんなことはなく、実は昔から色々なデータベースが存在しましたがほぼ全てが商用のサービスでした。オープンな化合物データベースが登場したのはごく最近のことです。アミノ酸、塩基配列、蛋白質結晶構造などのデータベースはかなり以前から無償で提供されていたのとは全く異なる状況だったと言えます。公開データベースがないという状況はオープンネスを失わせる要因の一つでした。
+****
 
-ですが、最初の一歩を踏み出すためのまとまった情報も必要だと考え、ケモインフォマティクスに関する基礎を学び、それらを応用できるようになるようなコンテンツを用意することにしました。最後のほうの章では「AI創薬」の文脈で用いられるディープラーニングを利用した化合物提案の方法を説明しています。
+近年では、ケモインフォマティクスもバイオインフォマティクス同様、ウェブで検索すれば多くの情報がすぐに得られ、自己学習することは十分可能となっています。
+
+このような状況ではありますが、それを初学者に強いるのはなかなかつらいことだと思い、最初の一歩を踏み出すためのまとまった情報として、「ケモインフォマティクスに関する基礎を学び、それらを応用できるようになるようなコンテンツ」を用意することにしました。近年のAI創薬ブームを考慮して後半の章では「AI創薬」の文脈で用いられるディープラーニングを利用した化合物の活性予測と化合物提案の章を追加していますので、一通り学習することで、最近のトレンドについていけるようにはなっていると思います。
 
 === RDKitとは
 
-warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。下書き段階での「申し上げる」とか「踏まえて」等の言い回しをそのまま生かし、自称を「拙者」にして「ござる」調の＠iwatobipen風文体です。
+warning:: ここは@iwatobipenがRDKitについて熱く語るサブセクションです。下書き段階での「申し上げる」とか「踏まえて」等の言い回しをそのまま生かし、自称が「拙者」で「ござる」調が＠iwatobipen風文体です。
 
 拙者、本書の一部を執筆する＠iwatobipenと申す。ここではRDKitに関して熱く語ってみようと思うでござる。
 
@@ -77,11 +86,11 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 [source, bash]
 ----
-$ git https://github.com/Mishima-syk/py4chemoinformatics.git
+$ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 ----
 
 
-=== おまけ1
+=== おまけ
 
 .Chemoinformatics or Cheminformatics?
 ****
@@ -92,7 +101,14 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 
 === 謝辞
 
-(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___)
+本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた以下の方々に感謝いたします。
+
+link:https://twitter.com/ReLuTropy[@ReLuTropy],
+link:https://twitter.com/ski_nanko[@ski_nanko],
+link:https://twitter.com/torusengoku[@torusengoku]
+
+
+ここから先は(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___ 2019/03/03)
 
 まず、本書を書くきっかけとなったlink:https://twitter.com/bonohu[@bonohu]に感謝したいと思います。@bonohuのlink:https://www.amazon.co.jp/dp/4895929019[Dr. Bonoの生命科学データ解析]の出版後のMishima.sykのミーティングで「Bono本のChemoinformatics版あったらいいよね」という話がどこからともなくでた際に、「書けばええんちゃう、むしろなんで書かんの？」と言ってくれたことが本書を執筆するきっかけであることは間違いありません。またlink:https://twitter.com/souyakuchan[@souyakuchan]のlink:https://adventar.org/calendars/3041[創薬 Advent Calendar 2018]も執筆のいい刺激になりました。というより、ここで章立てしなかったら具体的に動き出さなかったと思います。
 
@@ -108,9 +124,14 @@ $ git https://github.com/Mishima-syk/py4chemoinformatics.git
 皆さんも嫌なことは嫌だと言って自分の喜びを最大限に追い求めて人生を満喫した方が楽しいと思いますよ
 皆様の人生に幸多い事を願っています
 
-=== おまけ2
+=== License
 
-NOTE: もしあなたが創薬研究のインフォマティクスに携わっているのであればchemoinformatics,bioinformaticsと括る必要はありません。むしろ創薬の枠組みのなかでどちらもできる方が懐が深くなり、より深い考察ができるようになるので両方できるようになりましょう。そのほうが絶対楽しいです。link:https://www.amazon.co.jp/dp/4780909201/[DRY解析教本]やlink:https://www.amazon.co.jp/dp/4297103192[生命科学データ解析を支える情報技術]もきっとあなたのキャリアの助けになるでしょう。
+This document is copyright (C) 2019 by @fmkz___ and @iwatobipen
+
+This document is link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/LICENSE[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+Public License].
+
+image::by-nc-sa.png[CC-BY-NC-SA, width=100]
 
 <<<
 == 2章: ケモインフォマティクスのための環境を整えよう
@@ -131,7 +152,7 @@ Pythonには大きく2.x系のバージョンと3.x系のバージョンとが�
 
 === Anacondaのインストール方法
 
-では早速Anacondaをインストールしましょう。link:https://www.anaconda.com/[アナコンダの公式サイト]にアクセスし、ご自身の環境にあったインストーラー(Python3.7version(201901現在))をダウンロードします。　ついでLinuxであれば、ターミナルからインストーラーを実行します。
+では早速Anacondaをインストールしましょう。link:https://www.anaconda.com/[公式サイト]にアクセスし、ご自身の環境にあったインストーラー(Python3.7version(201901現在))をダウンロードします。OSがLinuxであればターミナルからインストーラーを実行します。
 
 [source, bash]
 ----
@@ -163,7 +184,7 @@ $ conda install -c conda-forge git
 
 ==== RDKit
 
-RDKitはケモインフォマティクスの分野で最近よく用いられるツールキットの一つです。オープンソースソフトウェア（OSS)と呼ばれるものの一つで、無償で利用することが可能です。詳しくはlink:ch01_introduction.asciidoc[はじめに]を参照してください。
+RDKitはケモインフォマティクスの分野で最近よく用いられるツールキットの一つです。オープンソースソフトウェア(OSS)と呼ばれるものの一つで、無償で利用することが可能です。詳しくはlink:ch01_introduction.asciidoc[はじめに]を参照してください。
 
 ==== seaborn
 
@@ -173,53 +194,36 @@ link:https://seaborn.pydata.org/[統計データの視覚化のためのパッ�
 
 グラフ描画パッケージの一つで**一貫性のある文法で合理的に描ける**ことが特徴です。もともとはRという統計解析言語のために開発されましたが、yhatという会社によりlink:http://ggplot.yhathq.com/[Pythonに移植]されました。
 
-==== git
+==== Git
 
-バージョン管理システムです。本書ではgitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
+バージョン管理システムです。本書ではGitについては説明しませんのでもしGitについて全然知らないという方はlink:https://backlog.com/ja/git-tutorial/[サルでもわかるGit入門]でも読みましょう。
 
 「はじめに」でも説明しましたが、以下のコマンドでpdfを含む全てのデータがダウンロードされますので必要に応じてダウンロードしてください。
 
 [source, bash]
 ----
-$ git https://github.com/Mishima-syk/py4chemoinformatics.git
+$ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 ----
 
 === Condaについてもう少し詳しく
 
-先に説明したAnacondaでインストールされるデフォルトのPythonのージョンは3.7ですが、本書執筆時点でconda-forgeで配布されているRDKitのパッケージが要求するPythonのバージョンが3.6となっています。このためcondaで仮想環境を構築しました。
+先に説明したAnacondaでインストールされるデフォルトのPythonのージョンは3.7ですが、本書執筆時点で配布されている最新のRDKitはPython3.6を必要とします。このためcondaで仮想環境を構築し、必要なバージョンのPythonをインストールしました。
 
 なぜ仮想環境を作るのでしょうか::
  いくつかのシステムでは様々な機能を提供するために内部的にPythonを利用しているため、特定のパッケージのためにPythonのバージョンを変更してしまうと問題が起こることがあります。仮想環境はこのような問題を解決します。もし、パッケージが異なるライブラリのバージョンを要求しても仮想的なPython環境を準備して試行錯誤できます。不要になれば仮想環境を簡単に削除でき、もとの環境にトラブルを持ちこむこともありません。このように、ひとつのシステム内にそれぞれ個別の開発環境を作成できるようにすることで開発時によく起こるライブラリの依存問題やPythonのバージョンの違いに悩まされることがなくなります。
 
-よく利用するcondaのサブコマンドを挙げておきます。
+本書では本書用に一つだけ仮想環境を用意しますが、実際はいくつもの仮想環境をつくって開発することが多いです。そのため、よく利用するcondaのサブコマンドを挙げておきます。
 
 [source, bash]
 ----
-# install package
-$ conda install <package name>
- 
-# 仮想環境の作成。
-$ conda create -n 仮想環境の名前 python=バージョン
- 
-# 作った仮想環境一覧の表示
-$ conda info -e
- 
-# 仮想環境の削除
-$ conda remove -n 仮想環境の名前
- 
-# 仮想環境を使う
-# mac/linuxの場合
-$ source activate 仮想環境の名前
- 
-# 仮想環境を使う
-# windowsの場合
-$ activate 仮想環境の名前
- 
-# 仮想環境から出る
-$ source deactivate
- 
-# 今使っている仮想環境にインストールされているライブラリの一覧を表示
-$ conda list
+$ conda install <package name>　# install package
+$ conda create -n 仮想環境の名前 python=バージョン　# 仮想環境の作成。
+$ conda info -e # 作った仮想環境一覧の表示
+$ conda remove -n 仮想環境の名前 # 仮想環境の削除
+$ source activate 仮想環境の名前 # 仮想環境を使う(mac/linux)
+$ activate 仮想環境の名前 # 仮想環境を使う(Windows)
+$ source deactivate # 仮想環境から出る
+$ conda list # 今使っている仮想環境にインストールされているライブラリの一覧を表示
 ----
 
 <<<
@@ -236,7 +240,7 @@ https://www.amazon.co.jp/dp/4774196436/[Pythonスタートブック増補改訂�
 プログラミング自体が初心者であればこの本が良いでしょう。
 
 https://www.amazon.co.jp/dp/B01NCOIC2P/[みんなのPython 第4版]::
-Javascript,Javaなどのなにかプログラミングを少しかじっていて、これからPythonを覚えたいのであればこちらの本をおすすめします。
+JavascriptやJavaなどのなにかプログラミングを少しかじっていて、これからPythonを覚えたいのであればこちらの本をおすすめします。
 
 ==== Pythonを本以外で学びたい
 
@@ -244,11 +248,11 @@ https://www.pycon.jp/support/bootcamp.html[Python Boot Camp(初心者向けPytho
 一般社団法人PyCon JPが開催している初心者向けPythonチュートリアルイベントです。全国各地で行われているので近くで開催される場合には参加するとよいでしょう
 
 https://connpass.com/category/Python/[その他ローカルコミュニティなど]::
-あちこちで入門者向けからガチのヒト向けまでの勉強会やコミュニティのあつまりなどもあるので、そういうのに参加してモチベーションを高めるのもよい方法です。
+あちこちで入門者向けからガチのヒト向けまでの勉強会やコミュニティなどもあるので、そういうのに参加してモチベーションを高めるのもよい方法です。
 
 https://www.udemy.com/topic/python/[udemy/python]::
 オンライン学習サービスを利用するのも効果的な手段のひとつですが、筆者は試したことがないのでわかりません。
-周りの評判を効いてみても良いでしょう。YouTubeを探すのもありです。
+周りの評判を聞いてみても良いでしょう。YouTubeを探すのもありです。
 
 ==== 本書でわからないことがあったら
 
@@ -256,7 +260,7 @@ https://github.com/Mishima-syk/py4chemoinformatics/issues[py4chemoinformaticsの
 py4chemoinformaticsのissuesに質問していただければお答えします。わかりにくい場合だったら修正しますので、よりよくなってみんなハッピー。
 
 https://qiita.com/[Qiita]::
-Qiitaで探せば大抵答えが見つかるとはずです。
+Qiitaで探せば大抵答えが見つかるはずです。
 
 https://stackoverflow.com/[stackoverflow]::
 それでも答えが見つからなかったらsofで探すか質問しましょう
@@ -279,11 +283,11 @@ terminal(Windowsではanaconda prompt)から
 $ jupyter notebook
 ----
 
-と打てばjupyter notebookが立ち上がります。本書ではこれ以降特に断らない限りjupyter notebook上でのコードを実行することとします。
+と打てばJupyter Notebookが立ち上がります。本書ではこれ以降特に断らない限りJupyter Notebook上でのコードを実行することとします。
 
 === Pythonで機械学習をするために
 
-chemoinformaticsに限らず、インフォマティクスを学ぶにあたり、機械学習は外せません。本書でもある程度の機械学習の知識があることを前提に進めていきます。Pythonで機械学習をするにはlink:https://scikit-learn.org/stable/[Scikit-learn]というライブラリを利用するのが定番であり、本書でも特に説明せずに利用していきますが、初学者のために参考となる書籍などをすすめておきます。
+ケモインフォマティクスに限らず、インフォマティクスを学ぶにあたり、機械学習は外せません。本書でもある程度の機械学習の知識があることを前提に進めていきます。Pythonで機械学習をするにはlink:https://scikit-learn.org/stable/[Scikit-learn]というライブラリを利用するのが定番であり、本書でも特に説明せずに利用していきますが、初学者のために参考となる書籍などをすすめておきます。
 
 link:https://www.amazon.co.jp/dp/4873117984/[Pythonではじめる機械学習 ―scikit-learnで学ぶ特徴量エンジニアリングと機械学習の基礎]::
 Pythonで機械学習をやるための基礎を学べます。数学的な表現があまりないので読みやすいです。
@@ -296,21 +300,13 @@ y-samaによるsklearnのチュートリアルハンズオンのjupyter notebook
 
 この章ではケモインフォマティクスでよく使うデータベースを紹介します。
 
-.化合物関連データベースの歴史
-****
-そもそも公共の化合物関連のデータベースというものは歴史が浅いです。化合物関連データベース自体の歴史が浅いのかと言われれば全然そんなことはなく、実は昔から色々なデータベースが存在しましたがほぼ全てが商用のサービスでした。オープンな化合物データベースが登場したのは実はごく最近のことです。アミノ酸、塩基配列、蛋白質結晶構造などのデータベースはかなり以前から無償で提供されていたのとは全く異なる状況だったと言えます。公開データベースがないという状況はオープンネスを失わせる要員の一つでした。
-****
-
 === ChEMBL
 
 link:https://www.ebi.ac.uk/chembl/[ChEMBL]はEBIのChEMBLチームにより維持管理されている医薬品及び開発化合物の結合データ、薬物動態、薬理活性を収録したデータベースです。データは主にメディシナルケミストリ関連のジャーナルから手動で抽出されており、大体3,4ヶ月に一度データの更新があります。
 
 メディシナルケミストリ関連のジャーナルからデータを収集しているため、QSARに関連する情報や背景知識を論文そのものに求めることが可能であり、創薬研究をする際には有用です。
 
-.ChEMBLの秘密
-****
-ChEMBLはもともとはstARLITeという商用のデータベースだったはずです。（要出典）
-****
+NOTE: ChEMBLはもともとはlink:http://chembl.blogspot.com/2009/11/faq-where-can-i-download-starlite.html[StARlite]という商用データベースでした
 
 === PubChem
 
@@ -318,9 +314,12 @@ link:https://pubchem.ncbi.nlm.nih.gov/[PubChem]はNCBIにより維持管理さ�
 
 特にPubChemは初期スクリーニングのデータが多いため、そのようなデータに対しなんらかのマイニングや分析を行いたい場合は有用だと考えられます。
 
-=== どちらを使うべき?
-
+どちらを使うべき?::
 QSARをやりたい場合にはやはりChEMBLのデータを利用することが多いです。IC50のようなデータが得られていることが多いですし、モデルの解釈に元論文をあたることができるというのが大きな理由です。
+
+=== ChEMBLで欲しい情報を検索する
+
+(beta版のUIでの検索のやり方を入れます。)
 
 === その他有用なデータベース
 
@@ -1068,7 +1067,7 @@ $ conda install -c conda-forge keras
 - https://keras.io/#installation
 - https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-pkgs.html
 
-=== Google colabでGPUを使えます
+=== Google colabとは
 
 .Google colab
 ****
@@ -1084,372 +1083,26 @@ image::ch10/ch10_1.png[GoogleColabTop]
 
 次いで、Githubというタブをクリックし、以下のURLをコピペします。
 link:https://github.com/Mishima-syk/sklearn-tutorial[https://github.com/Mishima-syk/sklearn-tutorial]
-するとURL先のNotebookが読み込ます。本資料は@y_samaが作成してくれたものです。データの準備からはじまり、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されています。Deep Learningではないですが、機械学習を学びたい方にとっては良いマテリアルになると思います。
-
-後半のPandasMLやAutoSklearnは、Colabに入ってない可能性があるためエラーが出るかもしれません。その場合は別途インストールしてください。
+するとURL先のNotebookが読み込ます。本資料は@y_samaが作成してくれたものです。データの準備からはじまり、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されています。非常にクオリティが高くDeepLearningではないですが、機械学習を学びたい方にとっては良いマテリアルになると思います。
+後半のPandasMLやAutoSklearnは、デフォルトの設定ですとCoalbに入ってないとエラーが出るかもしれません
 
 image::ch10/ch10_2.png[GoogleColab2]
 
-ノートブックを開くとJupyter notebookと同様の画面になります。Shit＋リターンキーでセルのコードを実行できます。
+ノートブックを開くとJupyter notebookと同じ感じの画面になります。Shit＋リターンキーでセルのコードを実行できると思います。
 
 image::ch10/ch10_2.png[NoteBook]
 
-参考までに本書執筆時点（201903）でGoogleColabのデフォルトで利用できるライブラリを列記します。
+参考までに本書執筆時点（201903）でGoogleColabデフォルトで利用できるライブラリを確認するにはセルの中で '!pip freeze'と打つと列記されます。
 
 - absl-py==0.7.0
 - alabaster==0.7.12
-- albumentations==0.1.12
-- altair==2.4.1
-- astor==0.7.1
-- astropy==3.0.5
-- atari-py==0.1.7
-- atomicwrites==1.3.0
-- attrs==18.2.0
-- audioread==2.1.6
-- autograd==1.2
-- Babel==2.6.0
-- backports.tempfile==1.0
-- backports.weakref==1.0.post1
-- beautifulsoup4==4.6.3
-- bleach==3.1.0
-- bokeh==1.0.4
-- boto==2.49.0
-- boto3==1.9.103
-- botocore==1.12.103
-- Bottleneck==1.2.1
-- bs4==0.0.1
-- bz2file==0.98
-- cachetools==3.1.0
-- certifi==2018.11.29
-- cffi==1.12.2
-- chainer==5.0.0
-- chardet==3.0.4
-- Click==7.0
-- cloudpickle==0.6.1
-- cmake==3.12.0
-- colorlover==0.3.0
-- community==1.0.0b1
-- contextlib2==0.5.5
-- convertdate==2.1.3
-- coverage==3.7.1
-- coveralls==0.5
-- crcmod==1.7
-- cufflinks==0.14.6
-- cvxopt==1.2.3
-- cvxpy==1.0.15
-- cycler==0.10.0
-- cymem==2.0.2
-- Cython==0.29.5
-- cytoolz==0.9.0.1
-- daft==0.0.4
-- dask==0.20.2
-- dataclasses==0.6
-- datascience==0.10.6
-- decorator==4.3.2
-- defusedxml==0.5.0
-- dill==0.2.9
-- distributed==1.26.0
-- Django==2.1.7
-- dlib==19.16.0
-- dm-sonnet==1.23
-- docopt==0.6.2
-- docutils==0.14
-- dopamine-rl==1.0.5
-- easydict==1.9
-- ecos==2.0.7.post1
-- editdistance==0.5.2
-- en-core-web-sm==2.0.0
-- entrypoints==0.3
-- enum34==1.1.6
-- ephem==3.7.6.0
-- et-xmlfile==1.0.1
-- fa2==0.3.5
-- fancyimpute==0.4.2
-- fastai==1.0.46
-- fastcache==1.0.2
-- fastdtw==0.3.2
-- fastprogress==0.1.20
-- fastrlock==0.4
-- fbprophet==0.4.post2
-- featuretools==0.4.1
-- filelock==3.0.10
-- fix-yahoo-finance==0.0.22
-- Flask==1.0.2
-- folium==0.2.1
-- future==0.16.0
-- gast==0.2.2
-- GDAL==2.2.2
-- gdown==3.6.4
-- gensim==3.6.0
-- geographiclib==1.49
-- geopy==1.17.0
-- gevent==1.4.0
-- gin-config==0.1.4
-- glob2==0.6
-- google==2.0.1
-- google-api-core==1.8.0
-- google-api-python-client==1.6.7
-- google-auth==1.4.2
-- google-auth-httplib2==0.0.3
-- google-auth-oauthlib==0.2.0
-- google-cloud-bigquery==1.8.1
-- google-cloud-core==0.29.1
-- google-cloud-language==1.0.2
-- google-cloud-storage==1.13.2
-- google-cloud-translate==1.3.3
-- google-colab==0.0.1a1
-- google-resumable-media==0.3.2
-- googleapis-common-protos==1.5.8
-- googledrivedownloader==0.3
-- graph-nets==1.0.3
-- graphviz==0.10.1
-- greenlet==0.4.15
-- grpcio==1.15.0
-- gspread==3.0.1
-- gspread-dataframe==3.0.2
-- gunicorn==19.9.0
-- gym==0.10.11
-- h5py==2.8.0
-- HeapDict==1.0.0
-- holidays==0.9.9
-- html5lib==1.0.1
-- httpimport==0.5.16
-- httplib2==0.11.3
-- humanize==0.5.1
-- hyperopt==0.1.2
-- ideep4py==2.0.0.post3
-- idna==2.6
-- image==1.5.27
-- imageio==2.4.1
-- imagesize==1.1.0
-- imbalanced-learn==0.4.3
-- imblearn==0.0
-- imgaug==0.2.8
-- imutils==0.5.2
-- inflect==2.1.0
-- intel-openmp==2019.0
-- intervaltree==2.1.0
-- ipykernel==4.6.1
-- ipython==5.5.0
-- ipython-genutils==0.2.0
-- ipython-sql==0.3.9
-- ipywidgets==7.4.2
-- itsdangerous==1.1.0
-- jdcal==1.4
-- jieba==0.39
-- Jinja2==2.10
-- jmespath==0.9.4
-- joblib==0.13.2
-- jpeg4py==0.1.4
-- jsonschema==2.6.0
-- jupyter==1.0.0
-- jupyter-client==5.2.4
-- jupyter-console==6.0.0
-- jupyter-core==4.4.0
-- kaggle==1.5.3
-- kapre==0.1.3.1
-- Keras==2.2.4
-- Keras-Applications==1.0.7
-- Keras-Preprocessing==1.0.9
-- keras-vis==0.4.1
-- kiwisolver==1.0.1
-- knnimpute==0.1.0
-- librosa==0.6.3
-- lightgbm==2.2.3
-- llvmlite==0.27.1
-- lmdb==0.94
-- lucid==0.3.8
-- lunardate==0.2.0
-- lxml==4.2.6
-- magenta==0.3.19
-- Markdown==3.0.1
-- MarkupSafe==1.1.1
-- matplotlib==3.0.2
-- matplotlib-venn==0.11.5
-- mesh-tensorflow==0.0.5
-- mido==1.2.6
-- mir-eval==0.5
-- missingno==0.4.1
-- mistune==0.8.4
-- mkl==2019.0
-- mlxtend==0.14.0
-- mock==2.0.0
-- more-itertools==6.0.0
-- moviepy==0.2.3.5
-- mpi4py==3.0.1
-- mpmath==1.1.0
-- msgpack==0.5.6
-- msgpack-numpy==0.4.3.2
-- multiprocess==0.70.7
-- multitasking==0.0.7
-- murmurhash==1.0.2
-- music21==5.5.0
-- natsort==5.5.0
-- nbconvert==5.4.1
-- nbformat==4.4.0
-- networkx==2.2
-- nibabel==2.3.3
-- nltk==3.2.5
-- nose==1.3.7
-- notebook==5.2.2
-- np-utils==0.5.9.0
-- numba==0.40.1
-- numexpr==2.6.9
-- numpy==1.14.6
-- nvidia-ml-py3==7.352.0
-- oauth2client==4.1.3
-- oauthlib==3.0.1
-- okgrade==0.4.3
-- olefile==0.46
-- opencv-contrib-python==3.4.3.18
-- opencv-python==3.4.5.20
-- openpyxl==2.5.9
-- osqp==0.5.0
-- packaging==19.0
-- pandas==0.22.0
-- pandas-datareader==0.7.0
-- pandas-gbq==0.4.1
-- pandas-profiling==1.4.1
-- pandocfilters==1.4.2
-- pathlib==1.0.1
-- patsy==0.5.1
-- pbr==5.1.2
-- pexpect==4.6.0
-- pickleshare==0.7.5
-- Pillow==4.0.0
-- plac==0.9.6
-- plotly==3.6.1
-- pluggy==0.9.0
-- portpicker==1.2.0
-- prefetch-generator==1.0.1
-- preshed==2.0.1
-- pretty-midi==0.2.8
-- prettytable==0.7.2
-- progressbar2==3.38.0
-- promise==2.2.1
-- prompt-toolkit==1.0.15
-- protobuf==3.6.1
-- psutil==5.4.8
-- psycopg2==2.7.6.1
-- ptyprocess==0.6.0
-- py==1.8.0
-- pyasn1==0.4.5
-- pyasn1-modules==0.2.4
-- pycocotools==2.0.0
-- pycparser==2.19
-- pydot==1.3.0
-- pydot-ng==2.0.0
-- pydotplus==2.0.2
-- pyemd==0.5.1
-- pyglet==1.3.2
-- Pygments==2.1.3
-- pygobject==3.26.1
-- pymc3==3.6
-- pymongo==3.7.2
-- pymystem3==0.2.0
-- PyOpenGL==3.1.0
-- pyparsing==2.3.1
-- pysndfile==1.3.2
-- PySocks==1.6.8
-- pystache==0.5.4
-- pystan==2.18.1.0
-- pytest==3.10.1
-- python-apt==1.6.3+ubuntu1
-- python-chess==0.23.11
-- python-dateutil==2.5.3
-- python-louvain==0.13
-- python-rtmidi==1.2.1
-- python-slugify==2.0.1
-- python-utils==2.3.0
-- pytz==2018.9
-- PyWavelets==1.0.2
-- PyYAML==3.13
-- pyzmq==17.0.0
-- qtconsole==4.4.3
-- regex==2018.1.10
-- requests==2.18.4
-- requests-oauthlib==1.2.0
-- resampy==0.2.1
-- retrying==1.3.3
-- rpy2==2.9.5
-- rsa==4.0
-- s3fs==0.2.0
-- s3transfer==0.2.0
-- scikit-image==0.13.1
-- scikit-learn==0.20.2
-- scipy==1.1.0
-- screen-resolution-extra==0.0.0
-- scs==2.0.2
-- seaborn==0.7.1
-- setuptools-git==1.2
-- Shapely==1.6.4.post2
-- simplegeneric==0.8.1
-- six==1.11.0
-- sklearn==0.0
-- smart-open==1.8.0
-- snowballstemmer==1.2.1
-- sortedcontainers==2.1.0
-- spacy==2.0.18
-- Sphinx==1.8.4
-- sphinxcontrib-websupport==1.1.0
-- SQLAlchemy==1.2.18
-- sqlparse==0.2.4
-- stable-baselines==2.2.1
-- statsmodels==0.8.0
-- sympy==1.1.1
-- tables==3.4.4
-- tabulate==0.8.3
-- tblib==1.3.2
-- tensor2tensor==1.11.0
-- tensorboard==1.12.2
-- tensorboardcolab==0.0.22
-- tensorflow==1.13.1
-- tensorflow-estimator==1.13.0
-- tensorflow-hub==0.2.0
-- tensorflow-metadata==0.12.1
-- tensorflow-probability==0.6.0
-- termcolor==1.1.0
-- terminado==0.8.1
-- testpath==0.4.2
-- textblob==0.15.3
-- textgenrnn==1.4.1
-- tfds-nightly==1.0.1.dev201902270105
-- tflearn==0.3.2
-- Theano==1.0.4
-- thinc==6.12.1
-- toolz==0.9.0
-- torch==1.0.1.post2
-- torchsummary==1.5.1
-- torchtext==0.3.1
-- torchvision==0.2.1
-- tornado==4.5.3
-- tqdm==4.28.1
-- traitlets==4.3.2
-- tweepy==3.6.0
-- typing==3.6.6
-- tzlocal==1.5.1
-- ujson==1.35
-- umap-learn==0.3.7
-- Unidecode==1.0.23
-- uritemplate==3.0.0
-- urllib3==1.22
-- vega-datasets==0.7.0
-- wcwidth==0.1.7
-- webencodings==0.5.1
-- Werkzeug==0.14.1
-- widgetsnbextension==3.4.2
-- wordcloud==1.5.0
-- wrapt==1.11.1
-- xarray==0.11.3
-- xgboost==0.7.post4
-- xkit==0.0.0
-- xlrd==1.1.0
-- xlwt==1.3.0
+- たくさん出てくる
 - yellowbrick==0.9.1
 - zict==0.1.3
 - zmq==0.0.0
 
-<<<== 11章: ディープラーニングを利用した構造活性相関
+<<<
+== 11章: ディープラーニングを利用した構造活性相関
 :imagesdir: images
 
 link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[10章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をします。
@@ -1682,6 +1335,8 @@ python example.py
 - link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
 - link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
 - link:https://github.com/deepchem/deepchem[DeepChem]
+
+<<<
 == 12章: コンピューターに化学構造を考えさせる
 :imagesdir: images
 
