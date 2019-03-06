@@ -66,7 +66,7 @@ link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaborato
 
 <<<
 
-Google のアカウントがある方はGithub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
+Google のアカウントがある方はGithub上のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施したScikit-learnハンズオンのノートブックを開いてみます。
 まず、link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。
 
 image::ch10/ch10_1.png[GoogleColabTop]
@@ -78,7 +78,7 @@ link:https://github.com/Mishima-syk/sklearn-tutorial[https://github.com/Mishima-
 
 image::ch10/ch10_2.png[GoogleColab2]
 
-ノートブックを開くとJupyter notebookと同じ感じの画面になります。Shit＋リターンキーでセルのコードを実行できると思います。
+ノートブックを開くとJupyter notebookと同じ感じの画面になります。Shift＋リターンキーでセルのコードを実行できると思います。
 
 image::ch10/ch10_2.png[NoteBook]
 
