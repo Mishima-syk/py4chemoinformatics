@@ -1,6 +1,8 @@
 == 7章: グラフ構造を利用した類似性の評価
 :imagesdir: images
 
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_rdkit.ipynb"]
+
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
 通常、6章で紹介したようなフィンガープリントを使い分子同士の類似性を評価することが多いですが、グラフ構造を利用して類似性を評価する手法もあります。次に紹介するMCS（Maximum Common Substructure）は対象となる分子集合の共通部分構造のことを指します。共通部分構造が多いほとそれらの分子はより似ていると考えます。

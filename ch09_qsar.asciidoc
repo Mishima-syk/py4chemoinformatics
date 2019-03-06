@@ -1,5 +1,7 @@
 == 9章: 構造活性相関（QSAR）の基礎
 
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch09_rdkit.ipynb"]
+
 化学構造と生物学的活性における相関関係をStructure Activity Relationship(SAR)またはQuantative SAR(QSAR)と呼びます。一般的には**似たような化合物は似たような生物学的活性を示す**ことが知られており、この相関関係を理解しドラッグデザインに活かすことが創薬研究において大変重要です。
 
 また、このような問題には細胞の生死、毒性の有無といった化合物がどのクラスに入るのかを推定する分類問題と阻害率（%inhibition）といった連続値を推定する回帰問題の2つがあります。
