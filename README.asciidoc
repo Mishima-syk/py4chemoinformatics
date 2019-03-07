@@ -30,6 +30,7 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 
 - ChEMBL
 - PubChem
+- ChEMBLで欲しい情報を検索する
 
 == link:ch05_rdkit.asciidoc[05 RDKitで構造情報を取り扱う]
 
