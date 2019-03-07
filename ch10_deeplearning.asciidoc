@@ -66,13 +66,7 @@ link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaborato
 利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみると良いでしょう。
 ****
 
-<<<<<<< HEAD
-<<<
-
-Google のアカウントがある方はGithub上のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施したScikit-learnハンズオンのノートブックを開いてみます。
-=======
 Google のアカウントがある方はGithub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
->>>>>>> 44256aaabbd20d3ae312418c0ebad65242c3d9b7
 まず、link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。
 
 image::ch10/ch10_1.png[GoogleColabTop]

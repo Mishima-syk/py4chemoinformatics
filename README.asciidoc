@@ -13,6 +13,7 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 - RDKitとは？
 - 対象読者
 - 謝辞
+- License
 
 == link:ch02_installation.asciidoc[02 ケモインフォマティクスのための環境を整えよう]
 
@@ -29,6 +30,7 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 
 - ChEMBL
 - PubChem
+- ChEMBLで欲しい情報を検索する
 
 == link:ch05_rdkit.asciidoc[05 RDKitで構造情報を取り扱う]
 
@@ -56,7 +58,6 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 
 - 効果ありなしの原因を考えてみる（分類問題）
 - 薬の効き目を予測しよう（回帰問題）
-- R分解とFree-Wilson Analysis
 - モデルの適用範囲(applicability domain)
 
 == link:ch10_deeplearning.asciidoc[10 ディープラーニング入門]
