@@ -18,6 +18,7 @@ SMILESで分子を表現することがわかったので、SMILESを読み込�
 ----
 from rdkit import Chem
 from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem import Draw
 ----
 
 RDKitにはSMILES文字列を読み込むためにMolFromSmilesというメソッドが用意されていますので、これを使い分子を読み込みます。
@@ -52,19 +53,12 @@ MDL社で開発された分子表現のためのフォーマットにMOL形式�
 
 ==== sdfファイルをChEMBLからダウンロードする
 
-(ここは新バージョンのUIに変更する予定。または4章でChEMBLの使い方を丁寧に説明する)
+4章を参考にlink:https://www.ebi.ac.uk/chembl/beta/[ChEMBL]のトポイソメラーゼII阻害試験(CHEMBL669726)の構造データをsdfファイル形式でダウンロードします。
 
-ここではlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL669726[トポイソメラーゼII阻害試験]の結果をsdfファイル形式でダウンロードします。
-
-ChEMBLの検索結果のページのcompound summayからDisplay All Recordsを選択します。
-
-image::ch05/ch05_02.png[Compound Summary]
-
-さらに、化合物表示画面からdownload sdfでsdfファイルをjupyter notebookを起動したディレクトリにダウンロードします。
-
-image::ch05/ch05_03.png[Download SDF]
-
-便宜上ch05_compounds.sdfという名前で保存しましたが、好きな名前で保存してください。
+NOTE::
+****
+具体的な手順はリンクのページを開いて、検索フォームにCHEMBL669726を入力すると検索結果が表示されるので、Compoundsタブをクリックします。その後、全選択してSDFでダウンロードするとgzip圧縮されたsdfがダウンロードされるので、gunzipコマンドまたは適当な解凍ソフトで解凍してください。それをch05_compounds.sdfという名前で保存します。
+****
 
 ==== RDKitでsdfを取り扱う
 
