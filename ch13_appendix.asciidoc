@@ -1,0 +1,87 @@
+== 13章: いろいろ
+:imagesdir: images
+
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch13_hetero_shuffle.ipynb"]
+
+この章では一歩踏み込んだTipsを紹介します。
+
+=== RDKitを使ってヘテロシャッフリングをしてみる
+
+化合物の物性を変換するアプローチの一つとしてヘテロシャッフリングと言うアプローチがあります。これは芳香環を形成する原子に関し、炭素原子をを窒素源信に、チオフェンの硫黄原子を酸素原子に等、芳香族原子を他の芳香族原子に変えつつ新しい分子を生み出す手法です。
+ヘテロシャッフリングをすることで活性を維持しつつ脂溶性などのプロパティを変化させてADMETの課題を解決する、または活性そのものを改善するなどの効果を期待します。実際の現場では単にシャッフルしたものを何でも作ることはなく、Docking Studyなどをして好ましい相互作用を持つ分子のみを選んだりしますが、その前段階としていろんな分子を生成することは一つのアプローチとしてあっても良いでしょう。
+古いですがBMSの研究者らはlink:https://pubs.acs.org/doi/10.1021/ci9004964[Morph]というアルゴリズムを論文発表しています。彼らは入力分子を元にヘテロ原子を入れ込んだ分子をいろいろ発生させ、新しいケミカルシリーズの探索をしています。このMorph自身はコードが公開されておらずすぐに使うことはできません。
+ちょっと遅いですがRDKITで同じように再帰的にヘテロシャッフルした分子を生成するコードを書いてみました。
+興味のある方は使ってみてください。
+下記が実際のコード部分です。芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変えていきます。変えたものに関してSanitizeMolのチェックかけてパスしたもののみを返します。
+
+[source, python]
+----
+import copy
+import sys
+from rdkit import Chem
+from rdkit.Chem import AllChem
+from rdkit.Chem import Fragments
+ 
+def replace_atom(mol):
+    res = []
+    aro_idxs = [atom.GetIdx() for atom in mol.GetAromaticAtoms() if atom.GetDegree() < 3]
+    for atm_num in [6, 7, 8, 16]:
+        for idx in aro_idxs:
+            cp_mol = copy.deepcopy(mol)
+            cp_mol.GetAtomWithIdx(idx).SetAtomicNum(atm_num)
+            p = Chem.MolFromSmarts("nnn")
+            if cp_mol.HasSubstructMatch(p) != True:
+                try:
+                    smi = Chem.MolToSmiles(cp_mol)
+                    smi.replace("[sH]", "s")
+                    cp_mol = Chem.MolFromSmiles(smi)
+                    Chem.SanitizeMol(cp_mol)
+                    res.append(cp_mol)
+                except:
+                    pass
+    return res
+----
+
+実際に使ってみます。
+
+[source, python]
+----
+from rdkit import Chem
+from rdkit.Chem import Draw
+from rdkit.Chem.Draw import IPythonConsole
+from rdk_util import morph
+from rdkit import rdBase
+rdBase.DisableLog('rdApp.error')
+# Gefitinib
+mol1 = Chem.MolFromSmiles('COC1=C(C=C2C(=C1)N=CN=C2NC3=CC(=C(C=C3)F)Cl)OCCCN4CCOCC4')
+#  Oxaprozin
+mol2 = Chem.MolFromSmiles('C1=CC=C(C=C1)C2=C(OC(=N2)CCC(=O)O)C3=CC=CC=C3')
+Draw.MolsToGridImage([mol1, mol2])
+----
+
+元の分子
+
+image::ch13/ch13_01.png[query]
+
+[source, python]
+----
+res = morph.replace_atom(mol1)
+Draw.MolsToGridImage(res, molsPerRow=5)
+----
+
+変換後１
+
+image::ch13/ch13_02.png[res1]
+
+[source, python]
+----
+res = morph.replace_atom(mol2)
+Draw.MolsToGridImage(res, molsPerRow=5)
+----
+
+変換後２
+
+image::ch13/ch13_03.png[res3]
+
+どうでしょうか。元文献とアルゴリズムが全く同じではないですが、ヘテロシャッフルができていると思います。
+まだコード改善の余地はありますが、RDKitの可能性を感じていただけると嬉しいです。
