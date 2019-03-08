@@ -1,7 +1,7 @@
 == 11章: ディープラーニングを利用した構造活性相関
 :imagesdir: images
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch12_rnn.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch11_simple_dnn.ipynb"]
 
 link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[10章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をします。
 

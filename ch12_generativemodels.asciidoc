@@ -1,6 +1,6 @@
 == 12章: コンピューターに化学構造を考えさせる
 :imagesdir: images
-[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch12_rnn.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch12_rnn.ipynb"]
 
 Deep Learningがメディナルケミストリに大きなインパクトをもたらしたものの一つに生成モデルがあげられます。特にこの数年での生成モデルの進化は素晴らしいです。ここではlink:https://github.com/MarcusOlivecrona/REINVENT[Marcus Olivecronaにより開発されたREINVENT]を使って新規な合成案を提案させてみましょう。
 
