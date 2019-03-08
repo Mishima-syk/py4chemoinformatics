@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.10013(Draft) 2019/03/07
+v0.10014(Draft) 2019/03/08
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -105,7 +105,8 @@ $ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 
 link:https://twitter.com/ReLuTropy[@ReLuTropy],
 link:https://twitter.com/ski_nanko[@ski_nanko],
-link:https://twitter.com/torusengoku[@torusengoku]
+link:https://twitter.com/torusengoku[@torusengoku],
+link:https://twitter.com/yamasaKit_[@yamasaKit_]
 
 
 ここから先は(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___ 2019/03/03)
@@ -392,6 +393,7 @@ viの場合':e ++enc=utf16le'と打てばきちんと表示されるようにな
 :imagesdir: images
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_rdkit.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_hetero_shuffle.ipynb"]
 
 この章ではRDKitを使って分子の読み込みの基本を覚えます。
 
@@ -497,23 +499,119 @@ MolsToGridImageで一行に並べる分子の数を変更することはでき�
   できます。molsPerRowというオプションが用意されています。Draw.MolsToGridImage(mols, molsPerRow=10)のように使います
 
 <<<
-== 6章: 化合物の類似性を評価してみる
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch06_rdkit.ipynb"]
+
+=== RDKitを使ってヘテロシャッフリングをしてみる
+
+化合物の物性を変換するアプローチの一つとしてヘテロシャッフリングがあります。これは置換基の位置関係は維持したまま、芳香環を形成する炭素、窒素、硫黄、酸素などの原子種を入れ替えて新しい分子を生み出す手法です。
+ヘテロシャッフリングをすることで活性を維持しつつ、脂溶性などのプロパティを変化させてADMETの課題を解決する、または活性そのものを改善するなどの効果を期待します。実際の現場では単にシャッフルしたものを何でも作ることはなく、Docking Studyなどをして好ましい相互作用を持つ分子のみを選んだりします。その前段階としていろんな分子を生成することは一つのアプローチとしてあっても良いでしょう。
+古いですがBMSの研究者らはlink:https://pubs.acs.org/doi/10.1021/ci9004964[Morph]というアルゴリズムを論文発表しています。彼らは入力分子を元にヘテロ原子を入れ込んだ分子を種々発生させ、新しいケミカルシリーズの探索をしています。
+RDKITで同じように再帰的にヘテロシャッフルした分子を生成するコードを書いてみました。
+下記が実際のコード部分です。芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変えていきます。変えたものに関してSanitizeMolのチェックかけてパスしたもののみを返します。recursive_replaceという関数が再帰的に原子を入れ替えます。Thresholdの値がオプションで設定できます。これは入力分子内の芳香環を形成する原子に対する芳香環を形成する窒素原子の数の割合です。これを設定しているのは、芳香環嬢の原子が全て炭素以外の原子になってしまうのは違和感があるからです。
+
+[source, python]
+----
+def replace_atom(mol):
+    res = []
+    aro_idxs = [atom.GetIdx() for atom in mol.GetAromaticAtoms() if atom.GetDegree() < 3]
+    for atm_num in [6, 7, 8, 16]:
+        for idx in aro_idxs:
+            cp_mol = copy.deepcopy(mol)
+            cp_mol.GetAtomWithIdx(idx).SetAtomicNum(atm_num)
+            p = Chem.MolFromSmarts("nnn")
+            if cp_mol.HasSubstructMatch(p) != True:
+                try:
+                    smi = Chem.MolToSmiles(cp_mol)
+                    smi.replace("[sH]", "s")
+                    cp_mol = Chem.MolFromSmiles(smi)
+                    Chem.SanitizeMol(cp_mol)
+                    res.append(cp_mol)
+                except:
+                    pass
+    return res
+ 
+def recursive_replace(mols, check=set([]), thres=0.4):
+    before_n = len(check)
+    print(before_n)
+    for mol in mols:
+        replaced_mols = replace_atom(mol)
+        for mol_conv in replaced_mols:
+            aro_n = Fragments.fr_Ar_N(mol)
+            aro_a = len(mol.GetAromaticAtoms())
+            ratio = float(aro_n) / float(aro_a)
+            if ratio < thres:
+                smi = Chem.MolToSmiles(mol_conv)
+                check.add(smi)
+    after_n = len(check)
+    print(before_n, after_n)
+    if before_n < after_n:
+        mols = [Chem.MolFromSmiles(mol) for mol in check]
+        recursive_replace(mols, check=check)
+    return [Chem.MolFromSmiles(smi) for smi in check]
+----
+
+実際に使ってみます。
+
+[source, python]
+----
+# Gefitinib
+mol1 = Chem.MolFromSmiles('COC1=C(C=C2C(=C1)N=CN=C2NC3=CC(=C(C=C3)F)Cl)OCCCN4CCOCC4')
+#  Oxaprozin
+mol2 = Chem.MolFromSmiles('C1=CC=C(C=C1)C2=C(OC(=N2)CCC(=O)O)C3=CC=CC=C3')
+Draw.MolsToGridImage([mol1, mol2])
+----
+
+元の分子
+
+image::ch05/ch05_05.png[query]
+
+[source, python]
+----
+res = recursive_replace([mol1])
+Draw.MolsToGridImage(res, molsPerRow=5)
+----
+
+変換後１
+
+image::ch05/ch05_06.png[res1]
+
+[source, python]
+----
+res = recursive_replace([mol2])
+Draw.MolsToGridImage(res, molsPerRow=5)
+----
+
+変換後２
+
+image::ch05/ch05_07.png[res2]
+
+どうでしょうか。二つの分子の例を示しました。一つ目は66の芳香環であり、それを形成できる原子は炭素と、窒素のみの場合です。二つ目は５員環で炭素、窒素、硫黄、酸素が原子の候補として入る場合の例です。いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されていると思います。興味のある方はコードを書き換えていろいろ検証してみてください。
+
+参考文献
+
+- https://pubs.acs.org/doi/10.1021/jm3001289
+- https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563== 6章: 化合物の類似性を評価してみる
+:imagesdir: images
+
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch06_similarity.ipynb"]
 
 === 化合物が似ているとはどういうことか？
 
-２つの化合物が似ているとはどういうことでしょうか？なんとなんく形が似ている？という表現は科学的ではありません。
+２つの化合物が似ているとはどういうことでしょうか？なんとなく形が似ている？という表現は科学的ではありません。
 ケモインフォマティクスでは類似度(一般的に0-100の値を取ります)や非類似度（距離）といった定量的な尺度により似ているか
-どうかを評価しますがここでは主に２つの代表的な測り方を紹介します。
+どうかを評価します。
+
+ここでは主に２つの代表的な尺度を紹介します。
 
 ==== 記述子
-分子の全体的な特徴をあらわすもの、分子量や極性表面性（PSA）、分配係数(logP)などを分子記述子または単に記述子
-と呼び、現在までにかなりの数が提案されています。
-これらの記述子の類似性を評価することで２つの分子がどのくらい似ているかを表現することが可能ですが、いくつかの記述子に関しては市販ソフトでないと計算できない場合があります。また分子全体の特徴を一つの数字で表現するために局所的な特徴を表現できないといったデメリットもあります。
+
+分子の全体的な特徴を数値で表現するものを記述子と呼びます。分子量や極性表面性（PSA）、分配係数(logP)などがあり、現在までに多くの記述子が提案されています。
+これらの記述子の類似性を評価することで２つの分子がどのくらい似ているかを表現することが可能です。また分子全体の特徴を一つの数字で表現するために局所的な特徴はできないです。
+
+NOTE:いくつかの記述子に関しては市販ソフトでないと計算できない場合があります。
 
 ==== フィンガープリント
 
-もう一つの方法としてフィンガープリントを利用することもできます。フィンガープリントとは分子の部分構造を0,1のバイナリーで表現したもので部分構造の有無とビットのon(1),off(0)を対応させたものです。
+もう一つがフィンガープリントです。フィンガープリントとは分子の部分構造を0,1のバイナリーで表現したもので部分構造の有無とビットのon(1),off(0)を対応させたものになります。
 フィンガープリントには固定長FPと可変長FPの二種類が存在し、古くはMACSKeyという固定長FP(予め部分構造とインデックスが決められているFP)が使われていましたが、現在ではECFP4(Morgan2)という可変長FPが利用されるのが普通です。
 
 RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf[開発者のGregさんのスライド]が詳しいので熟読してください。
@@ -544,6 +642,14 @@ mol2 = Chem.MolFromSmiles("Clc1ccccc1")
 [source, python]
 ----
 Draw.MolsToGridImage([mol1, mol2])
+----
+
+ECFP4に相当する半径2のモルガンフィンガープリントを生成します。
+
+[source, python]
+----
+fp1 = AllChem.GetMorganFingerprint(mol1, 2)
+fp2 = AllChem.GetMorganFingerprint(mol2, 2)
 ----
 
 類似度の評価にはタニモト係数を使います。
@@ -579,8 +685,8 @@ Draw.MolsToGridImage([apx, rvx], legends=["apixaban", "rivaroxaban"])
 
 [source, python]
 ----
-apx_fp = AllChem.GetMorganFingerprint(apx, 2, useFeatures=True)
-rvx_fp = AllChem.GetMorganFingerprint(rvx, 2, useFeatures=True)
+apx_fp = AllChem.GetMorganFingerprint(apx, 2)
+rvx_fp = AllChem.GetMorganFingerprint(rvx, 2)
 ----
 
 
@@ -596,7 +702,7 @@ DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 == 7章: グラフ構造を利用した類似性の評価
 :imagesdir: images
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_rdkit.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MCS.ipynb"]
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
@@ -791,7 +897,7 @@ MMPを視覚化して解釈する例を紹介しました。
 == 8章: 沢山の化合物を一度にみたい
 :imagesdir: images
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch08_rdkit.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch08_visualization.ipynb"]
 
 沢山のデータがどのように分布しているのかを見るには適当な空間にマッピングするのが一般的です。特にケモインフォマティクスではケミカルスペースという言葉が使われます。
 
@@ -903,7 +1009,7 @@ image::ch08/tsne.png[PCA, size=500]
 <<<
 == 9章: 構造活性相関（QSAR）の基礎
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch09_rdkit.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch09_qsar.ipynb"]
 
 化学構造と生物学的活性における相関関係をStructure Activity Relationship(SAR)またはQuantative SAR(QSAR)と呼びます。一般的には**似たような化合物は似たような生物学的活性を示す**ことが知られており、この相関関係を理解しドラッグデザインに活かすことが創薬研究において大変重要です。
 
@@ -1175,7 +1281,7 @@ image::ch10/ch10_2.png[NoteBook]
 == 11章: ディープラーニングを利用した構造活性相関
 :imagesdir: images
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch11_rdkit.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch11_simple_dnn.ipynb"]
 
 link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[10章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をします。
 
@@ -1419,6 +1525,7 @@ python example.py
 <<<
 == 12章: コンピューターに化学構造を考えさせる
 :imagesdir: images
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch12_rnn.ipynb"]
 
 Deep Learningがメディナルケミストリに大きなインパクトをもたらしたものの一つに生成モデルがあげられます。特にこの数年での生成モデルの進化は素晴らしいです。ここではlink:https://github.com/MarcusOlivecrona/REINVENT[Marcus Olivecronaにより開発されたREINVENT]を使って新規な合成案を提案させてみましょう。
 
