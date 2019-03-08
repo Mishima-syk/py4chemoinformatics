@@ -1,7 +1,7 @@
 == 7章: グラフ構造を利用した類似性の評価
 :imagesdir: images
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_rdkit.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MCS.ipynb"]
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 

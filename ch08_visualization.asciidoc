@@ -1,7 +1,7 @@
 == 8章: 沢山の化合物を一度にみたい
 :imagesdir: images
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch08_rdkit.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch08_visualization.ipynb"]
 
 沢山のデータがどのように分布しているのかを見るには適当な空間にマッピングするのが一般的です。特にケモインフォマティクスではケミカルスペースという言葉が使われます。
 
