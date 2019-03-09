@@ -85,21 +85,68 @@ rf.fit(x_train, y_train)
 y_pred = rf.predict(x_test)
 ----
 
-confusion matrixを作成します。
+Confusion matrixを作成します。
+
+.Confusion matrixとは
+****
+Confusion matriｘはクラス分類の結果をまとめた表です。クラスを正しく分類できているかをわかりやすく視覚化できTP,TNが多くFP,FNが少ないほどよく分類できているということになります。
+
+|===
+|| 2+|Actual class
+
+|
+|
+|Positive
+|Negative
+
+.2+|Predicted class
+|Positive
+|True Positive(TP)
+|False Positive(FP)
+
+|Negative
+|False Negative(FN)
+|True Negative(TN)
+|===
+****
 
 [source, python]
 ----
 confusion_matrix(y_test, y_pred)
+#array([[11,  1],[ 5,  2]])
 ----
+
+|===
+|11 |1
+
+|5
+|2
+|===
 
 F1スコアを見てみましょう。
 
 [source, python]
 ----
 f1_score(y_test, y_pred, pos_label="POS")
+#0.4
 ----
 
 あまりよくないですね。
+
+NOTE: train_test_split関数がランダムに訓練セットとテストセット分割するので、Confution matrix,F1スコアの値は実行するたびに変わります。
+
+.F1 scoreとは
+****
+
+- 正しいと予測されたもののうち本当に正しいものの割合を適合率と呼ぶ precision=TP/(TP+FP)
+- 正しいものが正しいと予測された割合を再現率と呼ぶ recall=TP/(TP+FN)
+
+F1スコアは適合率と再現率の調和平均となり
+
+F1 = 2 * (precision * recall) / (precision + recall)
+
+で計算されます。
+****
 
 === 薬の効き目を予測しよう（回帰問題）
 
@@ -158,9 +205,15 @@ y_pred = rf.predict(x_test)
 [source, python]
 ----
 r2_score(y_test, y_pred)
+#0.52
 ----
 
 まずまずといったところでしょうか。
+
+.R2スコアとは
+****
+回帰の当てはまりの良さへの1つの評価指標としてよく利用されるものでlink:https://ja.wikipedia.org/wiki/%E6%B1%BA%E5%AE%9A%E4%BF%82%E6%95%B0[決定係数]とも呼ばれます。
+****
 
 === モデルの適用範囲(applicability domain)
 
@@ -168,10 +221,10 @@ r2_score(y_test, y_pred)
 
 当然その場合は予測された値は信頼できませんよね。つまり、予測値にはその予測が確からしいか？という信頼度が常についてまわります。そのようなモデルが信頼できる、または適用できる範囲をapplicability domainと呼びます。これに関しては明治大学金子先生のlink:https://datachemeng.com/applicabilitydomain/[モデルの適用範囲・モデルの適用領域]が詳しいです。
 
-==== (おまけコラム)applicability domainは信頼できるのか？
+==== (おまけコラム)applicability domainはどこまで信頼できるのか？
 
-applicability domainはトレーニングセットの類似性からその予測が信頼できるかという確度を測る手法です。ここで類似性が誰のための類似性なのかという問題が出てきます。我々がこの化合物とこの化合物は似ているよねと思うのは我々の勝手ですが、似ているか似ていないかは最終的には蛋白質が判断します。このあたりはいわゆるインピーダンスミスマッチだと考えています。MMPの文脈で説明されるActivity Cliffなどインピーダンスミスマッチに気取った名前をつけただけではないでしょうか？
+筆者は昔、Hugo Kubinyi先生の**似ている化合物は果たして似た活性を示すのか？**という疑問を、estradiolのOH基をMethoxy基に変換すると活性が消失する例を上げて説明されていたことに感銘を受けたのを覚えています。
 
-筆者はHugo Kubinyi先生の**似ている化合物は果たして似た活性を示すのか？**という疑問を、estradiolのOH基がMetxy基に変換すると活性が消失する例を上げて説明されているコメントに感銘を受けたのを覚えています。J.M.Cだと思うんですが、探しても見つからないのでもしご存知でしたら教えてください。
+applicability domainはトレーニングセットの類似性からその予測が信頼できるかという確度を測る手法です。ここで類似性が誰のための類似性なのかという問題が出てきます。我々がこの化合物とこの化合物は似ているよねと思うのは我々の勝手ですが、似ているか似ていないかは最終的には蛋白質が判断します。そのため必ずしも類似度から活性が予測できるわけではなく、極めて類似度が高いのに活性が消失してしまうことが多々あります。特にMMPの文脈で説明されたActivity Cliffはこのような事象にそれっぽい名前をつけたものです。
 
 <<<
