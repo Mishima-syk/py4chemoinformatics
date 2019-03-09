@@ -8,7 +8,7 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 === 効果ありなしの原因を考えてみる（分類問題）
 
-ChEMBからlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL829152[hERG阻害アッセイ]の73データを用いてIC50が1uM未満のものをhERG阻害あり、それ以外をhERG阻害なしとラベルします。
+ChEMBLからlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL829152[hERG阻害アッセイ]の73データを用いてIC50が1uM未満のものをhERG阻害あり、それ以外をhERG阻害なしとラベルします。
 
 まずは必要なライブラリをインポートします。
 
@@ -19,7 +19,7 @@ from rdkit.Chem import AllChem, Draw
 from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, f1_score
+from sklearn.metrics import confusion_matrix, F1_score
 from sklearn.ensemble import RandomForestClassifier
 ----
 
@@ -92,7 +92,7 @@ confusion matrixを作成します。
 confusion_matrix(y_test, y_pred)
 ----
 
-f1スコアを見てみましょう。
+F1スコアを見てみましょう。
 
 [source, python]
 ----

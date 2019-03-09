@@ -1,9 +1,9 @@
 == 10章: ディープラーニング入門
 :imagesdir: images
 
-link:ch09_qsar.asciidoc[9章]でRandomForestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupportVectorMachine(SVM), LogisticRegiression, ArtificialNeuralNetwork(ANN)などといったものが利用されています。
+link:ch09_qsar.asciidoc[9章]でRandom Forestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupport Vector Machine(SVM), Logistic Regiression, Artificial Neural Network(ANN)などといったものが利用されています。
 
-本章では、近年注目を浴びているANNの一種であるディープラーニグの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを離床してみます。
+本章では、近年注目を浴びているANNの一種であるディープラーニングの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを離床してみます。
 
 === ディープラーニングに関して
 
@@ -66,15 +66,15 @@ link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaborato
 利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみると良いでしょう。
 ****
 
-Google のアカウントがある方はGithub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
+Google のアカウントがある方はGitHub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
 まず、link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。
 
 image::ch10/ch10_1.png[GoogleColabTop]
 
-次いで、Githubというタブをクリックし、以下のURLをコピペします。
+次いで、GitHubというタブをクリックし、以下のURLをコピペします。
 link:https://github.com/Mishima-syk/sklearn-tutorial[https://github.com/Mishima-syk/sklearn-tutorial]
 するとURL先のNotebookが読み込ます。本資料は@y_samaが作成してくれたものです。データの準備からはじまり、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されています。非常にクオリティが高くDeepLearningではないですが、機械学習を学びたい方にとっては良いマテリアルになると思います。
-後半のPandasMLやAutoSklearnは、デフォルトの設定ですとCoalbに入ってないとエラーが出るかもしれません
+後半のPandasMLやAutoSklearnは、デフォルトの設定ですとColabに入ってないとエラーが出るかもしれません
 
 image::ch10/ch10_2.png[GoogleColab2]
 

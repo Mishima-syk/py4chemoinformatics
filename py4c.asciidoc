@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.10015(Draft) 2019/03/09
+v0.20000(Draft) 2019/03/09
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -102,7 +102,7 @@ $ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 === 謝辞
 
 本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた以下の方々に感謝いたします。
-
+link:https://twitter.com/antiplastics[@antiplastics],
 link:https://twitter.com/ReLuTropy[@ReLuTropy],
 link:https://twitter.com/ski_nanko[@ski_nanko],
 link:https://twitter.com/torusengoku[@torusengoku],
@@ -641,7 +641,7 @@ from rdkit.Chem import AllChem, Draw
 from rdkit.Chem.Draw import IPythonConsole
 ----
 
-smilesで分子を読み込みます。
+SMILESで分子を読み込みます。
 
 [source, python]
 ----
@@ -744,7 +744,7 @@ Draw.MolsToGridImage(mols, molsPerRow=5)
 
 image::ch06/vs01.png[result]
 
-類似度を確認すればわかりますが、今回調べた約20万件の化合物のでは最高でも23%の類似度しかないためあまり似ている化合物は見いだせませんでした。しかしZINCは7億5000万件のデータを収録してあるのでその中にはもっと似ている化合物はたくさんあるはずです。
+類似度を確認すればわかりますが、今回調べた約20万件の化合物は最高でも23%の類似度の化合物しか見いだせませんでした。しかしZINCは7億5000万件のデータを収録してあるのでその中にはもっと似ている化合物はたくさんあるはずです。
 
 === Structure Based Drug Design(SBDD)
 
@@ -893,7 +893,7 @@ TIP: 興味があればlink:https://sar.pharm.or.jp/wp-content/uploads/2018/09/S
 
 [source, python]
 ----
-python rfrag.py <MMPAを実施したいSmilesFileの名前 >フラグメント化したデータの保存ファイル名
+python rfrag.py <MMPAを実施したいFileの名前 >フラグメント化したデータの保存ファイル名
 # 例えば
 # python rfrag.py <data/sample.smi >data/sample_fragmented.txt
 
@@ -935,7 +935,7 @@ image::ch07/chemviz2.png[AppManager, width=400]
 
 今回利用するデータはlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL930273[<Inhibition of recombinant GSK3-beta> J. Med. Chem. (2008) 51:2062-2077]の151化合物です。MMPAを行うにはHTSのような探索データではなくて構造最適化のようにスキャフォールドが決まっているものを使うのが原則です。
 
-コマンドの流れを載せておきます。smilesのtextと活性や物性値のデータは別々にデータベースに登録する必要があります。
+コマンドの流れを載せておきます。SMILESのtextと活性や物性値のデータは別々にデータベースに登録する必要があります。
 
 [source, bash]
 ----
@@ -947,7 +947,7 @@ $ mmpdb loadprops -p act.txt CHEMBL930273.db              # load properties
 そのあとCytoscapeで読み込むためのgmlファイルを作成しますが、これは本書の範囲を超えるので割愛します。もし興味があるのであればlink:https://github.com/Mishima-syk/12/tree/master/kzfm[コード]を直接読んでもらうといいのですが
 流れは以下のとおりです。
 
-. link:https://github.com/Mishima-syk/12/blob/master/kzfm/mmp2gml.py[mmpdbからpython-igraphをつかてgmlファイルを作る]
+. link:https://github.com/Mishima-syk/12/blob/master/kzfm/mmp2gml.py[mmpdbからpython-igraphを使ってgmlファイルを作る]
 . link:https://github.com/Mishima-syk/12/blob/master/kzfm/CHEMBL930273.gml[gmlファイル]をCytoscapeで読み込む
 . Cytoscapeで属性をいい感じにいじる
 .. ノードの大きさを物性値に対応
@@ -1037,8 +1037,7 @@ with open("ch08_compounds.txt") as f:
 ----
 
 molオブジェクトからフィンガープリントを構築しますが、sklearnで取り扱えるようにnumpyアレイに変換します。
-rdkitのフィンガープリントをsklearnで取り扱う場合にはこの変換操作が必須なのでそういうものだとして覚えてしまうと
-よいです。
+rdkitのフィンガープリントをsklearnで取り扱う場合にはこの変換操作が必須なのでそういうものだとして覚えてしまうとよいです。
 
 [source, python]
 ----
@@ -1105,7 +1104,7 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 === 効果ありなしの原因を考えてみる（分類問題）
 
-ChEMBからlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL829152[hERG阻害アッセイ]の73データを用いてIC50が1uM未満のものをhERG阻害あり、それ以外をhERG阻害なしとラベルします。
+ChEMBLからlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL829152[hERG阻害アッセイ]の73データを用いてIC50が1uM未満のものをhERG阻害あり、それ以外をhERG阻害なしとラベルします。
 
 まずは必要なライブラリをインポートします。
 
@@ -1116,7 +1115,7 @@ from rdkit.Chem import AllChem, Draw
 from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, f1_score
+from sklearn.metrics import confusion_matrix, F1_score
 from sklearn.ensemble import RandomForestClassifier
 ----
 
@@ -1189,7 +1188,7 @@ confusion matrixを作成します。
 confusion_matrix(y_test, y_pred)
 ----
 
-f1スコアを見てみましょう。
+F1スコアを見てみましょう。
 
 [source, python]
 ----
@@ -1275,9 +1274,9 @@ applicability domainはトレーニングセットの類似性からその予測
 == 10章: ディープラーニング入門
 :imagesdir: images
 
-link:ch09_qsar.asciidoc[9章]でRandomForestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupportVectorMachine(SVM), LogisticRegiression, ArtificialNeuralNetwork(ANN)などといったものが利用されています。
+link:ch09_qsar.asciidoc[9章]でRandom Forestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupport Vector Machine(SVM), Logistic Regiression, Artificial Neural Network(ANN)などといったものが利用されています。
 
-本章では、近年注目を浴びているANNの一種であるディープラーニグの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを離床してみます。
+本章では、近年注目を浴びているANNの一種であるディープラーニングの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを離床してみます。
 
 === ディープラーニングに関して
 
@@ -1340,15 +1339,15 @@ link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaborato
 利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみると良いでしょう。
 ****
 
-Google のアカウントがある方はGithub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
+Google のアカウントがある方はGitHub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
 まず、link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。
 
 image::ch10/ch10_1.png[GoogleColabTop]
 
-次いで、Githubというタブをクリックし、以下のURLをコピペします。
+次いで、GitHubというタブをクリックし、以下のURLをコピペします。
 link:https://github.com/Mishima-syk/sklearn-tutorial[https://github.com/Mishima-syk/sklearn-tutorial]
 するとURL先のNotebookが読み込ます。本資料は@y_samaが作成してくれたものです。データの準備からはじまり、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されています。非常にクオリティが高くDeepLearningではないですが、機械学習を学びたい方にとっては良いマテリアルになると思います。
-後半のPandasMLやAutoSklearnは、デフォルトの設定ですとCoalbに入ってないとエラーが出るかもしれません
+後半のPandasMLやAutoSklearnは、デフォルトの設定ですとColabに入ってないとエラーが出るかもしれません
 
 image::ch10/ch10_2.png[GoogleColab2]
 
@@ -1371,7 +1370,7 @@ image::ch10/ch10_2.png[NoteBook]
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch11_simple_dnn.ipynb"]
 
-link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch09_qsar.asciidoc[９章]で構造活性相関の基礎を学びました。link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/ch10_deeplearning.asciidoc[10章]でディプラーニングを学びました。本章では、早速DNNを利用して構造活性相関解析をします。
+本章ではDNNを利用して構造活性相関解析をします。
 
 === DNNを利用した予測モデル構築
 
@@ -1477,9 +1476,9 @@ model1 = Model(inputs=[inputlayer1], outputs=[output1])
 model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 ----
 
-NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意おり、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
+NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意されており、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
 
-NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackprobagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
+NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
 
 モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
 
@@ -1581,7 +1580,7 @@ image::ch11/ch11_nfp.png[Neural Finger Print]
 
 ECFP(Circular Fingerprints)は入力の分子それぞれの原子からN近傍（Nは任意）までの原子までの情報をHash関数（この例ではMod）任意の値に変換、で固定長のベクトルに直すといったものでした。ざっくりいうと部分構造の有無を0/1のビット情報に直したものを利用するといったイメージです。一方、今回紹介するNFPはECFPにコンセプトは似ているのですが、Hash関数の部分がSigmoidに、Modで離散化する部分がSoftmaxになっています。従って入力されるデータセットによりECFPよりも柔軟に分子のフィンガープリントを生成することが期待されます。
 
-この論文が発表されて以降、数多くの実装がGithubに公開されていますが、各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないと動作しなかったりと意外と環境依存のものが多く扱いにくい状況になっています。残念なことに今回構築した環境で動作するものが公開されていませんのでKeras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
+この論文が発表されて以降、数多くの実装がGitHubに公開されていますが、各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないと動作しなかったりと意外と環境依存のものが多く扱いにくい状況になっています。残念なことに今回構築した環境で動作するものが公開されていませんのでKeras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
 
 [source, python]
 ----

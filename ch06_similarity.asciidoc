@@ -38,7 +38,7 @@ from rdkit.Chem import AllChem, Draw
 from rdkit.Chem.Draw import IPythonConsole
 ----
 
-smilesで分子を読み込みます。
+SMILESで分子を読み込みます。
 
 [source, python]
 ----

@@ -104,7 +104,7 @@ TIP: 興味があればlink:https://sar.pharm.or.jp/wp-content/uploads/2018/09/S
 
 [source, python]
 ----
-python rfrag.py <MMPAを実施したいSmilesFileの名前 >フラグメント化したデータの保存ファイル名
+python rfrag.py <MMPAを実施したいFileの名前 >フラグメント化したデータの保存ファイル名
 # 例えば
 # python rfrag.py <data/sample.smi >data/sample_fragmented.txt
 
@@ -146,7 +146,7 @@ image::ch07/chemviz2.png[AppManager, width=400]
 
 今回利用するデータはlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL930273[<Inhibition of recombinant GSK3-beta> J. Med. Chem. (2008) 51:2062-2077]の151化合物です。MMPAを行うにはHTSのような探索データではなくて構造最適化のようにスキャフォールドが決まっているものを使うのが原則です。
 
-コマンドの流れを載せておきます。smilesのtextと活性や物性値のデータは別々にデータベースに登録する必要があります。
+コマンドの流れを載せておきます。SMILESのtextと活性や物性値のデータは別々にデータベースに登録する必要があります。
 
 [source, bash]
 ----
@@ -158,7 +158,7 @@ $ mmpdb loadprops -p act.txt CHEMBL930273.db              # load properties
 そのあとCytoscapeで読み込むためのgmlファイルを作成しますが、これは本書の範囲を超えるので割愛します。もし興味があるのであればlink:https://github.com/Mishima-syk/12/tree/master/kzfm[コード]を直接読んでもらうといいのですが
 流れは以下のとおりです。
 
-. link:https://github.com/Mishima-syk/12/blob/master/kzfm/mmp2gml.py[mmpdbからpython-igraphをつかてgmlファイルを作る]
+. link:https://github.com/Mishima-syk/12/blob/master/kzfm/mmp2gml.py[mmpdbからpython-igraphを使ってgmlファイルを作る]
 . link:https://github.com/Mishima-syk/12/blob/master/kzfm/CHEMBL930273.gml[gmlファイル]をCytoscapeで読み込む
 . Cytoscapeで属性をいい感じにいじる
 .. ノードの大きさを物性値に対応
