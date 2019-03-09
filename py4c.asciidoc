@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.20000(Draft) 2019/03/09
+v0.20001(Draft) 2019/03/09
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -102,6 +102,7 @@ $ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 === 謝辞
 
 本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた以下の方々に感謝いたします。
+
 link:https://twitter.com/antiplastics[@antiplastics],
 link:https://twitter.com/ReLuTropy[@ReLuTropy],
 link:https://twitter.com/ski_nanko[@ski_nanko],
@@ -404,7 +405,6 @@ NOTE:: これ以外にもケモインフォマティクスに有用なデータ�
 :imagesdir: images
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_rdkit.ipynb"]
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_hetero_shuffle.ipynb"]
 
 この章ではRDKitを使って分子の読み込みの基本を覚えます。
 
@@ -442,7 +442,10 @@ mol
 
 image::ch05/ch05_01.png[Depict benzene]
 
-NOTE: 余談ですが、jupyter notebookを使うとコードを書きながら構造を確認することが簡単にできるのでケモインフォマティクスにおいては重宝されます。
+上のように原子を線でつなぎ構造を表現する方法（構造式）と、SMILES表記はどちらも同じものを表現しています。構造式は人が見てわかりやすいですが、SMILESはASCII文字列で表現されるのでより少ないデータ量で表現できるというメリットがあります。
+
+NOTE: 文字列で表現できるということは、文字列生成アルゴリズムを応用することで新規な化学構造を生成することも可能ということです。この内容に関しては12章で詳しく説明します。
+
 
 === 複数の化合物を一度に取り扱うには？
 
@@ -450,8 +453,9 @@ NOTE: 余談ですが、jupyter notebookを使うとコードを書きながら�
 
 .sdfフォーマットとは？
 ****
-MDL社で開発された分子表現のためのフォーマットにMOL形式というものがあります。このMOL形式を拡張したものがSDF形式です。
-具体的にはMOL形式で表現されたものを"$$$$"という行で区切ることにより、複数の分子を取り扱えるようにしてあります。
+MDL社で開発された分子表現のためのフォーマットにMOL形式というものがあります。このMOL形式を拡張したものがSDF形式です。具体的にはMOL形式で表現されたものを"$$$$"という行で区切ることにより、複数の分子を取り扱えるようにしてあります。
+
+MOL形式は分子の三次元座標を格納することができ二次元だけでなく立体構造を表現できる点はSMILESとの大きな違いです。
 ****
 
 ==== sdfファイルをChEMBLからダウンロードする
@@ -465,7 +469,7 @@ NOTE::
 
 ==== RDKitでsdfを取り扱う
 
-RDKitでsdfファイルを読み込むにはSDMolSupplierというメソッドを利用します。複数の化合物を取り扱うことになるのでmolではなくmolsという変数に格納していることに注意
+RDKitでsdfファイルを読み込むにはSDMolSupplierというメソッドを利用します。複数の化合物を取り扱うことになるのでmolではなくmolsという変数に格納していることに注意してください。どういう変数を使うかの決まりはありませんが、見てわかりやすい変数名をつけることで余計なミスを減らすことは心がけるとよいでしょう。
 
 [source, python]
 ----
@@ -483,7 +487,7 @@ len(mols)
 
 ==== 分子の構造を描画する
 
-forループを使って、ひとつずつ分子を描画してもいいですが、RDKitには複数の分子を一度に並べて描画するメソッドが用意されているので、今回はそちらのMolsToGridImageメソッドを使います。
+forループを使って、ひとつずつ分子を描画してもいいですが、RDKitには複数の分子を一度に並べて描画するメソッドが用意されているので、今回はそちらのMolsToGridImageメソッドを使います。なお一行に並べる分子の数を変更するにはmolsPerRowオプションで指定します
 
 [source, python]
 ----
@@ -492,7 +496,8 @@ Draw.MolsToGridImage(mols)
 
 image::ch05/ch05_04.png[MolsToGridImage]
 
-===== (おまけ)参考までにループを回すやりかたも載せておきます。
+===== (おまけ)
+参考までにループを回すやりかたも載せておきます。
 
 [source, python]
 ----
@@ -501,15 +506,9 @@ for mol in mols:
     display(mol)
 ----
 
-==== Q&A
-
-[qanda]
-変数名を分子の数でmolやmolsに変えるのはなぜですか？::
-  どういう変数を使うかの決まりはありませんが、見てわかりやすい変数名をつけることで余計なミスを減らし、生産性が上がります
-MolsToGridImageで一行に並べる分子の数を変更することはできますか？::
-  できます。molsPerRowというオプションが用意されています。Draw.MolsToGridImage(mols, molsPerRow=10)のように使います
-
 === RDKitを使ってヘテロシャッフリングをしてみる
+
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_hetero_shuffle.ipynb"]
 
 化合物の物性を変換するアプローチの一つとしてヘテロシャッフリングがあります。これは置換基の位置関係は維持したまま、芳香環を形成する炭素、窒素、硫黄、酸素などの原子種を入れ替えて新しい分子を生み出す手法です。
 ヘテロシャッフリングをすることで活性を維持しつつ、脂溶性などのプロパティを変化させてADMETの課題を解決する、または活性そのものを改善するなどの効果を期待します。実際の現場では単にシャッフルしたものを何でも作ることはなく、Docking Studyなどをして好ましい相互作用を持つ分子のみを選んだりします。その前段階としていろんな分子を生成することは一つのアプローチとしてあっても良いでしょう。
@@ -629,6 +628,14 @@ NOTE:いくつかの記述子に関しては市販ソフトでないと計算で
 RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf[開発者のGregさんのスライド]が詳しいので熟読してください。
 
 今回はこのECFP4(Morgan2)を利用した類似性評価をしてみましょう。
+
+.SMILESとフィンガープリントの違い
+****
+SMILESは構造をASCII文字列で表現したものでフィンガープリントは部分構造の有無をバイナリで表現したものです。違いは前者は**構造表現**の一つであるのに対し、後者は**特徴表現**の一つだということです。
+部分構造の有無だけしか表現していないため、部分構造間の関係性（どう位置関係でつながっているのか）といった情報が失われ、もとの構造に戻ることはありません。
+
+テキストマイニングでよく用いられるBag-of-Wordsに対応するのでBag-of-Fragmentsと呼ぶ人もいます。
+****
 
 === 類似度を計算する
 
