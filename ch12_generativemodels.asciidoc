@@ -4,6 +4,13 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 Deep Learningがメディナルケミストリに大きなインパクトをもたらしたものの一つに生成モデルがあげられます。特にこの数年での生成モデルの進化は素晴らしいです。ここではlink:https://github.com/MarcusOlivecrona/REINVENT[Marcus Olivecronaにより開発されたREINVENT]を使って新規な合成案を提案させてみましょう。
 
+.生成モデルとは？
+****
+11章で構築した予測モデルを一般に識別モデルといいます。一方で入力の分布をモデル化することでモデルからのサンプリングつまり入力データを生成することが出来るようになります。これを生成モデルといいます。
+
+詳しくはlink:https://www.microsoft.com/en-us/research/uploads/prod/2006/01/Bishop-Pattern-Recognition-and-Machine-Learning-2006.pdf[PRMLの1.5.4]を読むのをおすすめします
+****
+
 === 準備
 pytorchというディープラーニングのライブラリをcondaでインストールします。新しいバージョンでは動かないのでバージョンを指定してインストールします。
 
@@ -93,8 +100,9 @@ Draw.MolsToGridImage(mols, molsPerRow=3, subImgSize=(500,400))
 
 image::ch11/ch11_01.png[Sitagliptin analogues]
 
-=== REINVENTについて簡単に説明
 
-link:https://arxiv.org/abs/1704.07555[元論文(Molecular De Novo Design through Deep Reinforcement Learning)]を読みましょう。
-
-（要説明）
+.REINVENTについて
+****
+是非とも
+link:https://arxiv.org/abs/1704.07555[元論文(Molecular De Novo Design through Deep Reinforcement Learning)]を読んでください。
+****
