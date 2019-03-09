@@ -69,7 +69,83 @@ DataStructs.TanimotoSimilarity(fp1, fp2)
 # 0.5384615384615384
 ----
 
-=== （おまけ）もう少しドラッグライクな分子の類似性を評価する
+=== バーチャルスクリーニング
+
+ここまでで化合物の類似性の評価方法について説明しました。この類似性の指標を用い多くの化合物の中から特定の化合物群を選び出すことをバーチャルスクリーニングと呼びます。
+
+例えば薬になりそうな化合物が特許や論文で発表されたり、自社のアッセイ系で有望そうな化合物が見つかった場合、自社の化合物ライブラリデータベースや市販化合物のデータベースの中に類似の化合物で、より有望そうなものがあるかどうかを探したいことがあります。ここではノイラミニダーゼ阻害薬として知られるインフルエンザ治療薬であるlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL466246/[イナビル]の類似体が購入可能であるかをlink:http://zinc15.docking.org/[ZINC]を利用して調べます。
+
+イナビルの分子量が約350,LogPが約-3だったのZINCの分子量350-375,LogP=-1の340万化合物の区画を選択しました。この区画は16のファイルに分かれていますが、最初の1セットだけダウンロードして使ってみます。
+
+NOTE: データのダウンロード方法は4章で説明しています。
+
+jupyter notebookでは!で始めるとShellコマンドを実行できます。以下はjupyter notebook上でwgetコマンドでZINCのデータセットをダウンロードする例です
+
+[source, python]
+----
+!wget http://files.docking.org/2D/EA/EAED.smi
+----
+
+ファイルからSMILESを読み込んでmolオブジェクトにしますが最初の行はヘッダーなので読み飛ばします。また、各行の最終文字は改行文字なのでl[:-1]として除いています。最後に何化合物あるか調べます。
+
+[source, python]
+----
+mols = []
+with open("EAED.smi") as f:
+    f.readline()
+    for l in f:
+        mol = Chem.MolFromSmiles(l[:-1])
+        mols.append(mol)
+print(len(mols))
+# 195493
+----
+
+続いてイナビル(LANIMAMIBIR)との類似度を調べるための関数を用意します。
+
+[source, python]
+----
+laninamivir = Chem.MolFromSmiles("CO[C@H]([C@H](O)CO)[C@@H]1OC(=C[C@H](NC(=N)N)[C@H]1NC(=O)C)C(=O)O")
+laninamivir_fp = AllChem.GetMorganFingerprint(laninamivir, 2)
+
+def calc_laninamivir_similarity(mol):
+    fp = AllChem.GetMorganFingerprint(mol, 2)
+    sim = DataStructs.TanimotoSimilarity(laninamivir_fp, fp)
+    return sim
+----
+
+調べてみます。
+
+[source, python]
+----
+similar_mols =[]
+for mol in mols:
+    sim = calc_laninamivir_similarity(mol)
+    if sim > 0.2:
+        similar_mols.append((mol, sim))
+----
+
+結果を類似度の高い順に並べ替えて最初の10件だけ取り出します。
+
+[source, python]
+----
+similar_mols.sort(key=lambda x: x[1], reverse=True)
+mols = [l[0] for l in similar_mols[:10]]
+----
+
+描画してみます。
+
+[source, python]
+----
+Draw.MolsToGridImage(mols, molsPerRow=5)
+----
+
+image::ch06/vs01.png[result]
+
+類似度を確認すればわかりますが、今回調べた約20万件の化合物のでは最高でも23%の類似度しかないためあまり似ている化合物は見いだせませんでした。しかしZINCは7億5000万件のデータを収録してあるのでその中にはもっと似ている化合物はたくさんあるはずです。
+
+=== Structure Based Drug Design(SBDD)
+
+(LBVSに触れたのでSBVS,SBDDにも言及するかどうか検討中のサブセクション)
 
 ここでは抗凝固薬として上市されているlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL231779/[apixaban], link:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL198362/[rivaroxiaban]の類似性を評価します。
 構造を見るとわかりますが、なんとなく似ていますが、どの部分とどの部分が対応するか

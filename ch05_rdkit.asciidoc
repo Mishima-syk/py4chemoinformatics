@@ -107,8 +107,6 @@ for mol in mols:
 MolsToGridImageで一行に並べる分子の数を変更することはできますか？::
   できます。molsPerRowというオプションが用意されています。Draw.MolsToGridImage(mols, molsPerRow=10)のように使います
 
-<<<
-
 === RDKitを使ってヘテロシャッフリングをしてみる
 
 化合物の物性を変換するアプローチの一つとしてヘテロシャッフリングがあります。これは置換基の位置関係は維持したまま、芳香環を形成する炭素、窒素、硫黄、酸素などの原子種を入れ替えて新しい分子を生み出す手法です。
@@ -199,3 +197,5 @@ image::ch05/ch05_07.png[res2]
 
 - https://pubs.acs.org/doi/10.1021/jm3001289
 - https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563
+
+<<<

@@ -42,6 +42,7 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 
 - 記述子、フィンガープリント
 - 類似度を計算する
+- バーチャルスクリーニング
 
 == link:ch07_graph.asciidoc[07 グラフ構造を利用した類似性の評価]
 
