@@ -9,9 +9,7 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 はじめにDNNを利用したシンプルな予測モデルを構築してみます。ここでは9章と同じデータを使います。最初に分類モデルを作成し、Positiveのラベルを[0, 1], Negativeのラベルを[1, 0]の二次元のOneHotベクトルで表します。KerasのModelオブジェクトを利用してモデルを作成した場合、上記の二次元のそれぞれの期待値が得られます。どちらのクラスに属する可能性が高いかを知るにはNumpyのArgmax関数を使えばよいです。
 
-TIP: このアプローチは次元が増えても同じで、10クラス分類であれば10次元で各クラスの期待値が返ってくるので同様にArgmaxを使うことで最も期待値が大きいクラスのインデックスを取得できます。
-
-NOTE: OneHotベクトルとはある一つの値が1でそれ以外が0になるようなベクトルです。１０クラスの分類問題を考えた場合、ラベルは0~9の`0個になります。これをOneHotベクトルに変換するということはラベルが0ならば、Index0を1にそれ以外を0にしたベクトル[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]になります。ラベルが5ならば、Index5を1に、それ以外を0にしたベクトル[0, 0, 0, 0, 0, 5, 0, 0, 0, 0]になります。上の例ではPositive/Negativeの2クラスですので、OneHotベクトルは2次元になっています。
+NOTE: OneHotベクトルとはある一つの値が1でそれ以外が0になるようなベクトルです。10クラスの分類問題を考えた場合[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]のようにどこかが1で残りの9個が0になるようなベクトルでクラスを表現できます。上の例ではPositive/Negativeの2クラスですので、OneHotベクトルは2次元になっています。
 
 必要なライブラリをインポートします。
 
@@ -88,11 +86,9 @@ x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_stat
 
 Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。
 
-Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いました。
+Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いましたがlink:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
-
-TIP: link:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 [source, python]
 ----
@@ -112,7 +108,16 @@ model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accu
 
 NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意されており、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
 
-NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。Epochsを増やすとなぜ過学習のリスクがあるのか？という点を考えてみます。トレーニングデータを用いてEpoch毎に正解の値と、予測値の誤差を計算し、小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまうでしょう。従ってEpoch毎、Training set/ Validation setの精度を評価しプロットすることをお勧めします。Training setの精度がどんどん向上する一方でValidation setの精度が変化しないまたは悪くなっているといった傾向が見えてきたら過学習し始めている懸念があります。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。また、英語の記事になりますが、このlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[ブログ]にEary stoppingの紹介と参考文献のURLがまとまっています。興味のある方はご一読ください。
+NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと過学習のリスクもあるので長ければ良いわけではないのでLoss/Accuracyなどを観測して適切なEpoch数を考えましょう。
+
+.Epochsを増やすとなぜ過学習のリスクがあるのか？
+****
+トレーニングデータを用いてEpoch毎に正解の値と予測値の誤差を小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまいます。
+
+過学習の判断にはEpoch毎、Training set/ Validation setの精度を評価しプロットするとTraining setの精度が向上する一方でValidation setの精度が変化しないまたは悪くなっているかどうかを調べればよいです。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。
+
+詳しくはlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Early stoppingの紹介と参考文献]をご覧ください。
+****
 
 モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
 
@@ -248,4 +253,5 @@ python example.py
 - link:https://github.com/deepchem/deepchem[DeepChem]
 - link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Eary stoppingに関して]
 - link:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[SIFT原著論文]
+
 <<<

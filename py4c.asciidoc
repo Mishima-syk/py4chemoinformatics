@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.30000(Draft) 2019/03/10
+v0.3    0000(Draft) 2019/03/10
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -511,10 +511,13 @@ for mol in mols:
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_hetero_shuffle.ipynb"]
 
 化合物の物性を変換するアプローチの一つとしてヘテロシャッフリングがあります。これは置換基の位置関係は維持したまま、芳香環を形成する炭素、窒素、硫黄、酸素などの原子種を入れ替えて新しい分子を生み出す手法です。
-ヘテロシャッフリングをすることで活性を維持しつつ、脂溶性などのプロパティを変化させてADMETの課題を解決する、または活性そのものを改善するなどの効果を期待します。実際の現場では単にシャッフルしたものを何でも作ることはなく、Docking Studyなどをして好ましい相互作用を持つ分子のみを選んだりします。その前段階としていろんな分子を生成することは一つのアプローチとしてあっても良いでしょう。
-古いですがBMSの研究者らはlink:https://pubs.acs.org/doi/10.1021/ci9004964[Morph]というアルゴリズムを論文発表しています。彼らは入力分子を元にヘテロ原子を入れ込んだ分子を種々発生させ、新しいケミカルシリーズの探索をしています。
-RDKITで同じように再帰的にヘテロシャッフルした分子を生成するコードを書いてみました。
-下記が実際のコード部分です。芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変えていきます。変えたものに関してSanitizeMolのチェックかけてパスしたもののみを返します。recursive_replaceという関数が再帰的に原子を入れ替えます。Thresholdの値がオプションで設定できます。これは入力分子内の芳香環を形成する原子に対する芳香環を形成する窒素原子の数の割合です。これを設定しているのは、芳香環嬢の原子が全て炭素以外の原子になってしまうのは違和感があるからです。
+
+ヘテロシャッフリングをすることで活性を維持しつつ、脂溶性などのプロパティを変化させてADMETの課題を解決する、または活性そのものを改善する、特許対策の効果をなど期待します。非常に有名な例としてはPfizer社のSildenafilとGSK社のVardinafilが挙げられます。
+実際の現場では単にシャッフルしたものを何でも作ることはなく、Docking Studyなどをして好ましい相互作用を持つ分子のみを選んだりします。その前段階としていろんな分子を生成することは一つのアプローチとしてあっても良いでしょう。
+
+RDKITで再帰的にヘテロシャッフルした分子を生成するコードを書いてみました。
+下記が実際のコード部分です。芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変えていきます。変えたものに関してSanitizeMolのチェックかけてパスしたもののみを返します。
+recursive_replaceという関数が再帰的に原子を入れ替えます。Thresholdの値がオプションで設定できます。これは入力分子内の芳香環を形成する原子に対する芳香環を形成する窒素原子の数の割合です。これを設定しているのは、芳香環嬢の原子が全て炭素以外の原子になってしまうのは違和感があるからです。
 
 [source, python]
 ----
@@ -592,13 +595,15 @@ Draw.MolsToGridImage(res, molsPerRow=5)
 
 image::ch05/ch05_07.png[res2]
 
-どうでしょうか。二つの分子の例を示しました。一つ目は66の芳香環であり、それを形成できる原子は炭素と、窒素のみの場合です。二つ目は５員環で炭素、窒素、硫黄、酸素が原子の候補として入る場合の例です。いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されていると思います。興味のある方はコードを書き換えていろいろ検証してみてください。
+どうでしょうか。二つの分子の例を示しました。一つ目は66の芳香環であり、それを形成できる原子は炭素と、窒素のみの場合です。
+二つ目は５員環で炭素、窒素、硫黄、酸素が原子の候補として入る場合の例です。
+いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されていると思います。興味のある方はコードを書き換えていろいろ検証してみてください。
 
 参考文献
 
 - https://pubs.acs.org/doi/10.1021/jm3001289
 - https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563
-
+- https://dx.doi.org/10.1021/jm101027s
 <<<
 == 6章: 化合物の類似性を評価してみる
 :imagesdir: images
@@ -920,6 +925,8 @@ MMPは変換前、変換後の情報をノード、変換ルールをエッジ�
 その他、Matched Molecular SeriesというMMPの拡張的手法も提案されています。他には連続的な変換ルールを解析し、経験的に生み出されたlink:https://www.slideshare.net/NextMoveSoftware/revising-the-topliss-tree[Topless Tree]のルールを表現したlink:https://pubs.acs.org/doi/10.1021/jm500022q[論文]もあります。
 
 ペアのデータを拡張し、トレンドを見極めるのがMMPAです。
+
+NOTE: link:http://www.daylight.com/dayhtml/doc/theory/theory.smirks.html[SMIRKS]は分子の変換をSMILESのように文字列表記によって表現する手法です。 創薬化学においてスキャフォールドといった場合、化合物のコアになる部分構造のことを指すことが多いです。大抵の場合は、SARにて化合物誘導体を作る際にも変えない部分化合物デザインの足場になる中心構造のことを言います。
 
 === Cytoscapeを使ってMMPネットワークを可視化する
 
@@ -1362,15 +1369,20 @@ applicability domainはトレーニングセットの類似性からその予測
 
 link:ch09_qsar.asciidoc[9章]でRandom Forestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupport Vector Machine(SVM), Logistic Regiression, Artificial Neural Network(ANN)などといったものが利用されています。
 
-本章では、近年注目を浴びているANNの一種であるディープラーニングの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを離床してみます。
+本章では、近年注目を浴びているANNの一種であるディープラーニングの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを利用してみます。
 
 === ディープラーニングに関して
 
 生物の脳には神経細胞が存在し、それらがネットワークを形成することで情報を伝達したり、記憶や学習しています。このネットワーク構造を数理モデル化したものがArtificial Neural Network(ANN)です。
 
-ANNは、学習のための情報を入れる**入力層**、入力情報のパターンを元に反応するかしないか（神経シナプスの発火に対応）を学習する**中間層（または隠れ層）**、最後の**出力層**の三層から構成されていますが、ディープラーニングはこの隠れ層の部分が分岐などを含む多層構造にすることで高精度な予測を可能としています。
+ANNは、学習のための情報を入れる**入力層**、入力情報のパターンを元に反応するかしないか（神経シナプスの発火に対応）を学習する**中間層（または隠れ層）**、最後の**出力層**の三層から構成されていますが、ディープラーニングはこの隠れ層の部分を分岐させたり、多層にする構造にすることで高精度な予測を可能としています。
+
+NOTE: 分岐構造を持つニューラルネットワークとは、入力層＝＞Layer1＝＞Layer2＝＞Layer3＝＞出力層という直列の構造ではなく入力層＝＞Layer1＝＞Layer2-1, Layer2-2＝＞Concate(Layer2-1,Layer2-2)＝＞出力層となるように一つの入力層に対して隠れ層が二つ以上に分かれる場合を指します。目的によって出力前にこれらのデータを再度まとめて（Concate）一つの出力層にしたり、または分岐させたまま学習をし、それぞれ異なるターゲットを学習させるといった使い方もあり得ます。下は、左が分岐しない入力層、隠れ層２層、出力層からなるモデルのイメージ図です。右は途中に分岐がありまた最後の部分でそれらを合わせて一つの出力層にしているモデルのイメージ図です。
+
+image::ch10/ch10_4.png[Network graph]
 
 ディープラニングは近年盛んに研究されており、上記のような多層構造を持つという単純なモデルだけではなく様々な構造のモデルが日々提案されています。それらすべてのフォローは本書の範囲を超えるのでこれ以上は説明しません。
+
 
 
 === TensorFlowとKerasについて
@@ -1386,9 +1398,19 @@ Pythonでディープラーニングを行う場合、複数のフレームワ�
 
 この中で本書ではGoogle社が開発しているフレームワークのTensorflow/Kerasを使います。
 
-Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報も少ないので、1.x系でまずは試しましょう。また同じ1.xでもバージョンによってAPIが少し変更されていますので、今後動かしたいコードがあった時にどのバージョンで書かれているかに気をつける必要があります。
+Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報が少ないので、1.x系を利用してください。また同じ1.xでもバージョンによってAPIが異なるので、動かしたいコードがあった場合、どのバージョンで書かれているかに気をつける必要があります。
 
-KerasはTensoflowなどの低レベルフレームワークをバックエンドに動く高レベルAPIで、Kerasを利用することでテンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので本書ではTensorflowに統合されたKerasを利用します。
+KerasはTensoflowなどの低レベルフレームワークをバックエンドにした高レベルAPIで、テンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。そのため別途イントールしなくてもTensorflowからKerasを利用できますが、Tensorflow同梱バージョンのKerasは本家との最新バージョンになっていないことがあります。
+
+実際に本家Kerasを使うのが良いか、Tensorflow同梱Kerasを使うのが良いのかは悩ましいところですが本書では利便性のためにTensorflowに統合されたKerasを利用します。
+
+.KerasとTensorflowの関係性
+****
+KerasとTensoflowをlink:https://blog.keras.io/introducing-keras-2.html[オフィシャルブログを参照]しつつ少し整理しておきます。元々KerasはTensoflowとは別のプロジェクトとして開発されており（もちろん今もです）Kerasを使うにはTensorflowとはインストールする必要がありました。しかし2017年Keras2.xのメジャーバージョンアップのタイミングのあたりでTensoflowプロジェクトがKerasを統合するようになりました。以下の英文は上記リンクの記事の抜粋です。現在はTensorflowからKerasを呼び出し利用することが可能になっています。
+
+_TensorFlow integration
+Although Keras has supported TensorFlow as a runtime backend since December 2015, the Keras API had so far been kept separate from the TensorFlow codebase. This is changing: the Keras API will now become available directly as part of TensorFlow, starting with TensorFlow 1.2. This is a big step towards making TensorFlow accessible to its next million users._
+****
 
 === インストールしてみよう
 
@@ -1428,20 +1450,20 @@ link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaborato
 Google のアカウントがある方はGitHub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
 まず、link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。
 
-image::ch10/ch10_1.png[GoogleColabTop]
+image::ch10/ch10_1.png[GoogleColabTop, pdfwidth=60%]
 
 次いで、GitHubというタブをクリックし、以下のURLをコピペします。
 link:https://github.com/Mishima-syk/sklearn-tutorial[https://github.com/Mishima-syk/sklearn-tutorial]
-するとURL先のNotebookが読み込ます。本資料は@y_samaが作成してくれたものです。データの準備からはじまり、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されています。非常にクオリティが高くDeepLearningではないですが、機械学習を学びたい方にとっては良いマテリアルになると思います。
-後半のPandasMLやAutoSklearnは、デフォルトの設定ですとColabに入ってないとエラーが出るかもしれません
+するとURL先のNotebookが読み込ます。本資料は@y_samaが作成したものです。データの準備から、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されていますので、機械学習を学びたい方にとっては良いマテリアルになると思います。
+後半のPandasMLやAutoSklearnは、デフォルトの設定ですとColabに入ってないとエラーが出たらライブラリをインストールしてください。
 
-image::ch10/ch10_2.png[GoogleColab2]
+image::ch10/ch10_2.png[GoogleColab2, pdfwidth=60%]
 
-ノートブックを開くとJupyter notebookと同じ感じの画面になります。Shift＋リターンキーでセルのコードを実行できると思います。
+ノートブックを開くとJupyter notebookと同じような画面になります。Shift＋リターンキーでセルのコードを実行できます。
 
-image::ch10/ch10_2.png[NoteBook]
+image::ch10/ch10_2.png[NoteBook, pdfwidth=60%]
 
-参考までに本書執筆時点（201903）でGoogleColabデフォルトで利用できるライブラリを確認するにはセルの中で '!pip freeze'と打つと列記されます。
+GoogleColabデフォルトで利用できるライブラリを確認するにはセルの中で '!pip freeze'と打つと列記されます。
 
 - absl-py==0.7.0
 - alabaster==0.7.12
@@ -1462,8 +1484,7 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 はじめにDNNを利用したシンプルな予測モデルを構築してみます。ここでは9章と同じデータを使います。最初に分類モデルを作成し、Positiveのラベルを[0, 1], Negativeのラベルを[1, 0]の二次元のOneHotベクトルで表します。KerasのModelオブジェクトを利用してモデルを作成した場合、上記の二次元のそれぞれの期待値が得られます。どちらのクラスに属する可能性が高いかを知るにはNumpyのArgmax関数を使えばよいです。
 
-TIP: このアプローチは次元が増えても同じで、１０クラス分類であれば10次元で各クラスの期待値が返ってくるので同様にArgmaxを使うことで最も期待値が大きいクラスのインデックスを取得できます。
-
+NOTE: OneHotベクトルとはある一つの値が1でそれ以外が0になるようなベクトルです。10クラスの分類問題を考えた場合[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]のようにどこかが1で残りの9個が0になるようなベクトルでクラスを表現できます。上の例ではPositive/Negativeの2クラスですので、OneHotベクトルは2次元になっています。
 
 必要なライブラリをインポートします。
 
@@ -1540,11 +1561,9 @@ x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_stat
 
 Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。
 
-Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いました。
+Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いましたがlink:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
-
-TIP: link:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 [source, python]
 ----
@@ -1564,7 +1583,16 @@ model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accu
 
 NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意されており、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
 
-NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
+NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと過学習のリスクもあるので長ければ良いわけではないのでLoss/Accuracyなどを観測して適切なEpoch数を考えましょう。
+
+.Epochsを増やすとなぜ過学習のリスクがあるのか？
+****
+トレーニングデータを用いてEpoch毎に正解の値と予測値の誤差を小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまいます。
+
+過学習の判断にはEpoch毎、Training set/ Validation setの精度を評価しプロットするとTraining setの精度が向上する一方でValidation setの精度が変化しないまたは悪くなっているかどうかを調べればよいです。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。
+
+詳しくはlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Early stoppingの紹介と参考文献]をご覧ください。
+****
 
 モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
 
@@ -1668,6 +1696,10 @@ ECFP(Circular Fingerprints)は入力の分子それぞれの原子からN近傍�
 
 この論文が発表されて以降、数多くの実装がGitHubに公開されていますが、各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないと動作しなかったりと意外と環境依存のものが多く扱いにくい状況になっています。残念なことに今回構築した環境で動作するものが公開されていませんのでKeras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
 
+==== Q&A 画像分類においてピクセルのまま古典的な手法を使うというアプローチは有効だったのか？
+
+_SIFTが提案されたのは1999年です。このlink:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[原著論文]を読んでみました。物体（画像）認識においてピクセルそのものを扱う場合の難しさは、オブジェクトの位置、回転、大きさ（スケール）、光度などが異なるものを扱うところにあるようです。これら、変動する値を普遍的な特徴量に変える方法が種々研究されていたようです。ピクセルそのものを使う方法が全くないわけではなく、私が機械学習を勉強する際に購入したlink:https://www.oreilly.co.jp/books/9784873117980/[pythonではじめる機械学習]には人の顔の画像データを学習して分類する例が載っています。ここではピクセルデータを入力に、主成分分析により顔の特徴を抽出し分類をしています。Qに関して明確に有効だったという文献を探せていませんが、タスクによっては有効であったと思います。もし詳しい方いたらぜひコメントください。_
+
 [source, python]
 ----
 git clone https://github.com/iwatobipen/keras-neural-graph-fingerprint.git
@@ -1694,6 +1726,8 @@ python example.py
 - link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
 - link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
 - link:https://github.com/deepchem/deepchem[DeepChem]
+- link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Eary stoppingに関して]
+- link:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[SIFT原著論文]
 
 <<<
 == 12章: コンピューターに化学構造を考えさせる
