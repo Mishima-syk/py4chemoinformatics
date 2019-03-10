@@ -9,9 +9,7 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 はじめにDNNを利用したシンプルな予測モデルを構築してみます。ここでは9章と同じデータを使います。最初に分類モデルを作成し、Positiveのラベルを[0, 1], Negativeのラベルを[1, 0]の二次元のOneHotベクトルで表します。KerasのModelオブジェクトを利用してモデルを作成した場合、上記の二次元のそれぞれの期待値が得られます。どちらのクラスに属する可能性が高いかを知るにはNumpyのArgmax関数を使えばよいです。
 
-TIP: このアプローチは次元が増えても同じで、10クラス分類であれば10次元で各クラスの期待値が返ってくるので同様にArgmaxを使うことで最も期待値が大きいクラスのインデックスを取得できます。
-
-NOTE: OneHotベクトルとはある一つの値が1でそれ以外が0になるようなベクトルです。１０クラスの分類問題を考えた場合、ラベルは0~9の`0個になります。これをOneHotベクトルに変換するということはラベルが0ならば、Index0を1にそれ以外を0にしたベクトル[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]になります。ラベルが5ならば、Index5を1に、それ以外を0にしたベクトル[0, 0, 0, 0, 0, 5, 0, 0, 0, 0]になります。上の例ではPositive/Negativeの2クラスですので、OneHotベクトルは2次元になっています。
+NOTE: OneHotベクトルとはある一つの値が1でそれ以外が0になるようなベクトルです。10クラスの分類問題を考えた場合[1, 0, 0, 0, 0, 0, 0, 0, 0, 0]のようにどこかが1で残りの9個が0になるようなベクトルでクラスを表現できます。上の例ではPositive/Negativeの2クラスですので、OneHotベクトルは2次元になっています。
 
 必要なライブラリをインポートします。
 
@@ -248,4 +246,5 @@ python example.py
 - link:https://github.com/deepchem/deepchem[DeepChem]
 - link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Eary stoppingに関して]
 - link:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[SIFT原著論文]
+
 <<<
