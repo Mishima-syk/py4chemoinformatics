@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.20001(Draft) 2019/03/09
+v0.20002(Draft) 2019/03/10
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -958,31 +958,25 @@ $ mmpdb loadprops -p act.txt CHEMBL930273.db              # load properties
 
 . link:https://github.com/Mishima-syk/12/blob/master/kzfm/mmp2gml.py[mmpdbからpython-igraphを使ってgmlファイルを作る]
 . link:https://github.com/Mishima-syk/12/blob/master/kzfm/CHEMBL930273.gml[gmlファイル]をCytoscapeで読み込む
-. Cytoscapeで属性をいい感じにいじる
+. Cytoscapeで属性を各パラメータにアサインして視覚的に理解しやすくする
 .. ノードの大きさを物性値に対応
 .. エッジの色を活性差に対応
 .. chemviz2 pluginで構造を描画してノードに貼り付ける
 
 ==== 解釈する
 
-さてMMPネットワークを見てみましょう。あまり活性差のないMMPが左上の方に固まっています。右下の方にはエッジが赤い（活性差が大きい）ものが観測されます。このような小さな置換基変化が大きな活性差を生むもMMPをActivity Cliffと呼びます。一般的にActivity Cliffは創薬プロジェクトにおいてブレークスルーとなることが多いのでこういう活性変化を見逃さないことが大切です。
+MMPネットワークを見てみましょう。あまり活性差のないMMPが左上の方に固まっています。右下の方にはエッジが赤い（活性差が大きい）ものが観測されます。このような小さな置換基変化が大きな活性差を生むもMMPをActivity Cliffと呼びます。一般的にActivity Cliffは創薬プロジェクトにおいてブレークスルーとなることが多いため、このような活性変化を見逃さないことは大切です。
 
-image::ch07/mmp01.png[MMPN, width=600]
+image:ch07/mmp01.png[MMPN, width=600, pdfwidth=48%] image:ch07/mmp02.png[MMPN, width=600, pdfwidth=48%]
 
-実際にどういう置換が行われたのかを確認すると、OH基をMeO基に置換することで活性が消失しています。
+実際にどういう置換が行われたのかを確認すると、OH基がMeO基に置換されることで活性の消失が起こっています。
 
-image::ch07/mmp02.png[MMPN, width=600]
+MMPだけではこのように単純に事実しかわからないので、もう少し深く考察するために類似体の複合体結晶構造を探してみました。するとlink:https://www.rcsb.org/structure/5OY4[PDBID:5OY4]というGSK3βと類似化合物の複合体が見つかりました。
 
-MMPだけではこのように単純に事実しかわかりませんが、今回はもう少し深く考察するために類似体の複合体結晶構造を探してみました。するとlink:https://www.rcsb.org/structure/5OY4[PDBID:5OY4]というGSK3βと類似化合物の複合体が見つかりました。
+image:ch07/mmp03.png[MMPN, width=600, pdfwidth=48%] image:ch07/mmp04.png[MMPN, width=600, pdfwidth=48%]
 
-image::ch07/mmp03.png[MMPN, width=600]
-
-OH基をMeO基に置換するとポケットの壁にぶつかりそうですね。したがってこのActivity Cliffはリガンドと蛋白質の立体障害
-により引き起こされたと考察されます。
-
-image::ch07/mmp04.png[MMPN, width=600]
-
-MMPを視覚化して解釈する例を紹介しました。
+OH基をMeO基に置換するとポケットの壁にぶつかりそうですね。つまりこのActivity Cliffはリガンドと蛋白質の立体障害
+により引き起こされたと考えられます。
 
 <<<
 == 8章: 沢山の化合物を一度にみたい
