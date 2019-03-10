@@ -111,7 +111,7 @@ model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accu
 
 NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意されており、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
 
-NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。
+NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。Epochsを増やすとなぜ過学習のリスクがあるのか？という点を考えてみます。トレーニングデータを用いてEpoch毎に正解の値と、予測値の誤差を計算し、小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまうでしょう。従ってEpoch毎、Training set/ Validation setの精度を評価しプロットすることをお勧めします。Training setの精度がどんどん向上する一方でValidation setの精度が変化しないまたは悪くなっているといった傾向が見えてきたら過学習し始めている懸念があります。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。また、英語の記事になりますが、このlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[ブログ]にEary stoppingの紹介と参考文献のURLがまとまっています。興味のある方はご一読ください。
 
 モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
 
@@ -215,6 +215,10 @@ ECFP(Circular Fingerprints)は入力の分子それぞれの原子からN近傍�
 
 この論文が発表されて以降、数多くの実装がGitHubに公開されていますが、各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないと動作しなかったりと意外と環境依存のものが多く扱いにくい状況になっています。残念なことに今回構築した環境で動作するものが公開されていませんのでKeras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
 
+==== Q&A 画像分類においてピクセルのまま古典的な手法を使うというアプローチは有効だったのか？
+
+_SIFTが提案されたのは1999年です。このlink:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[原著論文]を読んでみました。物体（画像）認識においてピクセルそのものを扱う場合の難しさは、オブジェクトの位置、回転、大きさ（スケール）、光度などが異なるものを扱うところにあるようです。これら、変動する値を普遍的な特徴量に変える方法が種々研究されていたようです。ピクセルそのものを使う方法が全くないわけではなく、私が機械学習を勉強する際に購入したlink:https://www.oreilly.co.jp/books/9784873117980/[pythonではじめる機械学習]には人の顔の画像データを学習して分類する例が載っています。ここではピクセルデータを入力に、主成分分析により顔の特徴を抽出し分類をしています。Qに関して明確に有効だったという文献を探せていませんが、タスクによっては有効であったと思います。もし詳しい方いたらぜひコメントください。_
+
 [source, python]
 ----
 git clone https://github.com/iwatobipen/keras-neural-graph-fingerprint.git
@@ -241,5 +245,6 @@ python example.py
 - link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
 - link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
 - link:https://github.com/deepchem/deepchem[DeepChem]
-
+- link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Eary stoppingに関して]
+- link:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[SIFT原著論文]
 <<<
