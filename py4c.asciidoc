@@ -926,6 +926,8 @@ MMPは変換前、変換後の情報をノード、変換ルールをエッジ�
 
 ペアのデータを拡張し、トレンドを見極めるのがMMPAです。
 
+NOTE: link:http://www.daylight.com/dayhtml/doc/theory/theory.smirks.html[SMIRKS]は分子の変換をSMILESのように文字列表記によって表現する手法です。 創薬化学においてスキャフォールドといった場合、化合物のコアになる部分構造のことを指すことが多いです。大抵の場合は、SARにて化合物誘導体を作る際にも変えない部分化合物デザインの足場になる中心構造のことを言います。
+
 === Cytoscapeを使ってMMPネットワークを可視化する
 
 WARNING: この内容は入門の内容を超えるので興味がなければ飛ばしてください
@@ -1373,7 +1375,7 @@ link:ch09_qsar.asciidoc[9章]でRandom Forestを用いたQSAR解析をしまし�
 
 生物の脳には神経細胞が存在し、それらがネットワークを形成することで情報を伝達したり、記憶や学習しています。このネットワーク構造を数理モデル化したものがArtificial Neural Network(ANN)です。
 
-ANNは、学習のための情報を入れる**入力層**、入力情報のパターンを元に反応するかしないか（神経シナプスの発火に対応）を学習する**中間層（または隠れ層）**、最後の**出力層**の三層から構成されていますが、ディープラーニングはこの隠れ層の部分を分岐させたり、多層のに重ねたりするなどを含む多層構造にすることで高精度な予測を可能としています。
+ANNは、学習のための情報を入れる**入力層**、入力情報のパターンを元に反応するかしないか（神経シナプスの発火に対応）を学習する**中間層（または隠れ層）**、最後の**出力層**の三層から構成されていますが、ディープラーニングはこの隠れ層の部分を分岐させたり、多層にする構造にすることで高精度な予測を可能としています。
 
 NOTE: 分岐構造を持つニューラルネットワークとは、入力層＝＞Layer1＝＞Layer2＝＞Layer3＝＞出力層という直列の構造ではなく入力層＝＞Layer1＝＞Layer2-1, Layer2-2＝＞Concate(Layer2-1,Layer2-2)＝＞出力層となるように一つの入力層に対して隠れ層が二つ以上に分かれる場合を指します。目的によって出力前にこれらのデータを再度まとめて（Concate）一つの出力層にしたり、または分岐させたまま学習をし、それぞれ異なるターゲットを学習させるといった使い方もあり得ます。下は、左が分岐しない入力層、隠れ層２層、出力層からなるモデルのイメージ図です。右は途中に分岐がありまた最後の部分でそれらを合わせて一つの出力層にしているモデルのイメージ図です。
 
@@ -1396,15 +1398,19 @@ Pythonでディープラーニングを行う場合、複数のフレームワ�
 
 この中で本書ではGoogle社が開発しているフレームワークのTensorflow/Kerasを使います。
 
-Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報も少ないので、1.x系でまずは試しましょう。また同じ1.xでもバージョンによってAPIが少し変更されていますので、今後動かしたいコードがあった時にどのバージョンで書かれているかに気をつける必要があります。
+Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報が少ないので、1.x系を利用してください。また同じ1.xでもバージョンによってAPIが異なるので、動かしたいコードがあった場合、どのバージョンで書かれているかに気をつける必要があります。
 
-KerasはTensoflowなどの低レベルフレームワークをバックエンドに動く高レベルAPIで、Kerasを利用することでテンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。したがってTensorflow側からKerasを呼び出し、ネットワークを構築することができます。Kerasそのものを使うのが良いか、Tensorflow側のKerasを使うのが良いのか、悩ましいところです。Kerasで作ってきたコードをTensorflowに統合されたKerasに移行するのはそれほど大変ではありません。また、今後Tensorflow側のモジュールを使いたくなることもあるかもしれないので本書ではTensorflowに統合されたKerasを利用します。
+KerasはTensoflowなどの低レベルフレームワークをバックエンドにした高レベルAPIで、テンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。そのため別途イントールしなくてもTensorflowからKerasを利用できますが、Tensorflow同梱バージョンのKerasは本家との最新バージョンになっていないことがあります。
 
-KerasとTensoflowをオフィシャルブログをlink:https://blog.keras.io/introducing-keras-2.html[参照]しつつ少し整理しておきます。
-先にも書きましたように、元々KerasはTensoflowとは別途開発されており（もちろん今もです）Kerasを使うにはKerasをインストールする必要がありました。ですが2017年Keras2.xのメジャーバージョンアップのタイミングあたりでTensoflowがKerasとIntegrateしました。以下の英文は上記リンクの記事の抜粋です。このように現在はTensorflowからKerasを呼び出し利用することが可能になりました。
+実際に本家Kerasを使うのが良いか、Tensorflow同梱Kerasを使うのが良いのかは悩ましいところですが本書では利便性のためにTensorflowに統合されたKerasを利用します。
+
+.KerasとTensorflowの関係性
+****
+KerasとTensoflowをlink:https://blog.keras.io/introducing-keras-2.html[オフィシャルブログを参照]しつつ少し整理しておきます。元々KerasはTensoflowとは別のプロジェクトとして開発されており（もちろん今もです）Kerasを使うにはTensorflowとはインストールする必要がありました。しかし2017年Keras2.xのメジャーバージョンアップのタイミングのあたりでTensoflowプロジェクトがKerasを統合するようになりました。以下の英文は上記リンクの記事の抜粋です。現在はTensorflowからKerasを呼び出し利用することが可能になっています。
 
 _TensorFlow integration
 Although Keras has supported TensorFlow as a runtime backend since December 2015, the Keras API had so far been kept separate from the TensorFlow codebase. This is changing: the Keras API will now become available directly as part of TensorFlow, starting with TensorFlow 1.2. This is a big step towards making TensorFlow accessible to its next million users._
+****
 
 === インストールしてみよう
 
@@ -1444,20 +1450,20 @@ link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaborato
 Google のアカウントがある方はGitHub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
 まず、link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。
 
-image::ch10/ch10_1.png[GoogleColabTop]
+image::ch10/ch10_1.png[GoogleColabTop, pdfwidth=60%]
 
 次いで、GitHubというタブをクリックし、以下のURLをコピペします。
 link:https://github.com/Mishima-syk/sklearn-tutorial[https://github.com/Mishima-syk/sklearn-tutorial]
-するとURL先のNotebookが読み込ます。本資料は@y_samaが作成してくれたものです。データの準備からはじまり、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されています。非常にクオリティが高くDeepLearningではないですが、機械学習を学びたい方にとっては良いマテリアルになると思います。
-後半のPandasMLやAutoSklearnは、デフォルトの設定ですとColabに入ってないとエラーが出るかもしれません
+するとURL先のNotebookが読み込ます。本資料は@y_samaが作成したものです。データの準備から、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されていますので、機械学習を学びたい方にとっては良いマテリアルになると思います。
+後半のPandasMLやAutoSklearnは、デフォルトの設定ですとColabに入ってないとエラーが出たらライブラリをインストールしてください。
 
-image::ch10/ch10_2.png[GoogleColab2]
+image::ch10/ch10_2.png[GoogleColab2, pdfwidth=60%]
 
-ノートブックを開くとJupyter notebookと同じ感じの画面になります。Shift＋リターンキーでセルのコードを実行できると思います。
+ノートブックを開くとJupyter notebookと同じような画面になります。Shift＋リターンキーでセルのコードを実行できます。
 
-image::ch10/ch10_2.png[NoteBook]
+image::ch10/ch10_2.png[NoteBook, pdfwidth=60%]
 
-参考までに本書執筆時点（201903）でGoogleColabデフォルトで利用できるライブラリを確認するにはセルの中で '!pip freeze'と打つと列記されます。
+GoogleColabデフォルトで利用できるライブラリを確認するにはセルの中で '!pip freeze'と打つと列記されます。
 
 - absl-py==0.7.0
 - alabaster==0.7.12
@@ -1555,11 +1561,9 @@ x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_stat
 
 Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。
 
-Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いました。
+Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いましたがlink:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
-
-TIP: link:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 [source, python]
 ----
@@ -1579,7 +1583,16 @@ model1.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accu
 
 NOTE: Kerasにはlink:https://keras.io/ja/models/sequential/[Sequential]モデルが用意されており、これを使うことで上記の例（Functional API）よりもシンプルにネットワークを記述できます。今回Functional APIでモデルを定義したのは、こちらに慣れておくと入力が複数の場合やより複雑なモデルの構築にも対応しやすいからです。もしSequentialの書き方に興味がある方は公式サイトやQiitaを調べてください。
 
-NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと、過学習のリスクもあるので長ければ良いというものでもありません。Loss/Accuracyなどを観測しつつ適切なEpoch数を考えましょう。Epochsを増やすとなぜ過学習のリスクがあるのか？という点を考えてみます。トレーニングデータを用いてEpoch毎に正解の値と、予測値の誤差を計算し、小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまうでしょう。従ってEpoch毎、Training set/ Validation setの精度を評価しプロットすることをお勧めします。Training setの精度がどんどん向上する一方でValidation setの精度が変化しないまたは悪くなっているといった傾向が見えてきたら過学習し始めている懸念があります。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。また、英語の記事になりますが、このlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[ブログ]にEary stoppingの紹介と参考文献のURLがまとまっています。興味のある方はご一読ください。
+NOTE: DNNは初期のランダムに発生させた重みに基づいて予測した予測値と実際の値を比較し、その差（LOSS)を最小化するように重みを更新するBackpropagationという手順を繰り返しながらモデルを最適化します。この繰り返しの回数を指定するのがEpochsです。Epochsを増やすとどんどん賢くなるように思われるかもしれませんが、計算コストがかかることと過学習のリスクもあるので長ければ良いわけではないのでLoss/Accuracyなどを観測して適切なEpoch数を考えましょう。
+
+.Epochsを増やすとなぜ過学習のリスクがあるのか？
+****
+トレーニングデータを用いてEpoch毎に正解の値と予測値の誤差を小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまいます。
+
+過学習の判断にはEpoch毎、Training set/ Validation setの精度を評価しプロットするとTraining setの精度が向上する一方でValidation setの精度が変化しないまたは悪くなっているかどうかを調べればよいです。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。
+
+詳しくはlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Early stoppingの紹介と参考文献]をご覧ください。
+****
 
 モデルを構築したら後はScikit-learnと同じ感覚でfit/predictが行えます。
 
