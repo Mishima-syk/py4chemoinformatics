@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.20002(Draft) 2019/03/10
+v0.30000(Draft) 2019/03/10
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -74,8 +74,8 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 - 医学薬学系の大学院生及び薬学系のデータ解析を行いたいポスドク
 - 製薬企業の薬理研究者で自分のデータを自分で解析したい人
-- 創薬化学者でケモインフォマティクスの必要性を感じている方
-- 突然企業でケモインフォマティクス要員にアサインされた方
+- 創薬化学者でケモインフォマティクスの必要性を感じている方や謎の力により突然アサインされた方
+- ケモインフォマティクスを学んでみようと考えているバイオインフォマティシャン
 - AI創薬に興味があるがなにからはじめたらいいかわからない人
 
 === 本書のコードについて
@@ -990,21 +990,32 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 ケミカルスペースとは化合物を何らかの尺度でn次元の空間に配置したものを指します。一般に、2次元または3次元が使われることが多いです（人間の理解のため）。尺度つまり類似性に関しては色々な手法が提案されていますが、うまく化合物の特徴を表すような距離が定義されるように決められることが多いです。
 
-ここではいくつかの尺度を用いてケミカルスペースを構築してみましょう。使うデータはlink:https://www.ebi.ac.uk/chembl/assay/inspect/CHEMBL3705525[ChEMBLのFXa酵素阻害アッセイに含まれる122化合物]です。
+今回は睡眠薬のターゲットとして知られているOrexin Receptorのアンタゴニストについて、どの製薬企業がどういった化合物を開発しているのかを視覚化してみます。データのダウンロード方法は4章を参照してください。今回は表の10個の論文のデータを利用しました。
 
-アッセイから全化合物表示をします。
+今回知りたいことは主に以下の２つです。
 
-image::ch08/ch08_1.png[Screenshot1, size=500]
+- 似たような化合物を開発していた会社はあったのか？
+- Merckは似たような骨格ばかり最適化していたのか、それとも複数の骨格を最適化したのか？
 
-続いてタブ区切りテキストでダウンロードします。
+.Orexin Receptor Antagonist
+|===
+|Doc ID|Journal|Pharma
+|CHEMBL3098111|link:https://www.sciencedirect.com/science/article/pii/S0960894X13012511?via%3Dihub[Bioorg. Med. Chem. Lett. (2013) 23:6620-6624]|Merck
+|CHEMBL3867477|link:https://www.sciencedirect.com/science/article/pii/S0960894X16310472?via%3Dihub[Bioorg Med Chem Lett (2016) 26:5809-5814]|Merck
+|CHEMBL2380240|link:https://www.sciencedirect.com/science/article/pii/S0960894X13002801?via%3Dihub[Bioorg. Med. Chem. Lett. (2013) 23:2653-2658]|Rottapharm
+|CHEMBL3352684|link:https://www.sciencedirect.com/science/article/pii/S0960894X14008853?via%3Dihub[Bioorg. Med. Chem. Lett. (2014) 24:4884-4890]|Merck
+|CHEMBL3769367|link:https://pubs.acs.org/doi/10.1021/acs.jmedchem.5b00832[J. Med. Chem. (2016) 59:504-530]|Merck
+|CHEMBL3526050|link:http://dmd.aspetjournals.org/content/41/5/1046[Drug Metab. Dispos. (2013) 41:1046-1059]|Actelion
+|CHEMBL3112474|link:https://www.sciencedirect.com/science/article/pii/S0960894X13014765?via%3Dihub[Bioorg. Med. Chem. Lett. (2014) 24:1201-1208]|Actelion
+|CHEMBL3739366|link:https://pubs.rsc.org/en/Content/ArticleLanding/2015/MD/C5MD00027K#!divAbstract[MedChemComm (2015) 6:947-955]|Heptares
+|CHEMBL3739395|link:https://pubs.rsc.org/en/Content/ArticleLanding/2015/MD/C5MD00074B#!divAbstract[MedChemComm (2015) 6:1054-1064]|Actelion
+|CHEMBL3351489|link:https://www.sciencedirect.com/science/article/pii/S0968089614006300?via%3Dihub[Bioorg. Med. Chem. (2014) 22:6071-6088]|Eisai
+|===
 
-image::ch08/ch08_2.png[Screenshot2, size=500]
-
-この中にSMILES形式で構造情報が入っています。
 
 === ユークリッド距離を用いたマッピング
 
-描画ライブラリにはggplotを使います。まだインストールされていない場合はconda install ggplotでインストールしてください。主成分分析(PCA)を利用して、化合物が似ているものは近くになるように分布させて可視化します。
+描画ライブラリにはggplotを使います。主成分分析(PCA)を利用して、化合物が似ているものは近くになるように分布させて可視化します。まずは必要なライブラリをインポートします
 
 [source, python]
 ----
@@ -1014,40 +1025,48 @@ import numpy as np
 import pandas as pd
 from ggplot import *
 from sklearn.decomposition import PCA
+import os
 ----
 
-タブ区切りテキストを読み込み、SMILESの領域を取り出してMolFromSmilesメソッドでmolオブジェクトに変換します。
-
-[source, python]
-----
-mols = []
-with open("ch08_compounds.txt") as f:
-    header = f.readline()
-    smiles_index = -1
-    for i, title in enumerate(header.split("\t")):
-        if title == "CANONICAL_SMILES":
-            smiles_index = i
-    for l in f:
-        smi = l.split("\t")[smiles_index]
-        mol = Chem.MolFromSmiles(smi)
-        mols.append(mol)
-----
-
-molオブジェクトからフィンガープリントを構築しますが、sklearnで取り扱えるようにnumpyアレイに変換します。
-rdkitのフィンガープリントをsklearnで取り扱う場合にはこの変換操作が必須なのでそういうものだとして覚えてしまうとよいです。
+ダウンロードしたsdfを読み込んで、製薬企業とドキュメントIDの対応が取れるようにしてそれぞれの化合物についてフィンガープリントを構築します。もし不明な点があれば6章を確認してください。
 
 [source, python]
 ----
+oxrs = [("CHEMBL3098111", "Merck" ),("CHEMBL3867477", "Merck" ),
+　　　　　("CHEMBL2380240", "Rottapharm" ),("CHEMBL3352684", "Merck" ),
+　　　　　("CHEMBL3769367", "Merck" ),("CHEMBL3526050", "Actelion" ),
+　　　　　("CHEMBL3112474", "Actelion" ),("CHEMBL3739366", "Heptares" ),
+　　　　　("CHEMBL3739395", "Actelion" ), ("CHEMBL3351489", "Eisai" )]
+
 fps = []
-for mol in mols:
-    fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2)
-    arr = np.zeros((1,))
-    DataStructs.ConvertToNumpyArray(fp, arr)
-    fps.append(arr)
+docs = []
+companies = []
+
+for cid, company in oxrs:
+    sdf_file = os.path.join("ch08", cid + ".sdf")
+    mols = Chem.SDMolSupplier(sdf_file)
+    for mol in mols:
+        if mol is not None:
+            fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2)
+            arr = np.zeros((1,))
+            DataStructs.ConvertToNumpyArray(fp, arr)
+            docs.append(cid)
+            companies.append(company)
+            fps.append(arr)
 fps = np.array(fps)
+companies = np.array(companies)
+docs = np.array(docs)
 ----
 
-これで主成分分析の用意が整ったので早速やりましょう。主成分の数はn_componentsで指定できます。
+フィンガープリントの情報を確認すると10の論文から293化合物のデータが得られていることがわかりました。
+
+[source, python]
+----
+fps.shape
+# (293, 2048)
+----
+
+これで主成分分析の準備完了です。主成分の数はn_componentsで指定できますが今回は二次元散布したいので2にします。
 
 [source, python]
 ----
@@ -1055,20 +1074,34 @@ pca = PCA(n_components=2)
 x = pca.fit_transform(fps)
 ----
 
-描画します。
+描画します。colorオプションを帰るとそれぞれのラベルに応じた色分けがされます。COMPANYとDOCIDで色分けします。
 
 [source, python]
 ----
 d = pd.DataFrame(x)
 d.columns = ["PCA1", "PCA2"]
-g = ggplot(aes(x="PCA1", y="PCA2"), data=d) + geom_point() + xlab("PCA1") + ylab("PCA2")
+d["DOCID"] = docs
+d["COMPANY"] = companies
+g = ggplot(aes(x="PCA1", y="PCA2", color="COMPANY"), data=d) + geom_point() + xlab("X") + ylab("Y")
+g
 ----
 
-image::ch08/pca.png[PCA, size=500]
+各製薬会社がどのような化合物を最適化したのかがわかるようになりました。ケミカルスペースの中心部に各社重なる領域があるので、Merck, Acterion, Eisai, Heptaressは似たような化合物を最適化していたと思われます。Acterionはうまく独自性のある方向(左下)に展開できたのか、展開できなくてレッドオーシャン気味の中心部に進出してきたのかは興味深いです。
+
+またMerckは色々な骨格を最適化していたようです。同時に最適化したのか先行がこけてバックアップに走ったのかわかりませんが、多数の骨格の最適化が動いていたのは間違いないので、ターゲットとしての魅力が高かったということでしょう。実際link:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL1083659/[SUVOREXANT]は上市されましたしね。
+
+image:ch08/pca01.png[PCA, size=400, pdfwidth=48%] image:ch08/pca02.png[PCA, size=400, pdfwidth=48%]
+
+.patinformatics
+****
+今回は論文データを利用しましたが、実際の現場でこのような解析をする場合には論文データは使いません。なぜなら、企業が論文化するときはそのプロジェクトが終わったこと（成功して臨床に進んだか、失敗して閉じたか）を意味するからです。実際の場面では特許データを利用して解析をします。
+
+このような解析とlink:http://rkakamilan.hatenablog.com/entry/2017/12/17/235417[メディシナルケミストの経験と洞察力]をもとに他社状況を推測しながら自分たちの成功を信じてプロジェクトは進んでいきます。
+****
 
 === tSNEをつかったマッピング
 
-PCAよりもtSNEのほうが分離能がよく、メディシナルケミストの感覚により近いと言われています。
+PCAよりもtSNEのほうが分離能がよく、メディシナルケミストの感覚により近いと言われています。sklearnではPCAをTSNEに変更するだけです。
 
 [source, python]
 ----
@@ -1077,16 +1110,19 @@ tsne = TSNE(n_components=2, random_state=0)
 tx = tsne.fit_transform(fps)
 ----
 
-描画します。
+描画するとわかりますが、PCAに比べてよく分離されています。
 
 [source, python]
 ----
 d = pd.DataFrame(tx)
 d.columns = ["PCA1", "PCA2"]
-g = ggplot(aes(x="PCA1", y="PCA2"), data=d) + geom_point() + xlab("PCA1") + ylab("PCA2")
+d["DOCID"] = docs
+d["COMPANY"] = companies 
+g = ggplot(aes(x="PCA1", y="PCA2", color="COMPANY"), data=d) + geom_point() + xlab("X") + ylab("Y")
+g
 ----
 
-image::ch08/tsne.png[PCA, size=500]
+image::ch08/tsne01.png[PCA, size=500]
 
 今回紹介したPCA,tSNEの他にも色々な描画方法があるので調べてみるとよいでしょう。
 
