@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.3    0000(Draft) 2019/03/10
+v0.30001(Draft) 2019/03/11
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -397,6 +397,15 @@ ZINCは購入可能な試薬をコレクションしたデータベースです�
 image::ch04/zinc01.png[ChEMBL]
 
 ここから必要なデータセットを選んでダウンロードボタンを押すと、実際にデータセットのURLが列挙されたテキストファイルが得られますのでそれぞれにアクセスしてデータをダウンロードします。
+
+==== link:http://togotv.dbcls.jp/[統合TV]
+
+統合TVは生命科学分野の有用なデータベースやツールの使い方を動画で紹介するサイトで、link:https://dbcls.rois.ac.jp/[ライフサイエンス統合データベースセンター(DBCLS)]により管理、運用されています。その名の通りバイオインフォマティクス関連の動画が多いですが、ケモインフォマティクスを紹介した動画もいくつかありますので参考にしてみてください。link:http://togotv.dbcls.jp/information.html[文献・辞書・プログラミング]のカテゴリも役に立つはずです。
+
+- link:https://doi.org/10.7875/togotv.2017.121[PubChemを利用して化学物質やアッセイの結果を調べる 2017]
+- link:https://doi.org/10.7875/togotv.2014.014[ChEMBLを使って医薬品候補となる化合物について調べる]
+
+NOTE: link:https://www.amazon.co.jp/dp/4815701431/[生命科学データベース・ウェブツール 図解と動画で使い方がわかる! 研究がはかどる定番18選]という書籍も出版されています。
 
 NOTE:: これ以外にもケモインフォマティクスに有用なデータベースがあればお知らせください。IssueやPRでも受け付けてます。
 
@@ -803,6 +812,7 @@ DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 :imagesdir: images
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MCS.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMPS.ipynb"]
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
@@ -922,9 +932,129 @@ MMPは変換前、変換後の情報をノード、変換ルールをエッジ�
 これをMMP的に解釈すると、MX>>MA, MA>>MB, MB>>MCとなりますね。これを繋げるとMX>>MA>>MB>>MCと一続きになります。
 このネットワークは構造変換の変遷を表現する手法の一つです。これを大規模なデータセットで実施すると、あるプロパティの変化と構造変換のルールを理解できます。MMPは基本的に部分構造変換にのみ着目するため、Scaffoldによらない普遍的なルールが見いだせるかもしれない！という期待があります。
 
-その他、Matched Molecular SeriesというMMPの拡張的手法も提案されています。他には連続的な変換ルールを解析し、経験的に生み出されたlink:https://www.slideshare.net/NextMoveSoftware/revising-the-topliss-tree[Topless Tree]のルールを表現したlink:https://pubs.acs.org/doi/10.1021/jm500022q[論文]もあります。
+その他、Matched Molecular SeriesというMMPの拡張的手法も提案されています。他には連続的な変換ルールを解析し、経験的に生み出されたlink:https://www.slideshare.net/NextMoveSoftware/revising-the-topliss-tree[Topliss Tree]のルールを表現したlink:https://pubs.acs.org/doi/10.1021/jm500022q[論文]もあります。
 
-ペアのデータを拡張し、トレンドを見極めるのがMMPAです。
+実際にMMPSを作ってみましょう。以下の例ではChEMBLよりFactor Xaのデータをダウンロードし、一例として使いました。MMPSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
+まず利用するライブラリの読み込みと、データの読み込みを行います。化合物がエンフォームですと一つのMolObjectに化合物＋塩の情報が入っており、正確に処理できないのでSaltRemoverを使い脱塩しています。
+
+[source, python]
+----
+import sys
+import os
+import pandas as pd
+from rdkit import Chem
+from rdkit.Chem import rdMMPA
+from rdkit.Chem import RDConfig
+from rdkit.Chem import rdBase
+from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem import Draw
+from rdkit.Chem import SaltRemover
+mmpapath = os.path.join(RDConfig.RDContribDir, 'mmpa')
+sys.path.append(mmpapath)
+df = pd.read_csv('Chembl_FXa.txt', sep='\t')
+remover = SaltRemover.SaltRemover()
+mols = []
+for i, smi in enumerate(df.CANONICAL_SMILES):
+    try:
+        mol = Chem.MolFromSmiles(smi)
+        mol.SetProp('CMPD_CHEMBLID', df.CMPD_CHEMBLID[i])
+        mol = remover.StripMol(mol)
+        mols.append(mol)
+    except:
+        print(smi)
+----
+
+続いてRDKit contribに登録されているmmpaから分子フラグメンテーションのスクリプトrfragをインポートします。これで分子をフラグメントに分解します。
+
+[source, python]
+----
+import rfrag
+rfragdata = []
+for i, smi in enumerate(df.CANONICAL_SMILES):
+    try:
+        out = rfrag.fragment_mol(smi, df.CMPD_CHEMBLID[i])
+        rfragdata.append(out)
+    except:
+        print(smi, df.CMPD_CHEMBLID[i])
+----
+
+ここまで準備ができたら、MMPSを作るスクリプトを定義します。コードはUGMの資料に記載されているものをほぼそのまま踏襲しています。今回は、Jupyter上で全ての処理を完結させたいめ、インプットをファイルからリストに変えています。
+MMPSの作成のコンセプトを簡単に説明します。
+
+- 各分子を一定のルール（回転可能結合で切断など）でカットします。
+- ついでカットしたフラグメントをキーとした辞書を作成し、フラグメントデータをサーチし、同じキーを持つ分子のフラグメントをバリューにストックします。
+
+上記の作業を繰り返すとことで共通のキー（以下のコードではscaffold）を持つ分子をまとめられます。共通のキーでまとまった分子は、キー以外の部分が異なる分子となります。
+
+[source, python]
+----
+from collections import namedtuple
+ 
+Frag = namedtuple( 'Frag', ['id', 'scaffold', 'rgroup'] )
+ 
+class Series():
+    def __init__( self ):
+        self.rgroups = []
+        self.scaffold = ""
+
+def getFrags(rfrags):
+    frags = []
+    for lines in rfrags:
+        for line in lines:
+            broken = line.rstrip().split(",")
+            if broken[2]: # single cut
+                continue
+            smiles = broken[-1].split(".")
+            mols = [Chem.MolFromSmiles( smi ) for smi in smiles]
+            numAtoms = [mol.GetNumAtoms() for mol in mols]
+            if len(numAtoms) < 2:
+                continue
+            if numAtoms[0] > 5 and numAtoms[1] < 12:
+                frags.append(Frag(broken[1], smiles[0], smiles[1]))
+            if numAtoms[1] > 5 and numAtoms[0] < 12:
+                frags.append(Frag(broken[1], smiles[1], smiles[0]))
+    frags.sort(key=lambda x:(x.scaffold, x.rgroup))
+    return frags
+ 
+def getSeries(frags):
+    oldfrag = Frag(None, None, None)
+    series = Series()
+    for frag in frags:
+        if frag.scaffold != oldfrag.scaffold:
+            if len(series.rgroups) >= 2:
+                series.scaffold = oldfrag.scaffold
+                yield series
+            series = Series()
+        series.rgroups.append((frag.rgroup, frag.id))
+        oldfrag = frag
+    if len(series.rgroups) >= 2:
+        series.scaffold = oldfrag.scaffold
+        yield series
+----
+
+ここまでで、MMPSを作る準備ができました。早速コードを実行してみましょう。Seriesに関する説明なので以下のコードでは同じスキャフォールドに対して４つ以上痴漢機の変換があったデータのみを可視化します。
+
+[source, python]
+----
+frags = getFrags(rfragdata)
+series = getSeries(frags)
+series =[i for i in series]
+from IPython.display import display
+for s in series[:50]:
+    mols = [Chem.MolFromSmiles(s.scaffold)]
+    ids = ['scaffold']
+    for r in s.rgroups:
+        rg = Chem.MolFromSmiles(r[0])
+        mols.append(rg)
+        ids.append(r[1])
+    if len(mols) > 5:
+        display(Draw.MolsToGridImage(mols, molsPerRow=5, legends=ids))
+        print("########")
+----
+
+image::ch07/mmps01.png[MMPS]
+
+うまく、一つのスキャフォールドに対して複数の変換があるもののみを取り出せているようです。
 
 NOTE: link:http://www.daylight.com/dayhtml/doc/theory/theory.smirks.html[SMIRKS]は分子の変換をSMILESのように文字列表記によって表現する手法です。 創薬化学においてスキャフォールドといった場合、化合物のコアになる部分構造のことを指すことが多いです。大抵の場合は、SARにて化合物誘導体を作る際にも変えない部分化合物デザインの足場になる中心構造のことを言います。
 
@@ -1696,9 +1826,10 @@ ECFP(Circular Fingerprints)は入力の分子それぞれの原子からN近傍�
 
 この論文が発表されて以降、数多くの実装がGitHubに公開されていますが、各実装ごとにKerasでもBackendがTheanoであったり、Keras/Tensorflowであっても、Keras1.xじゃないと動作しなかったりと意外と環境依存のものが多く扱いにくい状況になっています。残念なことに今回構築した環境で動作するものが公開されていませんのでKeras2.x/Python3.6で動作するものをこちらのlink:https://github.com/keiserlab/keras-neural-graph-fingerprint[コード]をベースに作成しました。
 
-==== Q&A 画像分類においてピクセルのまま古典的な手法を使うというアプローチは有効だったのか？
-
-_SIFTが提案されたのは1999年です。このlink:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[原著論文]を読んでみました。物体（画像）認識においてピクセルそのものを扱う場合の難しさは、オブジェクトの位置、回転、大きさ（スケール）、光度などが異なるものを扱うところにあるようです。これら、変動する値を普遍的な特徴量に変える方法が種々研究されていたようです。ピクセルそのものを使う方法が全くないわけではなく、私が機械学習を勉強する際に購入したlink:https://www.oreilly.co.jp/books/9784873117980/[pythonではじめる機械学習]には人の顔の画像データを学習して分類する例が載っています。ここではピクセルデータを入力に、主成分分析により顔の特徴を抽出し分類をしています。Qに関して明確に有効だったという文献を探せていませんが、タスクによっては有効であったと思います。もし詳しい方いたらぜひコメントください。_
+.画像分類においてピクセルのまま古典的な手法を使うというアプローチは有効だったのか？
+****
+_SIFTが提案されたのは1999年です。link:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[原著論文]によると、物体（画像）認識においてピクセルそのものを扱う場合の難しさは、オブジェクトの位置、回転、大きさ（スケール）、光度などが異なるものを扱うところにあるようです。これら、変動する値を普遍的な特徴量に変える方法が種々研究されていたようです。ピクセルそのものを使う方法が全くないわけではなく、私が機械学習を勉強する際に購入したlink:https://www.oreilly.co.jp/books/9784873117980/[pythonではじめる機械学習]には人の顔の画像データを学習して分類する例が載っています。ここではピクセルデータを入力に、主成分分析により顔の特徴を抽出し分類をしています。この問いに関して明確に有効だったという文献を探せていませんが、タスクによっては有効であったと思います。もし詳しい方いたらぜひコメントください。_
+****
 
 [source, python]
 ----
