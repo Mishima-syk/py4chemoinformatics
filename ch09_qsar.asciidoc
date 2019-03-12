@@ -19,7 +19,7 @@ from rdkit.Chem import AllChem, Draw
 from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import confusion_matrix, F1_score
+from sklearn.metrics import confusion_matrix, f1_score
 from sklearn.ensemble import RandomForestClassifier
 ----
 
@@ -89,7 +89,7 @@ Confusion matrixを作成します。
 
 .Confusion matrixとは
 ****
-Confusion matriｘはクラス分類の結果をまとめた表です。クラスを正しく分類できているかをわかりやすく視覚化できTP,TNが多くFP,FNが少ないほどよく分類できているということになります。
+Confusion matrixとはクラス分類の結果をまとめた表です。クラスを正しく分類できているかをわかりやすく視覚化できTP,TNが多くFP,FNが少ないほどよく分類できているということになります。
 
 |===
 || 2+|Actual class
@@ -135,7 +135,7 @@ f1_score(y_test, y_pred, pos_label="POS")
 
 NOTE: train_test_split関数がランダムに訓練セットとテストセット分割するので、Confution matrix,F1スコアの値は実行するたびに変わります。
 
-.F1 scoreとは
+.F1スコアとは
 ****
 
 - 正しいと予測されたもののうち本当に正しいものの割合を適合率と呼ぶ precision=TP/(TP+FP)
