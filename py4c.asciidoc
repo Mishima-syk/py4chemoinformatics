@@ -75,9 +75,9 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 === 本書のコードについて
 
-本書で使用したプログラミングコードは全てlink:https://github.com/Mishima-syk/py4chemoinformatics[Mishima.sykのpy4chemoinformaticsリポジトリ]のnotebooksディレクトリに置いてありますので利用してください。またそれぞれの章の最初のimage:jupyter.png[width="20"]にその章のJupyter notebooへのリンクを張っていますので適宜参照してください。
+本書で使用したプログラミングコードは全てlink:https://github.com/Mishima-syk/py4chemoinformatics[Mishima.sykのpy4chemoinformaticsリポジトリ]のnotebooksディレクトリに置いてありますので利用してください。またそれぞれの章の最初のimage:jupyter.png[width="20"]にその章のJupyter notebookへのリンクを張っていますので適宜参照してください。
 
-2章のインストールを行うとgitコマンドがつかえるようになっていますので以下のコマンドでpdfを含む全てのデータがダウンロードされます。
+2章のインストールを行うとgitコマンドが使えるようになりますので、以下のコマンドでpdfを含む本書の全てのデータがダウンロードできます
 
 [source, bash]
 ----
@@ -305,11 +305,11 @@ link:https://www.ebi.ac.uk/chembl/[ChEMBL]はEBIのChEMBLチームにより維�
 
 メディシナルケミストリ関連のジャーナルからデータを収集しているため、QSARに関連する情報や背景知識を論文そのものに求めることが可能であり、創薬研究をする際には有用です。
 
-NOTE: ChEMBLはもともとはlink:http://chembl.blogspot.com/2009/11/faq-where-can-i-download-starlite.html[StARlite]という商用データベースでした
+NOTE: ChEMBLはもともとはlink:http://chembl.blogspot.com/2009/11/faq-where-can-i-download-starlite.html[StARlite]という商用データベースでした。詳しくはlink:http://cbi-society.org/home/documents/seminar/2009to12/CBI_Ikeda_511_d.pdf[慶応大学池田先生のChEMBLに関する資料]を参照してください。
 
 === PubChem
 
-link:https://pubchem.ncbi.nlm.nih.gov/[PubChem]はNCBIにより維持管理されている低分子化合物とその生物学的活性データを収録している公開リポジトリです。5000万件以上の化合物情報と、100万件を超えるアッセイデータを含みそのデータ量の多さが特徴とも言えます。もうひとつの特徴はデータをアカデミアからの化合物登録やアッセイ結果の登録により成長することであり、ここが先のChEMBLとの大きな違いであるといえます。
+link:https://pubchem.ncbi.nlm.nih.gov/[PubChem]はNCBIにより維持管理されている低分子化合物とその生物学的活性データを収録している公開リポジトリです。5000万件以上の化合物情報と、100万件を超えるアッセイデータを含みそのデータ量の多さが特徴とも言えます。もうひとつの特徴はデータをアカデミアからの化合物登録やアッセイ結果の登録により成長することであり、ここが先のChEMBLとの大きな違いです。
 
 特にPubChemは初期スクリーニングのデータが多いため、そのようなデータに対しなんらかのマイニングや分析を行いたい場合は有用だと考えられます。
 

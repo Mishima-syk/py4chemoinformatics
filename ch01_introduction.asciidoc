@@ -62,9 +62,9 @@ RDKitは開発やユーザーコミュニティの活動も活発で、どんど
 
 === 本書のコードについて
 
-本書で使用したプログラミングコードは全てlink:https://github.com/Mishima-syk/py4chemoinformatics[Mishima.sykのpy4chemoinformaticsリポジトリ]のnotebooksディレクトリに置いてありますので利用してください。またそれぞれの章の最初のimage:jupyter.png[width="20"]にその章のJupyter notebooへのリンクを張っていますので適宜参照してください。
+本書で使用したプログラミングコードは全てlink:https://github.com/Mishima-syk/py4chemoinformatics[Mishima.sykのpy4chemoinformaticsリポジトリ]のnotebooksディレクトリに置いてありますので利用してください。またそれぞれの章の最初のimage:jupyter.png[width="20"]にその章のJupyter notebookへのリンクを張っていますので適宜参照してください。
 
-2章のインストールを行うとgitコマンドがつかえるようになっていますので以下のコマンドでpdfを含む全てのデータがダウンロードされます。
+2章のインストールを行うとgitコマンドが使えるようになりますので、以下のコマンドでpdfを含む本書の全てのデータがダウンロードできます
 
 [source, bash]
 ----
