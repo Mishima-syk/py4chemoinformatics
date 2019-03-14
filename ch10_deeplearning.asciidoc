@@ -1,7 +1,7 @@
 == 10章: ディープラーニング入門
 :imagesdir: images
 
-link:ch09_qsar.asciidoc[9章]でRandom Forestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupport Vector Machine(SVM), Logistic Regiression, Artificial Neural Network(ANN)などといったものが利用されています。
+c9章でRandom Forestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupport Vector Machine(SVM), Logistic Regiression, Artificial Neural Network(ANN)などといったものが利用されています。
 
 本章では、近年注目を浴びているANNの一種であるディープラーニングの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを利用してみます。
 
@@ -15,17 +15,6 @@ ANNは、学習のための情報を入れる**入力層**、入力情報のパ�
 
 
 === TensorFlowとKerasについて
-
-Pythonでディープラーニングを行う場合、複数のフレームワークがあります。主なものを挙げると
-
-- link:http://deeplearning.net/software/theano/[Theano]
-- link:https://www.tensorflow.org/[Tensorflow]
-- link:https://keras.io/[Keras]
-- link:https://mxnet.apache.org/[MXNet]
-- link:https://chainer.org/[Chainer]
-- link:https://pytorch.org/[PyTorch]
-
-この中で本書ではGoogle社が開発しているフレームワークのTensorflow/Kerasを使います。
 
 Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報が少ないので、1.x系を利用してください。また同じ1.xでもバージョンによってAPIが異なるので、動かしたいコードがあった場合、どのバージョンで書かれているかに気をつける必要があります。
 
@@ -100,5 +89,19 @@ GoogleColabデフォルトで利用できるライブラリを確認するには
 - yellowbrick==0.9.1
 - zict==0.1.3
 - zmq==0.0.0
+
+==== 補足
+
+Pythonでディープラーニングを行う場合、複数のフレームワークがあります。主なものを挙げると
+
+- link:http://deeplearning.net/software/theano/[Theano]
+- link:https://www.tensorflow.org/[Tensorflow]
+- link:https://keras.io/[Keras]
+- link:https://mxnet.apache.org/[MXNet]
+- link:https://chainer.org/[Chainer]
+- link:https://pytorch.org/[PyTorch]
+
+があります。様々な深層学習の文献を見ていると実装に上記のフレームワークが色々使われており、どれを使えば正解といったことは言えません。この本ではKerasを使っています。
+色々ご自身でも試してみて自分が使いやすいものを選ぶのでも良いと思います。
 
 <<<
