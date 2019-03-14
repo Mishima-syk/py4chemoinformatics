@@ -1492,33 +1492,22 @@ applicability domainはトレーニングセットの類似性からその予測
 == 10章: ディープラーニング入門
 :imagesdir: images
 
-link:ch09_qsar.asciidoc[9章]でRandom Forestを用いたQSAR解析をしましたが、QSARに用いられるアルゴリズムはこれ以外にSupport Vector Machine(SVM), Logistic Regiression, Artificial Neural Network(ANN)などといったものが利用されています。
-
-本章では、近年注目を浴びているANNの一種であるディープラーニングの概要に関して説明し、ディープラーニングフレームワークであるTensorflow/Kerasを利用してみます。
+本章からディープラーニングを利用して、QSARモデルや生成モデルを作成します。
 
 === ディープラーニングに関して
 
 生物の脳には神経細胞が存在し、それらがネットワークを形成することで情報を伝達したり、記憶や学習しています。このネットワーク構造を数理モデル化したものがArtificial Neural Network(ANN)です。
 
-ANNは、学習のための情報を入れる**入力層**、入力情報のパターンを元に反応するかしないか（神経シナプスの発火に対応）を学習する**中間層（または隠れ層）**、最後の**出力層**の三層から構成されていますが、ディープラーニングはこの隠れ層、多層にする構造にすることで高精度な予測を可能としています。
+一般的なANNは、学習のための情報を入れる**入力層**、入力情報のパターンを元に反応（神経シナプスの発火に対応）を学習する**中間層（または隠れ層）**、最後の**出力層**の三層から構成されていますが、ディープラーニングは隠れ層を多層にすることで高精度な予測を可能とします。
 
-ディープラニングは近年盛んに研究されており、上記のような多層構造を持つという単純なモデルだけではなく様々な構造のモデルが日々提案されています。それらすべてのフォローは本書の範囲を超えるのでこれ以上は説明しません。
-
+本書では特にこれ以上の説明はしませんが、自分でゼロからコードを書いて理解したい場合はlink:https://www.amazon.co.jp/dp/4873117585/[ゼロから作るDeep Learning]が助けになります。また、理論についてきちんと学びたい場合はlink:https://www.amazon.co.jp/dp/4048930621/[深層学習]をお薦めします。
 
 === TensorFlowとKerasについて
 
-Pythonでディープラーニングを行う場合、複数のフレームワークがあります。主なものを挙げると
+Tensorflowは　Googleが開発してOSSとして公開している機械学習のためのフレームワークです。主にディープラーニングのフレームワークとして使われることが多いです。
 
-- link:http://deeplearning.net/software/theano/[Theano]
-- link:https://www.tensorflow.org/[Tensorflow]
-- link:https://keras.io/[Keras]
-- link:https://mxnet.apache.org/[MXNet]
-- link:https://chainer.org/[Chainer]
-- link:https://pytorch.org/[PyTorch]
-
-この中で本書ではGoogle社が開発しているフレームワークのTensorflow/Kerasを使います。
-
-Tensorflowは最近1.xから2.xにメジャーアップデートをしていますが、2.x版はまだ登場したばかりで参考情報が少ないので、1.x系を利用してください。また同じ1.xでもバージョンによってAPIが異なるので、動かしたいコードがあった場合、どのバージョンで書かれているかに気をつける必要があります。
+NOTE: 
+Tensorflowは最近1.xから2.xにメジャーアップデートをしましたが、2.x版はまだ登場したばかりで参考情報が少ないので、1.x系を利用します。また同じ1.xでもバージョンによってAPIが異なるので、動かしたいコードがあった場合、どのバージョンで書かれているかに気をつけてください。
 
 KerasはTensoflowなどの低レベルフレームワークをバックエンドにした高レベルAPIで、テンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。そのため別途イントールしなくてもTensorflowからKerasを利用できますが、Tensorflow同梱バージョンのKerasは本家との最新バージョンになっていないことがあります。
 
@@ -1591,6 +1580,20 @@ GoogleColabデフォルトで利用できるライブラリを確認するには
 - yellowbrick==0.9.1
 - zict==0.1.3
 - zmq==0.0.0
+
+==== 補足
+
+Pythonでディープラーニングを行う場合、複数のフレームワークがあります。主なものを挙げると
+
+- link:http://deeplearning.net/software/theano/[Theano]
+- link:https://www.tensorflow.org/[Tensorflow]
+- link:https://keras.io/[Keras]
+- link:https://mxnet.apache.org/[MXNet]
+- link:https://chainer.org/[Chainer]
+- link:https://pytorch.org/[PyTorch]
+
+があります。様々な深層学習の文献を見ていると実装に上記のフレームワークが色々使われており、どれを使えば正解といったことは言えません。この本ではKerasを使っています。
+色々ご自身でも試してみて自分が使いやすいものを選ぶのでも良いと思います。
 
 <<<
 == 11章: ディープラーニングを利用した構造活性相関
