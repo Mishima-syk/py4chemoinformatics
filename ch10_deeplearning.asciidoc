@@ -43,11 +43,6 @@ $ conda install -c conda-forge tensorflow
 $ conda install -c anaconda tensorflow-gpu
 ----
 
-[source, bash]
-----
-$ conda install -c conda-forge keras 
-----
-
 NOTE: pipコマンドを利用してTensorFlowをインストールすることもできます。その場合はlink:https://www.tensorflow.org/install[公式ドキュメント]を参照してください。しかし基本的にはCondaで環境を作ったらCondaでパッケージを入れることが望ましいでしょう。
 
 
