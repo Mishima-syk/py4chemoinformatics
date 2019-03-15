@@ -18,9 +18,9 @@ Tensorflowは　Googleが開発してOSSとして公開している機械学習�
 NOTE: 
 Tensorflowは最近1.xから2.xにメジャーアップデートをしましたが、2.x版はまだ登場したばかりで参考情報が少ないので、1.x系を利用します。また同じ1.xでもバージョンによってAPIが異なるので、動かしたいコードがあった場合、どのバージョンで書かれているかに気をつけてください。
 
-KerasはTensoflowなどの低レベルフレームワークをバックエンドにした高レベルAPIで、テンポよくコードが書けます。KerasはもともとTensorflowとは独立して開発されてきましたが、最近のTensorflowはKerasを取り込んでいます。そのため別途イントールしなくてもTensorflowからKerasを利用できますが、Tensorflow同梱バージョンのKerasは本家との最新バージョンになっていないことがあります。
+KerasはTensoflowなどの低レベルフレームワークをバックエンドにした高レベルAPIで、より簡単にコードが書けます。KerasはTensorflowとは独立して開発されてきましたが、最近、TensorflowはKerasを同梱するようになりました。そのため別にイントールせずにKerasを利用できます。Tensorflow同梱バージョンのKerasが本家の最新バージョンになっていないことがあります。
 
-実際に本家Kerasを使うのが良いか、Tensorflow同梱のKerasを使うのが良いのかは悩ましいところですが本書では利便性のためにTensorflowに統合されたKerasを利用します。
+どちらのKerasを使うのが良いかは悩ましいところですが、本書では利便性のためにTensorflow統合版Kerasを利用します。
 
 .KerasとTensorflowの関係性
 ****
@@ -48,7 +48,7 @@ $ conda install -c anaconda tensorflow-gpu
 $ conda install -c conda-forge keras 
 ----
 
-この例ではcondaコマンドを利用しインストールしていますが、pipコマンドを利用しインストールすることもできます。その場合はlink:https://www.tensorflow.org/install[公式ドキュメント]を参照してください。しかし基本的にはCondaで環境を作ったらCondaでパッケージを入れることが望ましいでしょう。
+NOTE: pipコマンドを利用してTensorFlowをインストールすることもできます。その場合はlink:https://www.tensorflow.org/install[公式ドキュメント]を参照してください。しかし基本的にはCondaで環境を作ったらCondaでパッケージを入れることが望ましいでしょう。
 
 
 参考リンク
@@ -62,24 +62,27 @@ $ conda install -c conda-forge keras
 ****
 link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]はクラウド上で実行できるJupyter notebook環境です。Theano, Thensorflow, Keras, Pytorchなどのディープラーニング用のフレームワークがインストール済みなのと時間の制限はありますがGPUが使えるため、手元にGPUマシンがなくてもディープラーニングを利用できる点が非常に魅力的です。
 
-利用にはGoogleのアカウントを作成する必要があるので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみると良いでしょう。
+利用にはGoogleのアカウントが必要なので、もしGoogleアカウントを持っていなければこの機会にアカウントを取得し利用してみると良いでしょう。
 ****
 
-Google のアカウントがある方はGitHub状のノートブックをそのままColab上で実行することもできます。（*デフォルトで提供されていないライブラリもあるのでその場合は別途環境を作る必要があります。）ここでは、以前Mishima.sykで実施たScikit-learnハンズオンのノートブックを開いてみます。
-まず、link:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。
+Google のアカウントがある方はGitHub状のノートブックをそのままColab上で実行することもできます。以前Mishima.sykで使ったScikit-learnハンズオンのノートブックを開いてみます。
 
-image::ch10/ch10_1.png[GoogleColabTop, pdfwidth=60%]
+NOTE:: @y__samaが作成したノートブックですが、データの準備から、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで一通り学習できるようになっています。
 
-次いで、GitHubというタブをクリックし、以下のURLをコピペします。
-link:https://github.com/Mishima-syk/sklearn-tutorial[https://github.com/Mishima-syk/sklearn-tutorial]
-するとURL先のNotebookが読み込ます。本資料は@y_samaが作成したものです。データの準備から、link:https://automl.github.io/auto-sklearn/master/[AutoSklearn] まで網羅されていますので、機械学習を学びたい方にとっては良いマテリアルになると思います。
-後半のPandasMLやAutoSklearnは、デフォルトの設定ですとColabに入ってないとエラーが出たらライブラリをインストールしてください。
+まずlink:https://colab.research.google.com/notebooks/welcome.ipynb[Google colaboratory]にアクセスします。もし下のような画面にならなければ左上の「ファイル」から「ノートブックを開く」を実行してください
 
-image::ch10/ch10_2.png[GoogleColab2, pdfwidth=60%]
+image::ch10/ch10_1.png[GoogleColabTop, width=600, pdfwidth=60%]
 
-ノートブックを開くとJupyter notebookと同じような画面になります。Shift＋リターンキーでセルのコードを実行できます。
 
-image::ch10/ch10_2.png[NoteBook, pdfwidth=60%]
+次にGitHubというタブをクリックし、以下のURLをコピーペーストするとJupyter Notebookからコードを動かせます。
+
+https://github.com/Mishima-syk/sklearn-tutorial
+
+image::ch10/ch10_2.png[GoogleColab2, width=600, pdfwidth=60%]
+
+ノートブックを開くとJupyter Notebookと同じような画面になります。Shift＋リターンキーでセルのコードを実行できます。
+
+image::ch10/ch10_2.png[NoteBook, width=600, pdfwidth=60%]
 
 GoogleColabデフォルトで利用できるライブラリを確認するにはセルの中で '!pip freeze'と打つと列記されます。
 
@@ -90,18 +93,18 @@ GoogleColabデフォルトで利用できるライブラリを確認するには
 - zict==0.1.3
 - zmq==0.0.0
 
-==== 補足
+.Pythonのディープラーニング用フレームワーク
+****
+Pythonのディープラーニング用フレームワークはいくつもあります。主にlink:http://deeplearning.net/software/theano/[Theano], 
+link:https://www.tensorflow.org/[Tensorflow], 
+link:https://keras.io/[Keras], 
+link:https://mxnet.apache.org/[MXNet], 
+link:https://chainer.org/[Chainer], 
+link:https://pytorch.org/[PyTorch], 
+などが挙げられます。
 
-Pythonでディープラーニングを行う場合、複数のフレームワークがあります。主なものを挙げると
-
-- link:http://deeplearning.net/software/theano/[Theano]
-- link:https://www.tensorflow.org/[Tensorflow]
-- link:https://keras.io/[Keras]
-- link:https://mxnet.apache.org/[MXNet]
-- link:https://chainer.org/[Chainer]
-- link:https://pytorch.org/[PyTorch]
-
-があります。様々な深層学習の文献を見ていると実装に上記のフレームワークが色々使われており、どれを使えば正解といったことは言えません。この本ではKerasを使っています。
-色々ご自身でも試してみて自分が使いやすいものを選ぶのでも良いと思います。
+様々なディープラーニングの文献では実装に上記のフレームワークのいずれかが使われていることが多いです。
+色々試してみて自分が使いやすいフレームワークを選ぶのもよいでしょう。
+****
 
 <<<

@@ -98,11 +98,10 @@ Draw.MolsToGridImage(mols, molsPerRow=3, subImgSize=(500,400))
 
 まずまずといったところでしょうか？
 
-image::ch11/ch11_01.png[Sitagliptin analogues]
-
+image:ch11/ch11_01.png[Sitagliptin_analogues]
 
 .REINVENTについて
 ****
-是非とも
-link:https://arxiv.org/abs/1704.07555[元論文(Molecular De Novo Design through Deep Reinforcement Learning)]を読んでください。
+是非ともlink:https://arxiv.org/abs/1704.07555[Molecular De Novo Design through Deep Reinforcement Learning]を読んでください。
 ****
+
