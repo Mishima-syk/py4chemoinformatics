@@ -103,7 +103,7 @@ for mol in mols:
     display(mol)
 ----
 
-=== RDKitを使ってヘテロシャッフリングをしてみる
+=== ヘテロシャッフリングをしてみる
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch05_hetero_shuffle.ipynb"]
 
@@ -194,12 +194,13 @@ image::ch05/ch05_07.png[res2]
 
 どうでしょうか。二つの分子の例を示しました。一つ目は66の芳香環であり、それを形成できる原子は炭素と、窒素のみの場合です。
 二つ目は５員環で炭素、窒素、硫黄、酸素が原子の候補として入る場合の例です。
-いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されていると思います。興味のある方はコードを書き換えていろいろ検証してみてください。
+いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されています
 
-参考文献
+.ヘテロシャッフリングについてもう少し詳しく
+****
+link:https://pubs.acs.org/doi/10.1021/jm3001289[J. Med. Chem. 2012,  55, 11, 5151-5164]ではPIM-1キナーゼ阻害剤におけるNシャッフリングの効果をFragment Molecular Orbital法という量子化学的なアプローチを使って検証しています。さらにlink:https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563[J. Chem. Inf. Model. 2019,  59, 1, 149-158]ではAsp–Arg塩橋とヘテロ環のスタッキングのメカニズムを量子化学計算により探っており、置換デザインの指標になりそうです。
 
-- https://pubs.acs.org/doi/10.1021/jm3001289
-- https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563
-- https://dx.doi.org/10.1021/jm101027s
+また、バイオアベイラビリティ改善のためにヘテロシャッフリングを行った例としてはlink:https://dx.doi.org/10.1021/jm101027s[J. Med. Chem. 2011,  54, 8, 3076-3080]があります。
+****
 
 <<<
