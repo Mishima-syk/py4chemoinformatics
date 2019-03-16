@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.30013(Draft) 2019/03/16
+v0.30014(Draft) 2019/03/16
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -872,7 +872,6 @@ DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 :imagesdir: images
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MCS.ipynb"]
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMPS.ipynb"]
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
@@ -961,17 +960,19 @@ image::ch07/mcs05.png[FraggleSimilarity]
 - https://pubs.acs.org/doi/abs/10.1021/acs.jcim.5b00036[Efficient Heuristics for Maximum Common Substructure Search]
 - https://raw.github.com/rdkit/UGM_2013/master/Presentations/Hussain.Fraggle.pdf[Fraggle – A new similarity searching algorithm]
 
-=== Matched Molecular Pairによる化合物ネットワーク
+=== Matched Molecular PairとMatched Molecular Series
 
-創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造を変換していくかは非常に重要な問題です。加えてステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することも大切です。
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMPS.ipynb"]
+
+創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造変換していくかは非常に重要ですが、ステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することもまた非常に大切です。
 
 TIP: 興味があればlink:https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf[https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf]を読むとよいです。
 
-このような解析を行うためのアプローチの一つがMatched Molecular Pair Analyisis（MMPA)です。MMPAでは、二つの分子の活性、物性の変化と部分構造の変化を比較し解析します。例えばフェニル基上に置換基、Cl基->F基に変換した場合、活性、物性にどのような変化があるかを調べます。もし変換の前後で活性は変化せず物性パラメータが大きく変化したらそれは生物等価体と見なせます。MMPは基本的には変換した部位に着目する解析手法であり、大規模なデータを利用することでパラメータの変動のトレンドの把握ができます。
+Matched Molecular Pair(MMP)は、二つの分子のうち一部の部分構造だけが異なりそれ以外は同一な分子のペアのことです。例として、クロロベンゼンとフルオロベンゼンはCl基とF基のみが異なるのでMMPです。このようなペアの特性の変化を大量に解析することで、置換基変換のトレンドを掴むことができます。これをMatched Molecular Pair Analyisis（MMPA)と呼びます。大規模なデータでMMPAを行うことにより、置換基の変化がもたらす特性変化の普遍的なルールを抽出できます。このようなルールを理解していれば構造最適化を効率的に進められることになります。
 
 ここではRDKitのContribに提供されているlink:https://github.com/rdkit/rdkit/tree/master/Contrib/mmpa[RDKit/Contrib/MMPA][mmpa]を使ってMMP解析を行います。
 
-作業ディレクトリをRDKitインストール先の下にあるContrib/mmpaに移し、pythonスクリプトを順次実行します。
+RDKitインストール先の下にあるContrib/mmpaに移動し、pythonスクリプトを順次実行します。
 
 [source, python]
 ----
@@ -984,18 +985,15 @@ python indexing.py <先のコマンドでできたフラグメントのファイ
 # python index.py <data/sample_fragmented.txt >data/mmp.csv
 ----
 
-以上のコマンドを実行するとmmp.csvに分子A,分子B,分子AのID,分子BのID,変換された構造のSMIRKS,共通部分構造（context）が出力されます。ペアのIDが出力されていますのでこれに活性や物性などの評価値を紐つけることで構造変化と評価結果の変動の解析を実施することができます。
-MMPは変換前、変換後の情報をノード、変換ルールをエッジと考えるとグラフ構造です。Cytoscapeなどのネットワーク可視化ツールを利用するとMMPAの結果をより直感的に把握することができます。
+以上のコマンドを実行すると分子A, 分子B, 分子AのID, 分子BのID, 変換された構造のSMIRKS, 共通部分構造（context）ががcsvファイルが生成されます。このデータに基づき活性や物性などを紐つけることでMMPAが行えます。
 
-メディシナルケミストは、通常ある仮説に基づき構造変換の戦略を練ります。例えばある分子Mの部分構造Xに着目しその脂溶性を変化させるためにXをAに、その結果をもとにBに、さらにそれを元にCにと最適化を進めます。
+NOTE: link:http://www.daylight.com/dayhtml/doc/theory/theory.smirks.html[SMIRKS]は分子の変換をSMILESのように文字列表記によって表現する手法です。 
 
-これをMMP的に解釈すると、MX>>MA, MA>>MB, MB>>MCとなりますね。これを繋げるとMX>>MA>>MB>>MCと一続きになります。
-このネットワークは構造変換の変遷を表現する手法の一つです。これを大規模なデータセットで実施すると、あるプロパティの変化と構造変換のルールを理解できます。MMPは基本的に部分構造変換にのみ着目するため、Scaffoldによらない普遍的なルールが見いだせるかもしれない！という期待があります。
+MMPの拡張としてMatched Molecular Series(MMS)という手法も提案されています。MMPは分子のペアですが、このペアを共通構造をもった3つ以上の集団としてリスト化したものがMMSです。
 
-その他、Matched Molecular SeriesというMMPの拡張的手法も提案されています。他には連続的な変換ルールを解析し、経験的に生み出されたlink:https://www.slideshare.net/NextMoveSoftware/revising-the-topliss-tree[Topliss Tree]のルールを表現したlink:https://pubs.acs.org/doi/10.1021/jm500022q[論文]もあります。
+実際にMMSを作ってみます。以下の例ではChEMBLのFactor Xaのデータを使いました。MMSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
 
-実際にMMPSを作ってみましょう。以下の例ではChEMBLよりFactor Xaのデータをダウンロードし、一例として使いました。MMPSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
-まず利用するライブラリの読み込みと、データの読み込みを行います。化合物がエンフォームですと一つのMolObjectに化合物＋塩の情報が入っており、正確に処理できないのでSaltRemoverを使い脱塩しています。
+まず利用するライブラリの読み込みと、データの読み込みを行い、SaltRemoverを使い脱塩しています。
 
 [source, python]
 ----
@@ -1024,7 +1022,7 @@ for i, smi in enumerate(df.CANONICAL_SMILES):
         print(smi)
 ----
 
-続いてRDKit contribに登録されているmmpaから分子フラグメンテーションのスクリプトrfragをインポートします。これで分子をフラグメントに分解します。
+続いてRDKit contribに登録されているmmpaのrfragをインポートして、分子をフラグメントに分割します。
 
 [source, python]
 ----
@@ -1038,13 +1036,14 @@ for i, smi in enumerate(df.CANONICAL_SMILES):
         print(smi, df.CMPD_CHEMBLID[i])
 ----
 
-ここまで準備ができたら、MMPSを作るスクリプトを定義します。コードはUGMの資料に記載されているものをほぼそのまま踏襲しています。今回は、Jupyter上で全ての処理を完結させたいめ、インプットをファイルからリストに変えています。
-MMPSの作成のコンセプトを簡単に説明します。
+MMSを作成する関数を定義します。コードはUGMの資料に記載されているものをほぼそのまま利用しますが、Jupyter上で全ての処理をおこなうため読み込み先をファイルからリストに変更しました。
 
-- 各分子を一定のルール（回転可能結合で切断など）でカットします。
-- ついでカットしたフラグメントをキーとした辞書を作成し、フラグメントデータをサーチし、同じキーを持つ分子のフラグメントをバリューにストックします。
+以下MMSの作成プロセスの概要です。
 
-上記の作業を繰り返すとことで共通のキー（以下のコードではscaffold）を持つ分子をまとめられます。共通のキーでまとまった分子は、キー以外の部分が異なる分子となります。
+. 各分子を一定のルール（回転可能結合で切断など）でカット
+. カットしたフラグメントがkeyの辞書を作成、同じキーを持つ分子のフラグメントを辞書のvalueに格納
+
+上記の作業を繰り返すとことで共通のスキャフォールドを持つ分子をまとめられます。共通のスキャフォールドでまとまった分子は、スキャフォールド以外の置換基が異なる分子となります。
 
 [source, python]
 ----
@@ -1092,7 +1091,7 @@ def getSeries(frags):
         yield series
 ----
 
-ここまでで、MMPSを作る準備ができました。早速コードを実行してみましょう。Seriesに関する説明なので以下のコードでは同じスキャフォールドに対して４つ以上痴漢機の変換があったデータのみを可視化します。
+MMSを作る準備ができたので実行します。同じスキャフォールドに対して４つ以上置換基の変換があったデータのみを可視化します。
 
 [source, python]
 ----
@@ -1112,15 +1111,17 @@ for s in series[:50]:
         print("########")
 ----
 
-image::ch07/mmps01.png[MMPS]
+image::ch07/mmps01.png[MMS]
 
-うまく、一つのスキャフォールドに対して複数の変換があるもののみを取り出せているようです。
+スキャフォールドに対して5つの置換基のMMSが表示されました。
 
-NOTE: link:http://www.daylight.com/dayhtml/doc/theory/theory.smirks.html[SMIRKS]は分子の変換をSMILESのように文字列表記によって表現する手法です。 創薬化学においてスキャフォールドといった場合、化合物のコアになる部分構造のことを指すことが多いです。大抵の場合は、SARにて化合物誘導体を作る際にも変えない部分化合物デザインの足場になる中心構造のことを言います。
+NOTE: このMMSを利用してlink:https://pubs.acs.org/doi/10.1021/jm500022q[活性予測]を行うこともできます。
 
 === Cytoscapeを使ってMMPネットワークを可視化する
 
 WARNING: この内容は入門の内容を超えるので興味がなければ飛ばしてください
+
+MMPは変換前、変換後の情報をノード、変換ルールをエッジとするグラフ構造と考えることができます。Cytoscapeなどのネットワーク可視化ツールを利用するとこのグラフ構造を直感的に把握できます。
 
 RDKitには先に紹介したMMPAの他にlink:https://github.com/rdkit/mmpdb[mmpdb]という別プロジェクトがあります。
 こちらはコマンドラインのツール群とデータベースシステムとして提供されているため、長期的な管理がしやすいという特徴があります。本セクションではこのlink:https://github.com/Mishima-syk/12/tree/master/kzfm[mmpdbとCytoscapeを利用したMMPの可視化]を紹介します。
