@@ -105,3 +105,4 @@ image:ch11/ch11_01.png[Sitagliptin_analogues]
 是非ともlink:https://arxiv.org/abs/1704.07555[Molecular De Novo Design through Deep Reinforcement Learning]を読んでください。
 ****
 
+<<<
