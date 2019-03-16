@@ -203,7 +203,7 @@ image::ch05/ch05_07.png[res2]
 
 .ヘテロシャッフリングについてもう少し詳しく
 ****
-link:https://pubs.acs.org/doi/10.1021/jm3001289[J. Med. Chem. 2012,  55, 11, 5151-5164]ではPIM-1キナーゼ阻害剤におけるNシャッフリングの効果をFragment Molecular Orbital法という量子化学的なアプローチを使って検証しています。さらにlink:https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563[J. Chem. Inf. Model. 2019,  59, 1, 149-158]ではAsp–Arg塩橋とヘテロ環のスタッキングのメカニズムを量子化学計算により探っており、置換デザインの指標になりそうです。
+link:https://pubs.acs.org/doi/10.1021/jm3001289[J. Med. Chem. 2012,  55, 11, 5151-5164]ではPIM-1キナーゼ阻害剤におけるNシャッフリングの効果をFragment Molecular Orbital法という量子化学的なアプローチを使って検証しています。さらにlink:https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563[J. Chem. Inf. Model. 2019,  59, 1, 149-158]ではAsp–Arg塩橋とヘテロ環のスタッキングのメカニズムを量子化学計算により探っており、置換デザインの指標になりそうです。
 
 また、バイオアベイラビリティ改善のためにヘテロシャッフリングを行った例としてはlink:https://dx.doi.org/10.1021/jm101027s[J. Med. Chem. 2011,  54, 8, 3076-3080]があります。
 ****
