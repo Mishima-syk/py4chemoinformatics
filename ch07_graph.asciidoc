@@ -124,7 +124,7 @@ MMPの拡張としてMatched Molecular Series(MMS)という手法も提案され
 
 実際にMMSを作ってみます。以下の例ではChEMBLのFactor Xaのデータを使いました。MMSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
 
-実際にMMSを作ってみましょう。以下の例ではChEMBLよりFactor Xaのデータをダウンロードし、一例として使いました。MMSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
+実際にMMSを作ってみましょう。以下の例ではChEMBLよりFactor Xaのデータをlink:https://www.ebi.ac.uk/chembl/bioactivity/results/1/cmpd_chemblid/asc/tab/display[ダウンロード]し、一例として使いました。MMSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
 
 まず利用するライブラリの読み込みと、データの読み込みを行い、SaltRemoverを使い脱塩しています。
 
