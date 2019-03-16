@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.30003(Draft) 2019/03/13
+v0.30013(Draft) 2019/03/16
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -608,6 +608,7 @@ image::ch05/ch05_07.png[res2]
 - https://pubs.acs.org/doi/10.1021/jm3001289
 - https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563
 - https://dx.doi.org/10.1021/jm101027s
+
 <<<
 == 6章: 化合物の類似性を評価してみる
 :imagesdir: images
@@ -616,23 +617,19 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 === 化合物が似ているとはどういうことか？
 
-２つの化合物が似ているとはどういうことでしょうか？なんとなく形が似ている？という表現は科学的ではありません。
-ケモインフォマティクスでは類似度(一般的に0-100の値を取ります)や非類似度（距離）といった定量的な尺度により似ているか
-どうかを評価します。
+２つの化合物が似ているとはどういうことでしょうか？なんとなく形が似ている？という表現は科学的ではありません。ケモインフォマティクスでは類似度(一般的に0-100の値を取ります)や非類似度（距離）といった定量的な尺度により似ているかどうかを評価します。
 
 ここでは主に２つの代表的な尺度を紹介します。
 
 ==== 記述子
 
-分子の全体的な特徴を数値で表現するものを記述子と呼びます。分子量や極性表面性（PSA）、分配係数(logP)などがあり、現在までに多くの記述子が提案されています。
-これらの記述子の類似性を評価することで２つの分子がどのくらい似ているかを表現することが可能です。また分子全体の特徴を一つの数字で表現するために局所的な特徴はできないです。
+分子の全体的な特徴を数値で表現するものを記述子と呼びます。分子量や極性表面性（PSA）、分配係数(logP)などがあり、現在までに多くの記述子が提案されています。これらの記述子の類似性を評価することで２つの分子がどのくらい似ているかを表現することが可能です。また分子全体の特徴を1つの数字で表現しており局所的な特徴ではないということに注意してください。
 
-NOTE:いくつかの記述子に関しては市販ソフトでないと計算できない場合があります。
+NOTE: いくつかの記述子に関しては市販ソフトでないと計算できない場合があります。
 
 ==== フィンガープリント
 
-もう一つがフィンガープリントです。フィンガープリントとは分子の部分構造を0,1のバイナリーで表現したもので部分構造の有無とビットのon(1),off(0)を対応させたものになります。
-フィンガープリントには固定長FPと可変長FPの二種類が存在し、古くはMACSKeyという固定長FP(予め部分構造とインデックスが決められているFP)が使われていましたが、現在ではECFP4(Morgan2)という可変長FPが利用されるのが普通です。
+もう一つがフィンガープリントです。フィンガープリントとは分子の部分構造を0,1のバイナリーで表現したもので部分構造の有無とビットのon(1),off(0)を対応させたものになり、部分構造の集合を表現することで分子の特徴を表現しています。フィンガープリントには固定長FPと可変長FPの二種類が存在し、古くはMACSKeyという固定長FP(予め部分構造とインデックスが決められているFP)が使われていましたが、現在ではECFP4(Morgan2)という可変長FPが利用されるのが普通です。
 
 RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM/2012/Landrum_RDKit_UGM.Fingerprints.Final.pptx.pdf[開発者のGregさんのスライド]が詳しいので熟読してください。
 
@@ -648,7 +645,7 @@ SMILESは構造をASCII文字列で表現したものでフィンガープリン
 
 === 類似度を計算する
 
-まずは手始めに簡単な分子としてトルエンとクロロベンゼンの類似性を評価してみましょう。
+簡単な分子としてトルエンとクロロベンゼンの類似性を評価してみましょう。
 
 [source, python]
 ----
@@ -762,15 +759,77 @@ image::ch06/vs01.png[result]
 
 類似度を確認すればわかりますが、今回調べた約20万件の化合物は最高でも23%の類似度の化合物しか見いだせませんでした。しかしZINCは7億5000万件のデータを収録してあるのでその中にはもっと似ている化合物はたくさんあるはずです。
 
+=== クラスタリング
+
+例えば市販化合物を購入してライブラリを作る場合にはできるだけ多様性をもたせたいので、似ている化合物ばかりが偏らないように類似化合物どうしをまとめ、その中の代表を選びます。このように化合物を構造の類似性でまとめたい場合、クラスタリングという手法を使います。
+
+link:https://www.ebi.ac.uk/chembl/beta/assay_report_card/CHEMBL1040694/[Novrtisの抗マラリアアッセイ]の5614件のヒット化合物をクラスタリングします。
+
+クラスタリング用のライブラリをインポートし、データを読み込みます。
+
+[source, python]
+----
+from rdkit.ML.Cluster import Butina
+mols = Chem.SDMolSupplier("ch06_nov_hts.sdf")
+----
+
+何らかの理由でRDKitで分子の読み込みができない場合、molオブジェクトではなくNoneが生成されます。このNoneをGetMorganFingerprintAsBitVectメソッドにわたすとエラーになるので、Noneを除きながらフィンガープリントを生成します。
+
+[source, python]
+----
+fps = []
+valid_mols = []
+
+for mol in mols:
+    if mol is not None:
+        fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2)
+        fps.append(fp)
+        valid_mols.append(mol)
+----
+
+フィンガープリントから距離行列（下三角の距離行列）を生成します。
+
+[source, python]
+----
+distance_matrix = []
+for i, fp in enumerate(fps):
+    similarities = DataStructs.BulkTanimotoSimilarity(fps[i], fps[:i+1])
+    distance_matrix.extend([1-sim for sim in similarities])
+----
+
+距離行列を用いて化合物をクラスタリングします。3番目の引数は距離の閾値です。この例では距離0.2つまり80%以上の類似度の化合物でクラスタリングしています。
+
+[source, python]
+----
+clusters = Butina.ClusterData(distance_matrix, len(fps), 0.2, isDistData=True)
+----
+
+クラスタ数を確認します。
+
+[source, python]
+----
+len(clusters)
+#2492
+----
+
+最初のクラスタの構造を表示してみます
+
+[source, python]
+----
+mols_ =[valid_mols[i] for i in clusters[0]]
+Draw.MolsToGridImage(mols_, molsPerRow=5)
+----
+
+image::ch06/cls01.png[clustering result, width=600, pdfwidth=60%]
+
+今回はRDKitに用意されているライブラリでクラスタリングを行いましたが、link:https://scikit-learn.org/stable/modules/clustering.html[Scikit-learn]でも幾つかの手法が利用できますし、実際にはこちらの方を使うことが多いです。
+
 === Structure Based Drug Design(SBDD)
 
 (LBVSに触れたのでSBVS,SBDDにも言及するかどうか検討中のサブセクション)
 
 ここでは抗凝固薬として上市されているlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL231779/[apixaban], link:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL198362/[rivaroxiaban]の類似性を評価します。
-構造を見るとわかりますが、なんとなく似ていますが、どの部分とどの部分が対応するか
-想像つくでしょうか？実はこの２つの化合物は両方共FXaというセリンプロテアーゼの同じポケットに
-同じような結合モードで結合することでプロテアーゼの働きを阻害することが知られています。興味があれば
-実際にPDBから複合体の結晶構造を探して眺めてみるといいかもしれません。
+構造を見るとわかりますが、なんとなく似ていますが、どの部分とどの部分が対応するか想像つくでしょうか？実はこの２つの化合物は両方共FXaというセリンプロテアーゼの同じポケットに同じような結合モードで結合することでプロテアーゼの働きを阻害することが知られています。興味があれば実際にPDBから複合体の結晶構造を探して眺めてみるといいかもしれません。
 （pymol入門まで拡張するか？要検討）
 
 [source, python]
@@ -1532,11 +1591,6 @@ anacondaでインストールする場合、GPU対応バージョンを使うか
 $ conda install -c conda-forge tensorflow
 # GPU版
 $ conda install -c anaconda tensorflow-gpu
-----
-
-[source, bash]
-----
-$ conda install -c conda-forge keras 
 ----
 
 NOTE: pipコマンドを利用してTensorFlowをインストールすることもできます。その場合はlink:https://www.tensorflow.org/install[公式ドキュメント]を参照してください。しかし基本的にはCondaで環境を作ったらCondaでパッケージを入れることが望ましいでしょう。
