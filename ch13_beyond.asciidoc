@@ -1,0 +1,12 @@
+== 13章: おわりに
+:imagesdir: images
+
+=== さらに学ぶために
+
+NOTE:: どのあたりに興味があって、さらに知りたいというようなリクエストをissueに投げるかtwitterででもreplyしてもらえると。またおすすめの提案も助かります。
+
+==== 機械学習をさらに学びたい方
+
+link:https://www.microsoft.com/en-us/research/people/cmbishop/#!prml-book[Pattern Recognition and Machine Learning(PRML)]を一通り読めるようになることを目指すといいでしょう。英語のpdfは先のリンクからフリーでダウンロードできますが、日本語はlink:https://www.amazon.co.jp/dp/4621061224/[パターン認識と機械学習 上], link:https://www.amazon.co.jp/dp/4621061240/[下]で販売されています。
+
+PRMLが手強いという方は「PRMLを読む前に」などで検索するともう少し易しい本が出てくるので自分に合ったものを選ぶとよいと思います。
