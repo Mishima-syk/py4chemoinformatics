@@ -101,6 +101,7 @@ $ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた以下の方々に感謝いたします。
 
 link:https://twitter.com/antiplastics[@antiplastics],
+link:https://twitter.com/bonohu[@bonohu],
 link:https://twitter.com/ReLuTropy[@ReLuTropy],
 link:https://twitter.com/ski_nanko[@ski_nanko],
 link:https://twitter.com/torusengoku[@torusengoku],
@@ -1044,6 +1045,15 @@ MMSを作成する関数を定義します。コードはUGMの資料に記載�
 . カットしたフラグメントがkeyの辞書を作成、同じキーを持つ分子のフラグメントを辞書のvalueに格納
 
 上記の作業を繰り返すとことで共通のスキャフォールドを持つ分子をまとめられます。共通のスキャフォールドでまとまった分子は、スキャフォールド以外の置換基が異なる分子となります。
+
+.スキャフォールドとは？
+****
+創薬において、前臨床試験の前のステージに構造最適化というステージがあり、そこでは化合物の主要骨格以外の部分をちょこまかと変換して薬にふさわしいバランスの取れたプロパティにします。
+
+この主要骨格のことをスキャフォールドと呼びます。例えばlink:https://patentscope2.wipo.int/search/ja/detail.jsf?docId=JP232673446[この特許]ではRを除いた部分は固定されておりこの主要骨格をスキャフォールドと呼びます。
+
+image::ch07/scaffold.png[scaffold, width=100, pdfwidth=20%]
+****
 
 [source, python]
 ----

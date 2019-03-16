@@ -88,6 +88,7 @@ $ git clone https://github.com/Mishima-syk/py4chemoinformatics.git
 本書を執筆するにあたり、バグフィックスや改善のための助言をしてくれた以下の方々に感謝いたします。
 
 link:https://twitter.com/antiplastics[@antiplastics],
+link:https://twitter.com/bonohu[@bonohu],
 link:https://twitter.com/ReLuTropy[@ReLuTropy],
 link:https://twitter.com/ski_nanko[@ski_nanko],
 link:https://twitter.com/torusengoku[@torusengoku],
