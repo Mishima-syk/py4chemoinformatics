@@ -2,7 +2,6 @@
 :imagesdir: images
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MCS.ipynb"]
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMPS.ipynb"]
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
@@ -93,6 +92,8 @@ image::ch07/mcs05.png[FraggleSimilarity]
 
 === Matched Molecular Pairによる化合物ネットワーク
 
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMPS.ipynb"]
+
 創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造を変換していくかは非常に重要な問題です。加えてステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することも大切です。
 
 TIP: 興味があればlink:https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf[https://sar.pharm.or.jp/wp-content/uploads/2018/09/SARNews_19.pdf]を読むとよいです。
@@ -124,7 +125,7 @@ MMPは変換前、変換後の情報をノード、変換ルールをエッジ�
 
 その他、Matched Molecular SeriesというMMPの拡張的手法も提案されています。他には連続的な変換ルールを解析し、経験的に生み出されたlink:https://www.slideshare.net/NextMoveSoftware/revising-the-topliss-tree[Topliss Tree]のルールを表現したlink:https://pubs.acs.org/doi/10.1021/jm500022q[論文]もあります。
 
-実際にMMPSを作ってみましょう。以下の例ではChEMBLよりFactor Xaのデータをダウンロードし、一例として使いました。MMPSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
+実際にMMSを作ってみましょう。以下の例ではChEMBLよりFactor Xaのデータをダウンロードし、一例として使いました。MMSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
 まず利用するライブラリの読み込みと、データの読み込みを行います。化合物がエンフォームですと一つのMolObjectに化合物＋塩の情報が入っており、正確に処理できないのでSaltRemoverを使い脱塩しています。
 
 [source, python]
@@ -168,8 +169,8 @@ for i, smi in enumerate(df.CANONICAL_SMILES):
         print(smi, df.CMPD_CHEMBLID[i])
 ----
 
-ここまで準備ができたら、MMPSを作るスクリプトを定義します。コードはUGMの資料に記載されているものをほぼそのまま踏襲しています。今回は、Jupyter上で全ての処理を完結させたいめ、インプットをファイルからリストに変えています。
-MMPSの作成のコンセプトを簡単に説明します。
+ここまで準備ができたら、MMSを作るスクリプトを定義します。コードはUGMの資料に記載されているものをほぼそのまま踏襲しています。今回は、Jupyter上で全ての処理を完結させたいめ、インプットをファイルからリストに変えています。
+MMSの作成のコンセプトを簡単に説明します。
 
 - 各分子を一定のルール（回転可能結合で切断など）でカットします。
 - ついでカットしたフラグメントをキーとした辞書を作成し、フラグメントデータをサーチし、同じキーを持つ分子のフラグメントをバリューにストックします。
@@ -222,7 +223,7 @@ def getSeries(frags):
         yield series
 ----
 
-ここまでで、MMPSを作る準備ができました。早速コードを実行してみましょう。Seriesに関する説明なので以下のコードでは同じスキャフォールドに対して４つ以上痴漢機の変換があったデータのみを可視化します。
+ここまでで、MMSを作る準備ができました。早速コードを実行してみましょう。Seriesに関する説明なので以下のコードでは同じスキャフォールドに対して４つ以上痴漢機の変換があったデータのみを可視化します。
 
 [source, python]
 ----

@@ -11,5 +11,6 @@ ch08_visualization.asciidoc \
 ch09_qsar.asciidoc \
 ch10_deeplearning.asciidoc \
 ch11_dlqsar.asciidoc \
-ch12_generativemodels.asciidoc > py4c.asciidoc
+ch12_generativemodels.asciidoc \
+ch13_beyond.asciidoc > py4c.asciidoc
 asciidoctor-pdf -r asciidoctor-pdf-cjk -o pdf/py4chemoinformatics.pdf py4c.asciidoc
