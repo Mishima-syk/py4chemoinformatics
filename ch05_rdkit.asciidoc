@@ -113,6 +113,40 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 特許クレームについての非常に有名な例として、Pfizer社のlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL192/[Sildenafil]とGSK社のlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL1520/[Vardinafil]が挙げられます。
 
+構造を見てみましょう。二つの構造を見てみると中心の環構造部分の窒素原子の並びが異なるものの、極めて似ている構造のように見えませんか？両分子は同じ標的タンパク質をそがしますが、その活性や薬物動態は異なります。ちょっとの違いで選択性や薬物動態が異なるのはとても興味深いですね。
+
+image::ch05/ch05_08.png[check structures]
+
+上のイメージを作るサンプルコードは以下の通りです。
+以下の例ではCompute2DCoordsでSmilsから取得したmol objectに二次元の配座情報を付与し、別途用意したCore構造をベースにアライメントしています。
+Draw.MolToGridImageのオプションにlegendsを与え、分子名を描画しています。
+
+[source, python]
+----
+from rdkit import Chem
+from rdkit.Chem import AllChem
+from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem import Draw
+from rdkit.Chem import rdDepictor
+from rdkit.Chem import rdFMCS
+from rdkit.Chem import TemplateAlign
+IPythonConsole.ipython_useSVG = True
+rdDepictor.SetPreferCoordGen(True)
+
+sildenafil = Chem.MolFromSmiles('CCCC1=NN(C)C2=C1NC(=NC2=O)C1=C(OCC)C=CC(=C1)S(=O)(=O)N1CCN(C)CC1')
+vardenafil = Chem.MolFromSmiles('CCCC1=NC(C)=C2N1NC(=NC2=O)C1=C(OCC)C=CC(=C1)S(=O)(=O)N1CCN(CC)CC1')
+rdDepictor.Compute2DCoords(sildenafil)
+rdDepictor.Compute2DCoords(vardenafil)
+res = rdFMCS.FindMCS([sildenafil, vardenafil], completeRingsOnly=True, atomCompare=rdFMCS.AtomCompare.CompareAny)
+MCS = Chem.MolFromSmarts(res.smartsString)
+rdDepictor.Compute2DCoords(MCS)
+
+TemplateAlign.AlignMolToTemplate2D(sildenafil, MCS)
+TemplateAlign.AlignMolToTemplate2D(vardenafil, MCS)
+Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafil'])
+----
+
+
 RDKITで再帰的にヘテロシャッフルした分子を生成するコードが以下です。
 replace_atom関数で芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変更します。変更後の分子が芳香環を形成している正しい分子になっているかどうかをSanitizeMolによりチェックします。
 
