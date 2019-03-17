@@ -35,7 +35,8 @@ AnacondaでインストールされるPythonは3.7ですが、本書執筆時点
 [source, bash]
 ----
 $ conda create -n py4chemoinformatics python3.6
-$ source activate py4chemoinformatis
+$ source activate py4chemoinformatics # Mac/Linux
+$ activate py4chemoinformatics # Windows
 
 # install packages
 $ conda install -c conda-forge rdkit
