@@ -2,7 +2,6 @@
 :imagesdir: images
 
 image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MCS.ipynb"]
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMS.ipynb"]
 
 グラフとはノード（頂点）群とノード間の連結関係を示すエッジ（枝）群で構成されるデータのことを指します。化学構造はこのグラフで表現できます。つまり原子をノード、結合をエッジとしたグラフ構造で表せます。
 
@@ -93,7 +92,7 @@ image::ch07/mcs05.png[FraggleSimilarity]
 
 === Matched Molecular PairとMatched Molecular Series
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMPS.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMS.ipynb"]
 
 創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造変換していくかは非常に重要ですが、ステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することもまた非常に大切です。
 
@@ -253,7 +252,7 @@ for s in series[:50]:
         print("########")
 ----
 
-image::ch07/mmps01.png[MMS]
+image::ch07/mms01.png[MMS]
 
 スキャフォールドに対して5つの置換基のMMSが表示されました。
 

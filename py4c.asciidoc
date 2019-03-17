@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.30014(Draft) 2019/03/16
+v0.40000(Draft) 2019/03/18
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -171,7 +171,8 @@ AnacondaでインストールされるPythonは3.7ですが、本書執筆時点
 [source, bash]
 ----
 $ conda create -n py4chemoinformatics python3.6
-$ source activate py4chemoinformatis
+$ source activate py4chemoinformatics # Mac/Linux
+$ activate py4chemoinformatics # Windows
 
 # install packages
 $ conda install -c conda-forge rdkit
@@ -519,7 +520,39 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 ヘテロシャッフリングを行うことで、活性を維持したまま物性を変化させて動態を良くする、活性そのものを向上させる、特許クレームの回避といった効果が期待できます。
 
-特許クレームについての非常に有名な例として、Pfizer社のlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL192/[Sildenafil]とGSK社のlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL1520/[Vardinafil]が挙げられます。
+少しの構造の違いが選択性や薬物動態が影響を与える有名な例として、Pfizer社のlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL192/[Sildenafil]とGSK社のlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL1520/[Vardinafil]が挙げられます。
+
+二つの構造を比較すると中心の環構造部分の窒素原子の並びが異なっているだけで極めて似ています。両分子は同じ標的蛋白質を阻害しますが、そのlink:https://www.nature.com/articles/3901525[活性や薬物動態]は異なります。
+
+image::ch05/ch05_08.png[check structures]
+
+上記の画像を生成するコードを示します。単にDraw.MolsToGridImageを適用するのではなく
+Core構造をベースにアライメントしていることとDraw.MolToGridImageのオプションにlegendsを与え、分子名を表示していることに注意してください。
+
+[source, python]
+----
+from rdkit import Chem
+from rdkit.Chem import AllChem
+from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem import Draw
+from rdkit.Chem import rdDepictor
+from rdkit.Chem import rdFMCS
+from rdkit.Chem import TemplateAlign
+IPythonConsole.ipython_useSVG = True
+rdDepictor.SetPreferCoordGen(True)
+
+sildenafil = Chem.MolFromSmiles('CCCC1=NN(C)C2=C1NC(=NC2=O)C1=C(OCC)C=CC(=C1)S(=O)(=O)N1CCN(C)CC1')
+vardenafil = Chem.MolFromSmiles('CCCC1=NC(C)=C2N1NC(=NC2=O)C1=C(OCC)C=CC(=C1)S(=O)(=O)N1CCN(CC)CC1')
+rdDepictor.Compute2DCoords(sildenafil)
+rdDepictor.Compute2DCoords(vardenafil)
+res = rdFMCS.FindMCS([sildenafil, vardenafil], completeRingsOnly=True, atomCompare=rdFMCS.AtomCompare.CompareAny)
+MCS = Chem.MolFromSmarts(res.smartsString)
+rdDepictor.Compute2DCoords(MCS)
+
+TemplateAlign.AlignMolToTemplate2D(sildenafil, MCS)
+TemplateAlign.AlignMolToTemplate2D(vardenafil, MCS)
+Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafil'])
+----
 
 RDKITで再帰的にヘテロシャッフルした分子を生成するコードが以下です。
 replace_atom関数で芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変更します。変更後の分子が芳香環を形成している正しい分子になっているかどうかをSanitizeMolによりチェックします。
@@ -963,7 +996,7 @@ image::ch07/mcs05.png[FraggleSimilarity]
 
 === Matched Molecular PairとMatched Molecular Series
 
-image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMPS.ipynb"]
+image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/master/notebooks/ch07_MMS.ipynb"]
 
 創薬研究の構造最適化ステージにおいて、起点となる化合物（リード化合物）をどのように構造変換していくかは非常に重要ですが、ステージが進んだ場合どの構造変換が活性や物性に影響を及ぼしたかというレトロスペクティブな解析することもまた非常に大切です。
 
@@ -993,6 +1026,8 @@ NOTE: link:http://www.daylight.com/dayhtml/doc/theory/theory.smirks.html[SMIRKS]
 MMPの拡張としてMatched Molecular Series(MMS)という手法も提案されています。MMPは分子のペアですが、このペアを共通構造をもった3つ以上の集団としてリスト化したものがMMSです。
 
 実際にMMSを作ってみます。以下の例ではChEMBLのFactor Xaのデータを使いました。MMSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
+
+実際にMMSを作ってみましょう。以下の例ではChEMBLよりFactor Xaのデータをlink:https://www.ebi.ac.uk/chembl/bioactivity/results/1/cmpd_chemblid/asc/tab/display[ダウンロード]し、一例として使いました。MMSの実装に関してはNoel O'Boyle氏のRDKit UGMでのlink:https://github.com/rdkit/UGM_2014/blob/master/Presentations/OBoyle_MatchedSeries.pdf[プレゼンテーション]のコードを利用しています。
 
 まず利用するライブラリの読み込みと、データの読み込みを行い、SaltRemoverを使い脱塩しています。
 
@@ -1121,7 +1156,7 @@ for s in series[:50]:
         print("########")
 ----
 
-image::ch07/mmps01.png[MMS]
+image::ch07/mms01.png[MMS]
 
 スキャフォールドに対して5つの置換基のMMSが表示されました。
 
