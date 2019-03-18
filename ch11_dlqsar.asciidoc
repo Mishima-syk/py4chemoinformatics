@@ -21,12 +21,6 @@ from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, f1_score
-# DNN用のライブラリを読み込みます。 tensorflowに統合されたKerasを使うように変えました(20190306)
-# from keras.layers import Input
-# from keras.layers import Dense
-# from keras.layers import Dropout
-# from keras.layers import Activation
-# from keras.models import Model
 from thensorflow.python.keras.layers import Iput
 from thensorflow.python.keras.layers import Dense
 from thensorflow.python.keras.layers import Dropout
