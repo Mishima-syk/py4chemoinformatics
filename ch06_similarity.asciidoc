@@ -214,11 +214,7 @@ image::ch06/cls01.png[clustering result, width=600, pdfwidth=60%]
 
 === Structure Based Drug Design(SBDD)
 
-(LBVSに触れたのでSBVS,SBDDにも言及するかどうか検討中のサブセクション)
-
-ここでは抗凝固薬として上市されているlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL231779/[apixaban], link:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL198362/[rivaroxiaban]の類似性を評価します。
-構造を見るとわかりますが、なんとなく似ていますが、どの部分とどの部分が対応するか想像つくでしょうか？実はこの２つの化合物は両方共FXaというセリンプロテアーゼの同じポケットに同じような結合モードで結合することでプロテアーゼの働きを阻害することが知られています。興味があれば実際にPDBから複合体の結晶構造を探して眺めてみるといいかもしれません。
-（pymol入門まで拡張するか？要検討）
+ここでは抗凝固薬として上市されているlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL231779/[apixaban], link:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL198362/[rivaroxaban]の類似性を評価します。
 
 [source, python]
 ----
@@ -226,27 +222,38 @@ apx = Chem.MolFromSmiles("COc1ccc(cc1)n2nc(C(=O)N)c3CCN(C(=O)c23)c4ccc(cc4)N5CCC
 rvx = Chem.MolFromSmiles("Clc1ccc(s1)C(=O)NC[C@H]2CN(C(=O)O2)c3ccc(cc3)N4CCOCC4=O")
 ----
 
-構造を眺めてみます。メトキシフェニルとクロロチオールは同じような結合様式をとるんでしょうか？このような結合の成分をきちんと評価する方法もあるのですが、本書の内容を超えるので説明はしません。もし興味があればFragment Molecular Orbital Methodで調べてみてください
-
 [source, python]
 ----
 Draw.MolsToGridImage([apx, rvx], legends=["apixaban", "rivaroxaban"])
 ----
 
+image::ch06/apx_rvx.png[APX+RVX, width=600, pdfwidth=60%]
+
+構造を見るとわかる通りなんとなく似ていますが、この２つの化合物は両方共FXaというセリンプロテアーゼの同じポケットに同じように結合し、蛋白質の働きを阻害することが知られています。
 
 [source, python]
 ----
 apx_fp = AllChem.GetMorganFingerprint(apx, 2)
 rvx_fp = AllChem.GetMorganFingerprint(rvx, 2)
-----
 
-
-[source, python]
-----
 DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 # 0.40625
 ----
 
-40%くらいの類似度ということになりました。
+40%くらいの類似度ということになりました。実はlink:https://www.rcsb.org/structure/2P16[apixaban]もlink:https://www.rcsb.org/structure/2W26[rivaroxaban]も複合体結晶構造が解かれており、link:https://pymol.org/2/[PyMOL]を利用して重ねて描画しました。
+
+ NOTE:: 本書の内容を超えるので、PyMOLの使い方などについては説明しませんが、興味があればlink:http://www.protein.osaka-u.ac.jp/rcsfp/supracryst/suzuki/jpxtal/Katsutani/index.php[この辺り]を参考にしてください。
+
+image::ch06/apx_rvx_suf.png[APX+RVX, width=600, pdfwidth=60%]
+
+図からわかるように、apixaban,rivaroxabanは立体的に綺麗に重なっています。特にメトキシフェニルとクロロチオールはS1ポケットと呼ばれる部位に位置しており何らかの強い相互作用をしていると言われています。蛋白質のリガンド結合部位（ポケット）が明確になれば、メディシナルケミストが次にどの辺りを修飾するかの戦略が立てやすくなり、プロジェクトの成功確率や進捗速度も上がります。
+
+このように、X線やクライオ電験などにより決められた蛋白質の形状に基づいて構造最適化を行うアプローチをStructure Based Drug Design(SBDD)と呼びます。また、ポケットがわかれば、物理的にポケットに結合するような化合物をスクリーニングすることができ、これを構造ベースのバーチャルスクリーニング(SBVS)と呼び、前の章でやったようなリガンドベースのバーチャルスクリーニング(LBVS)と区別することもあります。
+
+.FXa阻害剤の歴史と量子化学計算の重要性
+****
+本書のケモインフォマティクスの内容とは大きくかけ離れるのですが、FXa阻害剤の歴史を辿り、世代を経てどのような改良がなされていったのかを理解するのは分子設計をする上でかなり役に立ちます。また、S1ポケットの相互作用の解釈は目視や古典力学では非常に難しく、Fragment Molecular Orbital Methodのような量子化学計算によってのみ解釈できるため、今後の分子設計において量子化学計算は必須になることは間違いないと思います。
+****
+
 
 <<<
