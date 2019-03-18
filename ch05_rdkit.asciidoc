@@ -145,7 +145,7 @@ TemplateAlign.AlignMolToTemplate2D(vardenafil, MCS)
 Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafil'])
 ----
 
-RDKITで再帰的にヘテロシャッフルした分子を生成するコードが以下です。
+RDKitで再帰的にヘテロシャッフルした分子を生成するコードが以下です。
 replace_atom関数で芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変更します。変更後の分子が芳香環を形成している正しい分子になっているかどうかをSanitizeMolによりチェックします。
 
 [source, python]
@@ -215,7 +215,7 @@ res = recursive_replace([mol1])
 Draw.MolsToGridImage(res, molsPerRow=5)
 ----
 
-変換後１
+Gefitinibを入力とした場合の変換結果の一部です。芳香環を形成する原子が元の化合物から変化した分子が出力されています。
 
 image::ch05/ch05_06.png[res1]
 
@@ -225,12 +225,12 @@ res = recursive_replace([mol2])
 Draw.MolsToGridImage(res, molsPerRow=5)
 ----
 
-変換後２
+Oxaprozinを入力とした場合の変換結果の一部です。こちらは中心に、link:https://en.wikipedia.org/wiki/Oxazole[オキサゾール]と呼ばれる5員環構造を有しております。５員環を形成する芳香環にはチオフェン、フランなどのように窒素や酸素を含むものもあります。以下の例でもS、Oが5員環の構成原子に含まれている分子が出力されています。
 
 image::ch05/ch05_07.png[res2]
 
-どうでしょうか。二つの分子の例を示しました。一つ目は66の芳香環であり、それを形成できる原子は炭素と、窒素のみの場合です。
-二つ目は５員環で炭素、窒素、硫黄、酸素が原子の候補として入る場合の例です。
+どうでしょうか。二つの分子の例を示しました。一つ目の例、Gefitinibは、分子を構成する芳香環が、link:https://ja.wikipedia.org/wiki/%E3%82%AD%E3%83%8A%E3%82%BE%E3%83%AA%E3%83%B3[キナゾリン]とベンゼンでした。キナゾリンは、ベンゼンとピリミジンという二つの６員環が縮環した構造です。６員環をベースに構成される芳香環を形成する原子の候補は炭素と窒素になります。（ピリリウムイオンなど電荷を持つものも考慮すれば酸素や硫黄も候補になりますが、通常このような構造をDrug Designで使うことは少ないので今回の説明からは外しています。link:https://ja.wikipedia.org/wiki/%E8%A4%87%E7%B4%A0%E7%92%B0%E5%BC%8F%E5%8C%96%E5%90%88%E7%89%A9[複素環式化合物の説明]）
+Oxaprozinはオキサゾールを有しています。５員環の芳香環を形成する原子の候補は炭素、窒素、硫黄、酸素が挙げられます。このような分子の場合の例として紹介しました。
 いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されています
 
 .ヘテロシャッフリングについてもう少し詳しく
