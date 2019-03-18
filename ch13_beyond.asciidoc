@@ -10,3 +10,27 @@ NOTE:: どのあたりに興味があって、さらに知りたいというよ�
 link:https://www.microsoft.com/en-us/research/people/cmbishop/#!prml-book[Pattern Recognition and Machine Learning(PRML)]を一通り読めるようになることを目指すといいでしょう。英語のpdfは先のリンクからフリーでダウンロードできますが、日本語はlink:https://www.amazon.co.jp/dp/4621061224/[パターン認識と機械学習 上], link:https://www.amazon.co.jp/dp/4621061240/[下]で販売されています。
 
 PRMLが手強いという方は「PRMLを読む前に」などで検索するともう少し易しい本が出てくるので自分に合ったものを選ぶとよいと思います。
+
+==== ITよりのChemoinformaticsをさらに学びたい方
+
+本書はAI創薬を念頭においているため、機械学習や解析手法の基本的なところを説明していますが、本来ケモインフォマティクスはバイオインフォマティクスと同じように、分子の表現方法や、データの効率的な格納方法、高速な検索技術をも含んでいます。このような情報学（ITの側面）としてのケモインフォマティクスに興味がある方はlink:https://www.amazon.co.jp/Chemoinformatics-Basic-Concepts-Methods-English-ebook/dp/B07MMWKNSL/[Chemoinformatics: Basic Concepts and Methods]から読み進んで興味のあるトピックを深掘りすることをお薦めします。
+
+==== メディシナルケミストリーとケモインフォマティクスを深く知りたい方
+
+製薬企業やアカデミアの薬物動態や毒性、薬理に属している方で本書の先を知りたい方は是非ともlink:https://www.amazon.co.jp/Drug-Like-Properties-Concepts-Structure-Optimization-ebook/dp/B019OMDRU4/[Drug-Like Properties: Concepts, Structure Design and Methods from ADME to Toxicity Optimization]を一読することをお薦めします。本書は大体製薬企業の合成部門に配属された新入社員が輪読するようなテキストなので、本書を読み終えた方であれば楽しく読めると思います。もし理解が追いつかない部分があれば関連書籍をあたってもいいですし、この本を手がかりにさらに学習しても良いと思います。
+
+また、薬物動態に携わっている方が本書のQSAR/QSPRを理解できていればlink:https://www.amazon.co.jp/Physiologically-Based-Pharmacokinetic-PBPK-Modeling-Simulations-ebook/dp/B007BGZKWO/[PBPKモデリング]の際に強みとして活かせるはずです。動態プロファイルの最適化は薬品の差別化戦略にとても大きな意味を持つのでQSPR+PBPKに強いというのは非常に重宝されるのではないでしょうか？
+
+==== ドラッグデザイナーを目指したい方
+
+本書では低分子化合物をもとにしたインフォマティクスの手法を紹介してきましたが、結果の解釈をする場合にはターゲットとなる蛋白質の理解は必須になります。つまり蛋白質の立体構造の理解なしにはドラッグデザインはできないということです。そのためSBDD関連の本を読むとよいです。
+
+NOTE: 残念ながら私はSBDDを本で勉強したことがないのでだれか良書を教えてください
+
+さらにSBDDは蛋白質を扱うことになるので、必然的にchemoinformatics,bioinformaticsと括る必要がなくなります。創薬の枠組みのなかでどちらも理解しているほうがより深い考察ができるようになるので両方できるようになりましょう。そのほうが絶対楽しいです。link:https://www.amazon.co.jp/dp/4780909201/[DRY解析教本]やlink:https://www.amazon.co.jp/dp/4297103192[生命科学データ解析を支える情報技術]もきっとあなたのキャリアの助けになるでしょう。
+
+もう一つ、6章で触れましたが、蛋白質とリガンドの相互作用を理解するのに量子化学計算は必須です。これからのSBDDで量子化学を理解していない人材の価値は著しく低くなると断言できます。毛嫌いせずにlink:https://www.amazon.co.jp/dp/4130625047/[基礎量子化学―軌道概念で化学を考える]などを読んでください。もしlink:https://www.msg.chem.iastate.edu/gamess/[Gamess]を使うならlink:https://www.amazon.co.jp/dp/4061543881/[新版 すぐできる 量子化学計算ビギナーズマニュアル]も助けになることでしょう。少なくともenergy decomposition analisysは押さえておきましょう、計算の解釈能力とプロジェクトへの貢献度が上がります。さらにFMOは言うまでもないことですが不可欠のツールですので、link:https://www.jstage.jst.go.jp/article/jccj/advpub/0/advpub_2014-0039/_pdf[各成分]を理解しておくとよりよりドラッグデザインの助けになります
+
+==== 「おわりに」のその先へ
+
+本書より高度な内容を章として追加していただいて構いません。PRしてください。コントリビューターに追加して、authorを章の最初に明記します。

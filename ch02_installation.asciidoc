@@ -1,4 +1,5 @@
 == 2章: ケモインフォマティクスのための環境を整えよう
+:imagesdir: images
 
 本書に必要な環境構築を行います。
 
@@ -16,14 +17,68 @@ Pythonには大きく2.x系のバージョンと3.x系のバージョンとが�
 
 === Anacondaのインストール方法
 
-では早速Anacondaをインストールしましょう。link:https://www.anaconda.com/[公式サイト]にアクセスして、ご自身の環境にあったPython3系インストーラーをダウンロードします。OSがLinuxであればターミナルからインストーラーを実行します。
+では早速Anacondaをインストールしましょう。link:https://www.anaconda.com/[公式サイト]にアクセスして、ご自身の環境にあったPython3系インストーラーをダウンロードします。OSがLinux/MacであればGUI/CUIのインストーラーを選べるのでPython3.7の64-Bit Command Line Installerをダウンロードします。
+
+image::ch02/anaconda01.png[APX+RVX, width=600, pdfwidth=60%]
 
 [source, bash]
 ----
-$ bash ~/Downloads/Anaconda3-4.1.0-Linux-x86_64.sh
+$ bash ~/Downloads/Anaconda3-4.1.0-Linux-x86_64.sh #インストーラー名は適宜変更してください
 ----
 
-インストーラーが起動しいくつかの質問をされますが、基本的にエンターまたはYesで進めてください。
+Enterを押します
+
+[source, bash]
+----
+Welcome to Anaconda3 2018.12
+
+In order to continue the installation process, please review the license
+agreement.
+Please, press ENTER to continue
+>>> 
+----
+
+Enterを押し続けてYes,Noでyesを入力します
+
+[source, bash]
+----
+Do you accept the license terms? [yes|no]
+[no] >>> 
+----
+
+インストール先を聞かれるのですがデフォルトで問題ないのでリターンを押します
+
+[source, bash]
+----
+Anaconda3 will now be installed into this location:
+/Users/kzfm/anaconda3
+
+  - Press ENTER to confirm the location
+  - Press CTRL-C to abort the installation
+  - Or specify a different location below
+----
+
+インストール後にVSCodeをさらにインストールするかを聞かれるのでNoを押します。
+
+[source, bash]
+----
+Thank you for installing Anaconda3!
+
+===========================================================================
+
+Anaconda is partnered with Microsoft! Microsoft VSCode is a streamlined
+code editor with support for development operations like debugging, task
+running and version control.
+
+To install Visual Studio Code, you will need:
+  - Internet connectivity
+
+Visual Studio Code License: https://code.visualstudio.com/license
+
+Do you wish to proceed with the installation of Microsoft VSCode? [yes|no]
+>>> Please answer 'yes' or 'no':
+>>> 
+----
 
 Anacondaのインストールが完了すると、コマンドプロンプトまたはターミナルから'conda'コマンドが使えるようなにります。
 
