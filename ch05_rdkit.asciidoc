@@ -146,52 +146,101 @@ Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafi
 ----
 
 RDKitで再帰的にヘテロシャッフルした分子を生成するコードが以下です。
-replace_atom関数で芳香環を形成する原子のインデックスを取得し、総当たりでC, N, S, Oに変更します。変更後の分子が芳香環を形成している正しい分子になっているかどうかをSanitizeMolによりチェックします。
+HeteroShuffleというクラスを定義しました。入力はシャッフルしたい分子と変換したい部分構造（Core）を与えます。クラス内のコードではまず、分子をコア部分で切断し、コア部分を抜き取ります。ヘテロ原子に変えるのは切断後の分子内のAromatic原子かつ、置換基がついてない部分だけにします。後でカットした置換基と生成したコアをつけるための反応を生成する関数がmake_connectorです。この関数で作られた反応オブジェクトを利用してre_construct_molで分子を再構築しています。
+シャフッルするのに考えられる原子の組み合わせを作る部分は、冗長ですがitertools.productに、候補原子（C, S, N, O）の原子番号と、環を構成する原子数target_atomic_numsを与えて算出します。後のステップで分子として生成できないものは全部捨てるのでここでは考えられる全部の組み合わせを出すようにしました。
 
 [source, python]
 ----
-def replace_atom(mol):
-    res = []
-    aro_idxs = [atom.GetIdx() for atom in mol.GetAromaticAtoms() if atom.GetDegree() < 3]
-    for atm_num in [6, 7, 8, 16]:
-        for idx in aro_idxs:
-            cp_mol = copy.deepcopy(mol)
-            cp_mol.GetAtomWithIdx(idx).SetAtomicNum(atm_num)
-            p = Chem.MolFromSmarts("nnn")
-            if cp_mol.HasSubstructMatch(p) != True:
-                try:
-                    smi = Chem.MolToSmiles(cp_mol)
-                    smi.replace("[sH]", "s")
-                    cp_mol = Chem.MolFromSmiles(smi)
-                    Chem.SanitizeMol(cp_mol)
-                    res.append(cp_mol)
-                except:
-                    pass
-    return res
+class HeteroShuffle():
+    
+    def __init__(self, mol, query):
+        self.mol = mol
+        self.query = query
+        self.subs = Chem.ReplaceCore(self.mol, self.query)
+        self.core = Chem.ReplaceSidechains(self.mol, self.query)
+        self.target_atomic_nums = [6, 7, 8, 16]
+    
+    
+    def make_connectors(self):
+        n = len(Chem.MolToSmiles(self.subs).split('.'))
+        map_no = n+1
+        self.rxn_dict = {}
+        for i in range(n):
+            self.rxn_dict[i+1] = AllChem.ReactionFromSmarts('[{0}*][*:{1}].[{0}*][*:{2}]>>[*:{1}][*:{2}]'.format(i+1, map_no, map_no+1))
+        return self.rxn_dict
+
+    def re_construct_mol(self, core):
+        '''
+        re construct mols from given substructures and core
+        '''
+        keys = self.rxn_dict.keys()
+        ps = [[core]]
+        for key in keys:
+            ps = self.rxn_dict[key].RunReactants([ps[0][0], self.subs])
+        mol = ps[0][0]
+        try:
+            smi = Chem.MolToSmiles(mol)
+            mol = Chem.MolFromSmiles(smi)
+            Chem.SanitizeMol(mol)
+            return mol
+        except:
+            return None
+
+    def get_target_atoms(self):
+        '''
+        get target atoms for replace
+        target atoms means atoms which don't have anyatom(*) in neighbors
+        '''
+        atoms = []
+        for atom in self.core.GetAromaticAtoms():
+            neighbors = [a.GetSymbol() for a in atom.GetNeighbors()]
+            if '*' not in neighbors and atom.GetSymbol() !='*':
+                atoms.append(atom)
+        print(len(atoms))
+        return atoms
+    
+    def generate_mols(self):
+        atoms = self.get_target_atoms()
+        idxs = [atom.GetIdx() for atom in atoms]
+        combinations = itertools.product(self.target_atomic_nums, repeat=len(idxs))
+        smiles_set = set()
+        self.make_connectors()
+        for combination in combinations:
+            target = copy.deepcopy(self.core)
+            #print(Chem.MolToSmiles(target))
+            for i, idx in enumerate(idxs):
+                target.GetAtomWithIdx(idx).SetAtomicNum(combination[i])
+            smi = Chem.MolToSmiles(target)
+            #smi = smi.replace('sH','s').replace('oH','o').replace('cH3','c')
+            #print('rep '+smi)
+            target = Chem.MolFromSmiles(smi)
+            if target != None:
+                n_attachment = len([atom for atom in target.GetAtoms() if atom.GetAtomicNum() == 0])
+                n_aromatic_atoms = len(list(target.GetAromaticAtoms()))
+                if target.GetNumAtoms() - n_attachment == n_aromatic_atoms:
+                    try:
+                        mol = self.re_construct_mol(target)  
+                        if checkmol(mol):
+                            smiles_set.add(Chem.MolToSmiles(mol))
+                    except:
+                        pass
+        mols = [Chem.MolFromSmiles(smi) for smi in smiles_set]
+        return mols
 ----
 
-recursive_replaceという関数では再帰的に原子を入れ替えます。thresは閾値で、入力分子内の芳香環を形成する原子に対する芳香環を形成する窒素原子の数の割合です。閾値を設定することで芳香環の原子が全て炭素以外の原子になってしまうことを防いでいます。
+上のコードで使われているcheckmolという関数はc1coooo1のような６員環の構造もAromaticだと判定されてしまうのでそれを避けるために使っています。O, Sが許容されるのは５員環のヘテロ芳香環のみにしました。
 
 [source, python]
 ----
-def recursive_replace(mols, check=set([]), thres=0.4):
-    before_n = len(check)
-    print(before_n)
-    for mol in mols:
-        replaced_mols = replace_atom(mol)
-        for mol_conv in replaced_mols:
-            aro_n = Fragments.fr_Ar_N(mol)
-            aro_a = len(mol.GetAromaticAtoms())
-            ratio = float(aro_n) / float(aro_a)
-            if ratio < thres:
-                smi = Chem.MolToSmiles(mol_conv)
-                check.add(smi)
-    after_n = len(check)
-    print(before_n, after_n)
-    if before_n < after_n:
-        mols = [Chem.MolFromSmiles(mol) for mol in check]
-        recursive_replace(mols, check=check)
-    return [Chem.MolFromSmiles(smi) for smi in check]
+def checkmol(mol):
+    arom_atoms = mol.GetAromaticAtoms()
+    symbols = [atom.GetSymbol() for atom in arom_atoms if not atom.IsInRingSize(5)]
+    if symbols == []:
+        return True
+    elif 'O' in symbols or 'S' in symbols:
+        return False
+    else:
+        return True
 ----
 
 実際に使ってみます。
@@ -200,9 +249,10 @@ def recursive_replace(mols, check=set([]), thres=0.4):
 ----
 # Gefitinib
 mol1 = Chem.MolFromSmiles('COC1=C(C=C2C(=C1)N=CN=C2NC3=CC(=C(C=C3)F)Cl)OCCCN4CCOCC4')
+core1 = Chem.MolFromSmiles('c1ccc2c(c1)cncn2')
 #  Oxaprozin
-mol2 = Chem.MolFromSmiles('C1=CC=C(C=C1)C2=C(OC(=N2)CCC(=O)O)C3=CC=CC=C3')
-Draw.MolsToGridImage([mol1, mol2])
+mol2 = Chem.MolFromSmiles('OC(=O)CCC1=NC(=C(O1)C1=CC=CC=C1)C1=CC=CC=C1')
+core2 =  Chem.MolFromSmiles('c1cnco1')
 ----
 
 元の分子
@@ -211,21 +261,26 @@ image::ch05/ch05_05.png[query]
 
 [source, python]
 ----
-res = recursive_replace([mol1])
+ht=HeteroSuffle(mol1, core1)
+res=ht.generate_mols()
+print(len(res))
 Draw.MolsToGridImage(res, molsPerRow=5)
 ----
 
 Gefitinibを入力とした場合の変換結果の一部です。芳香環を形成する原子が元の化合物から変化した分子が出力されています。
+また、COREで指定したキナゾリン部分のみが変換されています。
 
 image::ch05/ch05_06.png[res1]
 
 [source, python]
 ----
-res = recursive_replace([mol2])
+ht=HeteroSuffle(mol2, core2)
+res=ht.generate_mols()
+print(len(res))
 Draw.MolsToGridImage(res, molsPerRow=5)
 ----
 
-Oxaprozinを入力とした場合の変換結果の一部です。こちらは中心に、link:https://en.wikipedia.org/wiki/Oxazole[オキサゾール]と呼ばれる5員環構造を有しております。５員環を形成する芳香環にはチオフェン、フランなどのように窒素や酸素を含むものもあります。以下の例でもS、Oが5員環の構成原子に含まれている分子が出力されています。
+Oxaprozinを入力とした場合の変換結果です。こちらは中心に、link:https://en.wikipedia.org/wiki/Oxazole[オキサゾール]と呼ばれる5員環構造を有しております。５員環を形成する芳香環にはチオフェン、フランなどのように窒素や酸素を含むものもあります。以下の例でもS、Oが5員環の構成原子に含まれている分子が出力されています。
 
 image::ch05/ch05_07.png[res2]
 
