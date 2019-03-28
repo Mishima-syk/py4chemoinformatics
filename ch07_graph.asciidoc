@@ -190,10 +190,12 @@ MMSを作成する関数を定義します。コードはUGMの資料に記載�
 image::ch07/scaffold.png[scaffold, width=100, pdfwidth=20%]
 ****
 
-
 以下のコードの簡単な説明をします。
+
 Fragというnamedtupleはid, scaffold, rgroupを属性に持ちます。link:https://docs.python.org/3.6/library/collections.html[Namedtuple]を利用することで簡単なクラスと同じ働きをするオブジェクトを作ることができます。
+
 getFrags関数は、フラグメント化してあるデータを元にFragクラスにデータを登録します。登録の際に、フラグメントの原子数を比較しどちらをScaffoldにするかを決めています。この関数を呼ぶことで各分子のid, scaffold, rgroupのペアを作ります。
+
 次のgetSeries関数はFragオブジェクト内に格納されたscaffoldと与えられたデータを照合し、同じscaffoldを持つrgroupのデータをまとめます。これによってペアからシリーズにしています。Seriesクラスはscaffoldが文字列（SMILES)、rgroupsはリストで複数のフラグメントを持てるようになっています。
 
 [source, python]
