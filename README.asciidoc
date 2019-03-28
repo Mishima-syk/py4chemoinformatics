@@ -5,20 +5,24 @@
 
 - https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/#formatted-text[AsciiDoc Syntax Quick Reference]
 
-image::python_for_ci.png[py4chemoinformatics, width=250]
+image::souyakuchan.png[py4chemoinformatics, width=150]
 
 == link:ch01_introduction.asciidoc[01 はじめに]
 
-- ケモインフォマティクスとは？
 - RDKitとは？
 - 対象読者
+- 本書のコードについて
+- おまけ
 - 謝辞
 - License
 
 == link:ch02_installation.asciidoc[02 ケモインフォマティクスのための環境を整えよう]
 
-- Anaconda(Python, Jupyter, scikit-learn)
-- RDKit
+- Anacondaとは
+- Anacondaのインストール方法
+- 仮想環境の構築とパッケージのインストール
+- インストールしたパッケージの説明
+- Condaについてもう少し詳しく
 
 == link:ch03_python.asciidoc[03 Pythonプログラミングの基礎]
 
@@ -31,28 +35,33 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 - ChEMBL
 - PubChem
 - ChEMBLで欲しい情報を検索する
+- その他有用なデータベース
 
 == link:ch05_rdkit.asciidoc[05 RDKitで構造情報を取り扱う]
 
-- SMILESとは？
+- SMILESとは
 - 構造を描画してみよう
 - 複数の化合物を一度に取り扱うには？
+- ヘテロシャッフリングをしてみる
 
 == link:ch06_similarity.asciidoc[06 化合物の類似性を評価してみる]
 
-- 記述子、フィンガープリント
+- 化合物が似ているとはどういうことか？
 - 類似度を計算する
 - バーチャルスクリーニング
+- クラスタリング
+- Structure Based Drug Design(SBDD)
 
 == link:ch07_graph.asciidoc[07 グラフ構造を利用した類似性の評価]
 
 - 主要な骨格による分類(MCS)
-- Matched Molecular Pairによる化合物ネットワーク
+- Matched Molecular PairとMatched Molecular Series
 - Cytoscapeを使ってMMPネットワークを可視化する
 
 == link:ch08_visualization.asciidoc[08 沢山の化合物を一度にみたい]
 
 - Chemical Spaceとは
+- ユークリッド距離を用いたマッピング
 - tSNEをつかったマッピング
 
 == link:ch09_qsar.asciidoc[09 構造活性相関（QSAR）の基礎]
@@ -63,9 +72,10 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 
 == link:ch10_deeplearning.asciidoc[10 ディープラーニング入門]
 
+- ディープラーニングに関して
 - TensorFlowとKerasについて
-- Google colab
 - インストールしてみよう
+- Google colabとは
 
 == link:ch11_dlqsar.asciidoc[11 ディープラーニングを利用した構造活性相関]
 
@@ -74,4 +84,10 @@ image::python_for_ci.png[py4chemoinformatics, width=250]
 
 == link:ch12_generativemodels.asciidoc[12 コンピューターに化学構造を考えさせる]
 
-- Recurrent Neural Networkを利用した構造生成
+- 準備
+- 実例
+
+== link:ch13_beyond.asciidoc[13 おわりに]
+
+- さらに学ぶために
+
