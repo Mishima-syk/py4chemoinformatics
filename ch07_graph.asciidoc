@@ -142,7 +142,7 @@ from rdkit.Chem import SaltRemover
 mmpapath = os.path.join(RDConfig.RDContribDir, 'mmpa')
 sys.path.append(mmpapath)
 
-# データをPandasのDataFrameとして読み込み、ついでSmilesをMolオブジェクトに変換、CHEMBLのIDをプロパティとして登録します。
+# データをPandasのDataFrameとして読み込み、SmilesをMolオブジェクトに変換、CHEMBLのIDをプロパティとして登録します。
 df = pd.read_csv('Chembl_FXa.txt', sep='\t')
 remover = SaltRemover.SaltRemover()
 mols = []
@@ -158,7 +158,7 @@ for i, smi in enumerate(df.CANONICAL_SMILES):
 
 続いてRDKit contribに登録されているmmpaのrfragをインポートして、分子をフラグメントに分割します。
 以下のコードで用いているrfrag.fragment_molで呼ばれている関数の実態はlink:http://rdkit.org/docs/source/rdkit.Chem.rdMMPA.html[rdMMPA.FragmentMol]です。この関数は、与えたMolオブジェクトを回転可能ボンドにて切断したフラグメントを生成します。
-出力の形式はfragment(SMILES, COMPOUND_ID)とした場合、**SMILES, COMPOUND_ID, CORE, CHAINS**q というカンマ区切りのテキストのリストになります。COREというのは例えばA-B-Cという分子（ーが回転可能ボンドを意味します）を考えると、切断の仕方がA/B-C, A/B/C, A-B/Cという三つのケースがあります。二番目のケースの時にBがCoreにA, CがCHAINSになります。一番目と、三番目はどちらも（A,B-C）、（A-B,C）というフラグメントはCHAINSにアサインされ、COREはNONEになります。
+出力の形式はfragment(SMILES, COMPOUND_ID)とした場合、**SMILES, COMPOUND_ID, CORE, CHAINS** というカンマ区切りのテキストのリストになります。COREというのは例えばA-B-Cという分子（ーが回転可能ボンドを意味します）を考えると、切断の仕方がA/B-C, A/B/C, A-B/Cという三つのケースがあります。二番目のケースの時にBがCoreにA, CがCHAINSになります。一番目と、三番目はどちらも（A,B-C）、（A-B,C）というフラグメントはCHAINSにアサインされ、COREはNONEになります。
 
 [source, python]
 ----
