@@ -39,7 +39,7 @@ image::ch07/mcs01.png[compounds]
 [source, python]
 ----
 result1 = rdFMCS.FindMCS(mols[:7])
-mcs1 = Chem.MolFromSmarts　(result1.smartsString)
+mcs1 = Chem.MolFromSmarts(result1.smartsString)
 mcs1
 print(result1.smartsString)
 #[#6]1:[#7]:[#6](:[#7]:[#6]2:[#6]:1:[#7]:[#6]:[#7]:2)-[#7]
@@ -217,7 +217,7 @@ def getFrags(rfrags):
             if broken[2]: # single cut
                 continue
             smiles = broken[-1].split(".")
-            mols = [Chem.MolFromSmiles( smi ) for smi in smiles]
+            mols = [Chem.MolFromSmiles(smi) for smi in smiles]
             numAtoms = [mol.GetNumAtoms() for mol in mols]
             if len(numAtoms) < 2:
                 continue
