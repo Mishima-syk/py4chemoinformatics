@@ -767,13 +767,13 @@ image:jupyter.png[link="https://github.com/Mishima-syk/py4chemoinformatics/blob/
 
 === 化合物が似ているとはどういうことか？
 
-２つの化合物が似ているとはどういうことでしょうか？なんとなく形が似ている？という表現は科学的ではありません。ケモインフォマティクスでは類似度(一般的に0-100の値を取ります)や非類似度（距離）といった定量的な尺度により似ているかどうかを評価します。
+２つの化合物が似ているとはどういうことでしょうか？なんとなく形が似ている？という表現は科学的ではありません。ケモインフォマティクスでは類似度(一般的に0-100の値を取ります)や非類似度(距離}といった定量的な尺度により似ているかどうかを評価します。
 
 ここでは主に２つの代表的な尺度を紹介します。
 
 ==== 記述子
 
-分子の全体的な特徴を数値で表現するものを記述子と呼びます。分子量や極性表面性（PSA）、分配係数(logP)などがあり、現在までに多くの記述子が提案されています。これらの記述子の類似性を評価することで２つの分子がどのくらい似ているかを表現することが可能です。また分子全体の特徴を1つの数字で表現しており局所的な特徴ではないということに注意してください。
+分子の全体的な特徴を数値で表現するものを記述子と呼びます。分子量や極性表面性(PSA}、分配係数(logP)などがあり、現在までに多くの記述子が提案されています。これらの記述子の類似性を評価することで２つの分子がどのくらい似ているかを表現することが可能です。また分子全体の特徴を1つの数字で表現しており局所的な特徴ではないということに注意してください。
 
 NOTE: いくつかの記述子に関しては市販ソフトでないと計算できない場合があります。
 
@@ -788,7 +788,7 @@ RDKitのフィンガープリントに関してはlink:https://www.rdkit.org/UGM
 .SMILESとフィンガープリントの違い
 ****
 SMILESは構造をASCII文字列で表現したものでフィンガープリントは部分構造の有無をバイナリで表現したものです。違いは前者は**構造表現**の一つであるのに対し、後者は**特徴表現**の一つだということです。
-部分構造の有無だけしか表現していないため、部分構造間の関係性（どう位置関係でつながっているのか）といった情報が失われ、もとの構造に戻ることはありません。
+部分構造の有無だけしか表現していないため、部分構造間の関係性(どう位置関係でつながっているのか}といった情報が失われ、もとの構造に戻ることはありません。
 
 テキストマイニングでよく用いられるBag-of-Wordsに対応するのでBag-of-Fragmentsと呼ぶ人もいます。
 ****
@@ -852,17 +852,12 @@ jupyter notebookでは!で始めるとShellコマンドを実行できます。�
 !wget http://files.docking.org/2D/EA/EAED.smi
 ----
 
-ファイルからSMILESを読み込んでmolオブジェクトにしますが最初の行はヘッダーなので読み飛ばします。また、各行の最終文字は改行文字なのでl[:-1]として除いています。最後に何化合物あるか調べます。
+SmilesMolSupplier関数を使い、ファイルからまとめてSMILESを読み込みmolオブジェクトにします。5章で紹介したSDMolSupplierのSMILESバージョンと考えてください。
 
 [source, python]
 ----
-mols = []
-with open("EAED.smi") as f:
-    f.readline()
-    for l in f:
-        mol = Chem.MolFromSmiles(l[:-1])
-        mols.append(mol)
-print(len(mols))
+spl = Chem.rdmolfiles.SmilesMolSupplier("EAED.smi")
+len(spl)
 # 195493
 ----
 
@@ -883,8 +878,8 @@ def calc_laninamivir_similarity(mol):
 
 [source, python]
 ----
-similar_mols =[]
-for mol in mols:
+similar_mols = []
+for mol in spl:
     sim = calc_laninamivir_similarity(mol)
     if sim > 0.2:
         similar_mols.append((mol, sim))
@@ -898,7 +893,7 @@ similar_mols.sort(key=lambda x: x[1], reverse=True)
 mols = [l[0] for l in similar_mols[:10]]
 ----
 
-描画してみます。
+描画してみます。
 
 [source, python]
 ----
@@ -923,7 +918,7 @@ from rdkit.ML.Cluster import Butina
 mols = Chem.SDMolSupplier("ch06_nov_hts.sdf")
 ----
 
-何らかの理由でRDKitで分子の読み込みができない場合、molオブジェクトではなくNoneが生成されます。このNoneをGetMorganFingerprintAsBitVectメソッドにわたすとエラーになるので、Noneを除きながらフィンガープリントを生成します。
+何らかの理由でRDKitで分子の読み込みができない場合、molオブジェクトではなくNoneが生成されます。このNoneをGetMorganFingerprintAsBitVect関数にわたすとエラーになるので、Noneを除きながらフィンガープリントを生成します。
 
 [source, python]
 ----
@@ -937,7 +932,7 @@ for mol in mols:
         valid_mols.append(mol)
 ----
 
-フィンガープリントから距離行列（下三角の距離行列）を生成します。
+フィンガープリントから距離行列(下三角の距離行列}を生成します。
 
 [source, python]
 ----
@@ -966,7 +961,7 @@ len(clusters)
 
 [source, python]
 ----
-mols_ =[valid_mols[i] for i in clusters[0]]
+mols_ = [valid_mols[i] for i in clusters[0]]
 Draw.MolsToGridImage(mols_, molsPerRow=5)
 ----
 
@@ -1008,7 +1003,7 @@ DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
 
 image::ch06/apx_rvx_suf.png[APX+RVX, width=600, pdfwidth=60%]
 
-図からわかるように、apixaban,rivaroxabanは立体的に綺麗に重なっています。特にメトキシフェニルとクロロチオールはS1ポケットと呼ばれる部位に位置しており何らかの強い相互作用をしていると言われています。蛋白質のリガンド結合部位（ポケット）が明確になれば、メディシナルケミストが次にどの辺りを修飾するかの戦略が立てやすくなり、プロジェクトの成功確率や進捗速度も上がります。
+図からわかるように、apixaban,rivaroxabanは立体的に綺麗に重なっています。特にメトキシフェニルとクロロチオールはS1ポケットと呼ばれる部位に位置しており何らかの強い相互作用をしていると言われています。蛋白質のリガンド結合部位(ポケット}が明確になれば、メディシナルケミストが次にどの辺りを修飾するかの戦略が立てやすくなり、プロジェクトの成功確率や進捗速度も上がります。
 
 このように、X線やクライオ電験などにより決められた蛋白質の形状に基づいて構造最適化を行うアプローチをStructure Based Drug Design(SBDD)と呼びます。また、ポケットがわかれば、物理的にポケットに結合するような化合物をスクリーニングすることができ、これを構造ベースのバーチャルスクリーニング(SBVS)と呼び、前の章でやったようなリガンドベースのバーチャルスクリーニング(LBVS)と区別することもあります。
 
