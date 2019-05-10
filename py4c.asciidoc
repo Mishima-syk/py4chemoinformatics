@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.90(Draft) 2019/03/28
+v1.00 2019/05/10
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -159,7 +159,7 @@ image::ch02/anaconda01.png[APX+RVX, width=600, pdfwidth=60%]
 
 [source, bash]
 ----
-$ bash ~/Downloads/Anaconda3-4.1.0-Linux-x86_64.sh #インストーラー名は適宜変更してください
+$ bash ~/Downloads/Anaconda3-2019.03-MacOSX-x86_64.sh #インストーラー名は適宜変更してください
 ----
 
 Enterを押します
@@ -220,12 +220,12 @@ Anacondaのインストールが完了すると、コマンドプロンプトま
 
 === 仮想環境の構築とパッケージのインストール
 
-AnacondaでインストールされるPythonは3.7ですが、本書執筆時点で配布されている最新のRDKitはPython3.6を必要とします。そのためcondaで仮想環境を構築し、必要なバージョンのPythonをインストールします。コマンドの-nの後ろは"py4chemoinformatics"としていますが皆さんの好きな名前でも構いません。
+コマンドの-nの後ろは"py4chemoinformatics"としていますが皆さんの好きな名前でも構いません。
 仮想環境構築後、本章以降で利用するパッケージをインストールします。
 
 [source, bash]
 ----
-$ conda create -n py4chemoinformatics python3.6
+$ conda create -n py4chemoinformatics
 $ source activate py4chemoinformatics # Mac/Linux
 $ activate py4chemoinformatics # Windows
 
@@ -510,16 +510,16 @@ NOTE: 文字列で表現できるということは、文字列生成アルゴ�
 
 === 複数の化合物を一度に取り扱うには？
 
-複数の化合物を一つのファイルに格納する方法にはいくつかありますが、sdfというファイル形式を利用するのが一般的です。
+複数の化合物を一つのファイルに格納する方法にはいくつかありますが、sdというファイル形式を利用するのが一般的です。sdファイルということで、ファイルの拡張子は.sdfとなることが多いです。
 
-.sdfフォーマットとは？
+.sdfとは？
 ****
-MDL社で開発された分子表現のためのフォーマットにMOL形式というものがあります。このMOL形式を拡張したものがSDF形式です。具体的にはMOL形式で表現されたものを"$$$$"という行で区切ることにより、複数の分子を取り扱えるようにしてあります。
+MDL社で開発された分子表現のためのフォーマットにlink:https://en.wikipedia.org/wiki/Chemical_table_file[MOL形式]というものがあります。このMOL形式を拡張したものがSDファイルです。具体的にはMOL形式で表現されたものを\$$$$という行で区切ることにより、複数の分子を取り扱えるようにしてあります。
 
 MOL形式は分子の三次元座標を格納することができ二次元だけでなく立体構造を表現できる点はSMILESとの大きな違いです。
 ****
 
-==== sdfファイルをChEMBLからダウンロードする
+==== sdファイルをChEMBLからダウンロードする
 
 4章を参考にlink:https://www.ebi.ac.uk/chembl/beta/[ChEMBL]のトポイソメラーゼII阻害試験(CHEMBL669726)の構造データをsdfファイル形式でダウンロードします。
 

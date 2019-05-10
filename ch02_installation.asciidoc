@@ -23,7 +23,7 @@ image::ch02/anaconda01.png[APX+RVX, width=600, pdfwidth=60%]
 
 [source, bash]
 ----
-$ bash ~/Downloads/Anaconda3-4.1.0-Linux-x86_64.sh #インストーラー名は適宜変更してください
+$ bash ~/Downloads/Anaconda3-2019.03-MacOSX-x86_64.sh #インストーラー名は適宜変更してください
 ----
 
 Enterを押します
@@ -84,12 +84,12 @@ Anacondaのインストールが完了すると、コマンドプロンプトま
 
 === 仮想環境の構築とパッケージのインストール
 
-AnacondaでインストールされるPythonは3.7ですが、本書執筆時点で配布されている最新のRDKitはPython3.6を必要とします。そのためcondaで仮想環境を構築し、必要なバージョンのPythonをインストールします。コマンドの-nの後ろは"py4chemoinformatics"としていますが皆さんの好きな名前でも構いません。
+コマンドの-nの後ろは"py4chemoinformatics"としていますが皆さんの好きな名前でも構いません。
 仮想環境構築後、本章以降で利用するパッケージをインストールします。
 
 [source, bash]
 ----
-$ conda create -n py4chemoinformatics python3.6
+$ conda create -n py4chemoinformatics
 $ source activate py4chemoinformatics # Mac/Linux
 $ activate py4chemoinformatics # Windows
 

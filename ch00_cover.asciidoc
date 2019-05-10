@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v0.90(Draft) 2019/03/28
+v1.00 2019/05/10
 :toc:
 :toc-title: 目次
 :lang: ja
