@@ -91,3 +91,11 @@ image::souyakuchan.png[py4chemoinformatics, width=150]
 
 - さらに学ぶために
 
+== License
+
+This document is copyright (C) 2019 by @fmkz___ and @iwatobipen
+
+This document is link:https://github.com/Mishima-syk/py4chemoinformatics/blob/master/LICENSE[Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+Public License].
+
+image::by-nc-sa.png[CC-BY-NC-SA, width=100]
