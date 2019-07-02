@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v1.00 2019/05/10
+v1.01 2019/07/02
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -236,6 +236,13 @@ $ conda install -c conda-forge ggplot
 $ conda install -c conda-forge git
 ----
 
+もし仮想環境でjupyter notebookが動かない場合はもう一度インストールする必要があります。
+
+[source, bash]
+----
+$ conda install notebook ipykernel
+----
+
 === インストールしたパッケージの説明
 
 ==== RDKit
@@ -276,7 +283,7 @@ $ conda info -e # 作った仮想環境一覧の表示
 $ conda remove -n 仮想環境の名前 # 仮想環境の削除
 $ source activate 仮想環境の名前 # 仮想環境を使う(mac/linux)
 $ activate 仮想環境の名前 # 仮想環境を使う(Windows)
-$ source deactivate # 仮想環境から出る
+$ conda deactivate # 仮想環境から出る(source deactivateは廃止されました)
 $ conda list # 今使っている仮想環境にインストールされているライブラリの一覧を表示
 ----
 
@@ -609,7 +616,7 @@ TemplateAlign.AlignMolToTemplate2D(vardenafil, MCS)
 Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafil'])
 ----
 
-ヘテロシャッフルした分子を生成するためにHeteroShuffleというクラスを定義します。オブジェクトの生成にはシャッフルしたい分子と変換したい部分構造（Core）を与えます。クラス内のコードではまず、分子をCoreで切断し、Coreとそれ以外に分けます。CoreのAromatic原子で、置換基がついてない原子のみが置換候補になります。。シャッフル後のCoreとCore以外のパーツを再結合するための反応オブジェクトを生成するメソッドがmake_connectorです。このメソッドで作られた反応オブジェクトを利用してre_construct_molで分子を再構築しています。
+ヘテロシャッフルした分子を生成するためにHeteroShuffleというクラスを定義します。オブジェクトの生成にはシャッフルしたい分子と変換したい部分構造（Core）を与えます。クラス内のコードではまず、分子をCoreで切断し、Coreとそれ以外に分けます。CoreのAromatic原子で、置換基がついてない原子のみが置換候補になります。シャッフル後のCoreとCore以外のパーツを再結合するための反応オブジェクトを生成するメソッドがmake_connectorです。このメソッドで作られた反応オブジェクトを利用してre_construct_molで分子を再構築しています。
 
 考えられる原子の組み合わせを構築するために、itertools.productに、候補原子（C, S, N, O）の原子番号と、環を構成する原子数target_atomic_numsを与えます。その後に分子として生成できないものは排除するのでここでは考えられる全部の組み合わせを出します。
 

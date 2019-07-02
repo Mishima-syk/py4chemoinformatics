@@ -100,6 +100,13 @@ $ conda install -c conda-forge ggplot
 $ conda install -c conda-forge git
 ----
 
+もし仮想環境でjupyter notebookが動かない場合はもう一度インストールする必要があります。
+
+[source, bash]
+----
+$ conda install notebook ipykernel
+----
+
 === インストールしたパッケージの説明
 
 ==== RDKit
@@ -140,7 +147,7 @@ $ conda info -e # 作った仮想環境一覧の表示
 $ conda remove -n 仮想環境の名前 # 仮想環境の削除
 $ source activate 仮想環境の名前 # 仮想環境を使う(mac/linux)
 $ activate 仮想環境の名前 # 仮想環境を使う(Windows)
-$ source deactivate # 仮想環境から出る
+$ conda deactivate # 仮想環境から出る(source deactivateは廃止されました)
 $ conda list # 今使っている仮想環境にインストールされているライブラリの一覧を表示
 ----
 
