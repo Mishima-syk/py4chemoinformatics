@@ -90,6 +90,8 @@ jupyter notebookでは!で始めるとShellコマンドを実行できます。�
 !wget http://files.docking.org/2D/EA/EAED.smi
 ----
 
+NOTE:: もし、Windowsなどでwgetコマンドがない場合はブラウザにURLを直接入力するとファイルのダウンロードができるので、ダウンロードしたファイルをjupyterを起動しているディレクトリに移動してください。
+
 SmilesMolSupplier関数を使い、ファイルからまとめてSMILESを読み込みmolオブジェクトにします。5章で紹介したSDMolSupplierのSMILESバージョンと考えてください。
 
 [source, python]
