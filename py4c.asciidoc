@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v1.01 2019/07/02
+v1.02 2019/08/03
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -281,7 +281,7 @@ $ conda install <package name>　# install package
 $ conda create -n 仮想環境の名前 python=バージョン　# 仮想環境の作成。
 $ conda info -e # 作った仮想環境一覧の表示
 $ conda remove -n 仮想環境の名前 # 仮想環境の削除
-$ source activate 仮想環境の名前 # 仮想環境を使う(mac/linux)
+$ conda activate 仮想環境の名前 # 仮想環境を使う(mac/linux)
 $ activate 仮想環境の名前 # 仮想環境を使う(Windows)
 $ conda deactivate # 仮想環境から出る(source deactivateは廃止されました)
 $ conda list # 今使っている仮想環境にインストールされているライブラリの一覧を表示
