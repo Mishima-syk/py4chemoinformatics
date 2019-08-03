@@ -26,9 +26,9 @@ RDKitのRDはなんなのか？実は**Rational Discovery**の略称であり現
 
 おっと話が横道に逸れてしまった。本題に戻ろう。
 
-開発者のGreg Landorum氏いわく
+開発者のGreg Landrum氏いわく
 
-[quote, Greg Landorum]
+[quote, Greg Landrum]
 RDKitはケモインフォマティクスにおけるSwiss Army Knifeであり、様々な機能ピースの集合体である
 
 これはまさに的を得た表現でござる。link:https://www.rdkit.org/docs/[公式ドキュメント]を見ればわかるでござろうが、既に色々な機能が用意されておるのだ。
