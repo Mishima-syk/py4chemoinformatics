@@ -200,7 +200,7 @@ class HeteroShuffle():
         atoms = []
         for atom in self.core.GetAromaticAtoms():
             neighbors = [a.GetSymbol() for a in atom.GetNeighbors()]
-            if '*' not in neighbors and atom.GetSymbol() !='*':
+            if '*' not in neighbors and atom.GetSymbol() != '*':
                 atoms.append(atom)
         print(len(atoms))
         return atoms
@@ -217,7 +217,7 @@ class HeteroShuffle():
                 target.GetAtomWithIdx(idx).SetAtomicNum(combination[i])
             smi = Chem.MolToSmiles(target)
             target = Chem.MolFromSmiles(smi)
-            if target != None:
+            if target is not None:
                 n_attachment = len([atom for atom in target.GetAtoms() if atom.GetAtomicNum() == 0])
                 n_aromatic_atoms = len(list(target.GetAromaticAtoms()))
                 if target.GetNumAtoms() - n_attachment == n_aromatic_atoms:
@@ -238,7 +238,7 @@ class HeteroShuffle():
 def checkmol(mol):
     arom_atoms = mol.GetAromaticAtoms()
     symbols = [atom.GetSymbol() for atom in arom_atoms if not atom.IsInRingSize(5)]
-    if symbols == []:
+    if not symbols:
         return True
     elif 'O' in symbols or 'S' in symbols:
         return False
