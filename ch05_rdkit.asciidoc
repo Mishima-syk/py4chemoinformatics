@@ -223,7 +223,7 @@ class HeteroShuffle():
                 if target.GetNumAtoms() - n_attachment == n_aromatic_atoms:
                     try:
                         mol = self.re_construct_mol(target)  
-                        if checkmol(mol):
+                        if check_mol(mol):
                             smiles_set.add(Chem.MolToSmiles(mol))
                     except:
                         pass
@@ -231,11 +231,11 @@ class HeteroShuffle():
         return mols
 ----
 
-上のコードで使われているcheckmolという関数はc1coooo1のような６員環の構造もAromaticだと判定されてしまうのでそれを避けるために使っています。O, Sが許容されるのは５員環のヘテロ芳香環のみにしました。
+上のコードで使われているcheck_molという関数はc1coooo1のような６員環の構造もAromaticだと判定されてしまうのでそれを避けるために使っています。O, Sが許容されるのは５員環のヘテロ芳香環のみにしました。
 
 [source, python]
 ----
-def checkmol(mol):
+def check_mol(mol):
     arom_atoms = mol.GetAromaticAtoms()
     symbols = [atom.GetSymbol() for atom in arom_atoms if not atom.IsInRingSize(5)]
     if not symbols:
