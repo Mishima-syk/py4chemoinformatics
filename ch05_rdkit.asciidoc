@@ -151,6 +151,12 @@ Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafi
 
 [source, python]
 ----
+import copy
+import itertools
+from rdkit import Chem
+from rdkit.Chem import AllChem
+
+
 class HeteroShuffle():
     
     def __init__(self, mol, query):
