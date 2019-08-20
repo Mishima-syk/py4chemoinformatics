@@ -153,6 +153,7 @@ Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafi
 ----
 import copy
 import itertools
+
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
@@ -165,7 +166,6 @@ class HeteroShuffle():
         self.subs = Chem.ReplaceCore(self.mol, self.query)
         self.core = Chem.ReplaceSidechains(self.mol, self.query)
         self.target_atomic_nums = [6, 7, 8, 16]
-    
     
     def make_connectors(self):
         n = len(Chem.MolToSmiles(self.subs).split('.'))
@@ -213,12 +213,9 @@ class HeteroShuffle():
         self.make_connectors()
         for combination in combinations:
             target = copy.deepcopy(self.core)
-            #print(Chem.MolToSmiles(target))
             for i, idx in enumerate(idxs):
                 target.GetAtomWithIdx(idx).SetAtomicNum(combination[i])
             smi = Chem.MolToSmiles(target)
-            #smi = smi.replace('sH','s').replace('oH','o').replace('cH3','c')
-            #print('rep '+smi)
             target = Chem.MolFromSmiles(smi)
             if target != None:
                 n_attachment = len([atom for atom in target.GetAtoms() if atom.GetAtomicNum() == 0])
