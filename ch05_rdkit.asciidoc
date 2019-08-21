@@ -151,6 +151,13 @@ Draw.MolsToGridImage([sildenafil, vardenafil], legends=['sildenafil', 'vardenafi
 
 [source, python]
 ----
+import copy
+import itertools
+
+from rdkit import Chem
+from rdkit.Chem import AllChem
+
+
 class HeteroShuffle():
     
     def __init__(self, mol, query):
@@ -159,7 +166,6 @@ class HeteroShuffle():
         self.subs = Chem.ReplaceCore(self.mol, self.query)
         self.core = Chem.ReplaceSidechains(self.mol, self.query)
         self.target_atomic_nums = [6, 7, 8, 16]
-    
     
     def make_connectors(self):
         n = len(Chem.MolToSmiles(self.subs).split('.'))
@@ -194,7 +200,7 @@ class HeteroShuffle():
         atoms = []
         for atom in self.core.GetAromaticAtoms():
             neighbors = [a.GetSymbol() for a in atom.GetNeighbors()]
-            if '*' not in neighbors and atom.GetSymbol() !='*':
+            if '*' not in neighbors and atom.GetSymbol() != '*':
                 atoms.append(atom)
         print(len(atoms))
         return atoms
@@ -207,20 +213,17 @@ class HeteroShuffle():
         self.make_connectors()
         for combination in combinations:
             target = copy.deepcopy(self.core)
-            #print(Chem.MolToSmiles(target))
             for i, idx in enumerate(idxs):
                 target.GetAtomWithIdx(idx).SetAtomicNum(combination[i])
             smi = Chem.MolToSmiles(target)
-            #smi = smi.replace('sH','s').replace('oH','o').replace('cH3','c')
-            #print('rep '+smi)
             target = Chem.MolFromSmiles(smi)
-            if target != None:
+            if target is not None:
                 n_attachment = len([atom for atom in target.GetAtoms() if atom.GetAtomicNum() == 0])
                 n_aromatic_atoms = len(list(target.GetAromaticAtoms()))
                 if target.GetNumAtoms() - n_attachment == n_aromatic_atoms:
                     try:
                         mol = self.re_construct_mol(target)  
-                        if checkmol(mol):
+                        if check_mol(mol):
                             smiles_set.add(Chem.MolToSmiles(mol))
                     except:
                         pass
@@ -228,14 +231,14 @@ class HeteroShuffle():
         return mols
 ----
 
-上のコードで使われているcheckmolという関数はc1coooo1のような６員環の構造もAromaticだと判定されてしまうのでそれを避けるために使っています。O, Sが許容されるのは５員環のヘテロ芳香環のみにしました。
+上のコードで使われているcheck_molという関数はc1coooo1のような６員環の構造もAromaticだと判定されてしまうのでそれを避けるために使っています。O, Sが許容されるのは５員環のヘテロ芳香環のみにしました。
 
 [source, python]
 ----
-def checkmol(mol):
+def check_mol(mol):
     arom_atoms = mol.GetAromaticAtoms()
     symbols = [atom.GetSymbol() for atom in arom_atoms if not atom.IsInRingSize(5)]
-    if symbols == []:
+    if not symbols:
         return True
     elif 'O' in symbols or 'S' in symbols:
         return False
@@ -261,8 +264,8 @@ image::ch05/ch05_05.png[query]
 
 [source, python]
 ----
-ht=HeteroSuffle(mol1, core1)
-res=ht.generate_mols()
+ht = HeteroShuffle(mol1, core1)
+res = ht.generate_mols()
 print(len(res))
 Draw.MolsToGridImage(res, molsPerRow=5)
 ----
@@ -274,8 +277,8 @@ image::ch05/ch05_06.png[res1]
 
 [source, python]
 ----
-ht=HeteroSuffle(mol2, core2)
-res=ht.generate_mols()
+ht = HeteroShuffle(mol2, core2)
+res = ht.generate_mols()
 print(len(res))
 Draw.MolsToGridImage(res, molsPerRow=5)
 ----
