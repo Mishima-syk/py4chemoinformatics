@@ -73,6 +73,15 @@ DataStructs.TanimotoSimilarity(fp1, fp2)
 # 0.5384615384615384
 ----
 
+類似度の補数(すなわち1 - 類似度)である距離を求めたい場合はreturnDistance=Trueとします。
+後述のクラスタリングなどでは類似度よりも距離を用いることの方が多いです。
+
+[source, python]
+----
+DataStructs.TanimotoSimilarity(fp1, fp2, returnDistance=True)
+# 0.46153846153846156
+----
+
 === バーチャルスクリーニング
 
 ここまでで化合物の類似性の評価方法について説明しました。この類似性の指標を用い多くの化合物の中から特定の化合物群を選び出すことをバーチャルスクリーニングと呼びます。
@@ -172,14 +181,15 @@ for mol in mols:
         valid_mols.append(mol)
 ----
 
-フィンガープリントから距離行列(下三角の距離行列)を生成します。
+フィンガープリントから距離行列(下三角の距離行列)を生成します。ある化合物を参照化合物とし、複数の化合物の間の類似度や距離を計算する時はDataStructs.BulkTanimotoSimilarityを用いるとまとめて計算ができます。
 
 [source, python]
 ----
 distance_matrix = []
 for i, fp in enumerate(fps):
-    similarities = DataStructs.BulkTanimotoSimilarity(fps[i], fps[:i+1])
-    distance_matrix.extend([1-sim for sim in similarities])
+    distance = DataStructs.BulkTanimotoSimilarity(fps[i], fps[:i+1],
+                                                  returnDistance=True)
+    distance_matrix.extend(distance)
 ----
 
 距離行列を用いて化合物をクラスタリングします。3番目の引数は距離の閾値です。この例では距離0.2つまり80%以上の類似度の化合物でクラスタリングしています。
