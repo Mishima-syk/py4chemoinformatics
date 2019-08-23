@@ -234,7 +234,7 @@ apx_fp = AllChem.GetMorganFingerprint(apx, 2)
 rvx_fp = AllChem.GetMorganFingerprint(rvx, 2)
 
 DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
-# 0.40625
+# 0.32353
 ----
 
 40%くらいの類似度ということになりました。実はlink:https://www.rcsb.org/structure/2P16[apixaban]もlink:https://www.rcsb.org/structure/2W26[rivaroxaban]も複合体結晶構造が解かれており、link:https://pymol.org/2/[PyMOL]を利用して重ねて描画しました。
