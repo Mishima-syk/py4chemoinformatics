@@ -112,10 +112,10 @@ python rfrag.py <MMPAを実施したいFileの名前 >フラグメント化し�
 
 python indexing.py <先のコマンドでできたフラグメントのファイル >MMP_アウトプットファイル.CSV
 # 例えば
-# python index.py <data/sample_fragmented.txt >data/mmp.csv
+# python indexing.py <data/sample_fragmented.txt >data/mmp.csv
 ----
 
-以上のコマンドを実行すると分子A, 分子B, 分子AのID, 分子BのID, 変換された構造のSMIRKS, 共通部分構造（context）ががcsvファイルが生成されます。このデータに基づき活性や物性などを紐つけることでMMPAが行えます。
+以上のコマンドを実行すると分子A, 分子B, 分子AのID, 分子BのID, 変換された構造のSMIRKS, 共通部分構造（context）のcsvファイルが生成されます。このデータに基づき活性や物性などを紐つけることでMMPAが行えます。
 
 NOTE: link:http://www.daylight.com/dayhtml/doc/theory/theory.smirks.html[SMIRKS]は分子の変換をSMILESのように文字列表記によって表現する手法です。 
 
@@ -158,7 +158,7 @@ for i, smi in enumerate(df.CANONICAL_SMILES):
 
 続いてRDKit contribに登録されているmmpaのrfragをインポートして、分子をフラグメントに分割します。
 以下のコードで用いているrfrag.fragment_molで呼ばれている関数の実態はlink:http://rdkit.org/docs/source/rdkit.Chem.rdMMPA.html[rdMMPA.FragmentMol]です。この関数は、与えたMolオブジェクトを回転可能ボンドにて切断したフラグメントを生成します。
-出力の形式はfragment(SMILES, COMPOUND_ID)とした場合、**SMILES, COMPOUND_ID, CORE, CHAINS** というカンマ区切りのテキストのリストになります。COREというのは例えばA-B-Cという分子（ーが回転可能ボンドを意味します）を考えると、切断の仕方がA/B-C, A/B/C, A-B/Cという三つのケースがあります。二番目のケースの時にBがCoreにA, CがCHAINSになります。一番目と、三番目はどちらも（A,B-C）、（A-B,C）というフラグメントはCHAINSにアサインされ、COREはNONEになります。
+出力の形式はfragment(SMILES, COMPOUND_ID)とした場合、**SMILES, COMPOUND_ID, CORE, CHAINS** というカンマ区切りのテキストのリストになります。COREというのは例えばA-B-Cという分子（ーが回転可能ボンドを意味します）を考えると、切断の仕方がA/B-C, A/B/C, A-B/Cという三つのケースがあります。二番目のケースの時にBがCoreにA, CがCHAINSになります。一番目と、三番目はどちらも (A,B-C), (A-B,C) というフラグメントはCHAINSにアサインされ、COREはNONEになります。
 
 [source, python]
 ----
