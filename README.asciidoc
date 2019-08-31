@@ -1,9 +1,7 @@
+link:https://github.com/joofio/py4chemoinformatics[English version of Python for Chemoinformatics] link:https://github.com/joofio/py4chemoinformatics/blob/master/pdf/py4chemoinformatics.pdf[(pdf)]
+
 = 目次
 :imagesdir: images
-
-ちょっと追加した(2018.12.12)。web interfaceは入門の範囲を超えそうなのでどうするかは考える。
-
-- https://asciidoctor.org/docs/asciidoc-syntax-quick-reference/#formatted-text[AsciiDoc Syntax Quick Reference]
 
 image::souyakuchan.png[py4chemoinformatics, width=150]
 
