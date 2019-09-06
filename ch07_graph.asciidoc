@@ -163,9 +163,13 @@ for i, smi in enumerate(df.CANONICAL_SMILES):
 [source, python]
 ----
 import rfrag
+remover = SaltRemover.SaltRemover()
 rfragdata = []
 for i, smi in enumerate(df.CANONICAL_SMILES):
     try:
+        mol = Chem.MolFromSmiles(smi)
+        mol = remover.StripMol(mol)
+        smi = Chem.MolToSmiles(mol)
         out = rfrag.fragment_mol(smi, df.CMPD_CHEMBLID[i])
         rfragdata.append(out)
     except:
