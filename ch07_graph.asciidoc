@@ -146,10 +146,10 @@ sys.path.append(mmpapath)
 df = pd.read_csv('Chembl_FXa.txt', sep='\t')
 remover = SaltRemover.SaltRemover()
 mols = []
-for i, smi in enumerate(df.CANONICAL_SMILES):
+for smi, chembl_id in zip(df.CANONICAL_SMILES, df.CMPD_CHEMBLID):
     try:
         mol = Chem.MolFromSmiles(smi)
-        mol.SetProp('CMPD_CHEMBLID', df.CMPD_CHEMBLID[i])
+        mol.SetProp('CMPD_CHEMBLID', chembl_id)
         mol = remover.StripMol(mol)
         mols.append(mol)
     except:
@@ -165,15 +165,15 @@ for i, smi in enumerate(df.CANONICAL_SMILES):
 import rfrag
 remover = SaltRemover.SaltRemover()
 rfragdata = []
-for i, smi in enumerate(df.CANONICAL_SMILES):
+for smi, chembl_id in zip(df.CANONICAL_SMILES, df.CMPD_CHEMBLID):
     try:
         mol = Chem.MolFromSmiles(smi)
         mol = remover.StripMol(mol)
         smi = Chem.MolToSmiles(mol)
-        out = rfrag.fragment_mol(smi, df.CMPD_CHEMBLID[i])
+        out = rfrag.fragment_mol(smi, chembl_id)
         rfragdata.append(out)
     except:
-        print(smi, df.CMPD_CHEMBLID[i])
+        print(smi, chembl_id)
 ----
 
 MMSを作成する関数を定義します。コードはUGMの資料に記載されているものをほぼそのまま利用しますが、Jupyter上で全ての処理をおこなうため読み込み先をファイルからリストに変更しました。
