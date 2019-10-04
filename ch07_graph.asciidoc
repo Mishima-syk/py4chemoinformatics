@@ -170,10 +170,10 @@ for smi, chembl_id in zip(df.CANONICAL_SMILES, df.CMPD_CHEMBLID):
         mol = Chem.MolFromSmiles(smi)
         mol = remover.StripMol(mol)
         smi = Chem.MolToSmiles(mol)
-        out = rfrag.fragment_mol(smi, df.chembl_id)
+        out = rfrag.fragment_mol(smi, chembl_id)
         rfragdata.append(out)
     except:
-        print(smi, df.CMPD_CHEMBLID[i])
+        print(smi, chembl_id)
 ----
 
 MMSを作成する関数を定義します。コードはUGMの資料に記載されているものをほぼそのまま利用しますが、Jupyter上で全ての処理をおこなうため読み込み先をファイルからリストに変更しました。
