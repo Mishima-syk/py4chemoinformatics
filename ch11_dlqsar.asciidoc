@@ -21,11 +21,11 @@ from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, f1_score
-from thensorflow.python.keras.layers import Iput
-from thensorflow.python.keras.layers import Dense
-from thensorflow.python.keras.layers import Dropout
-from thensorflow.python.keras.layers import Activation
-from thensorflow.python.keras.Model import Model
+from tensorflow.python.keras.layers import Input
+from tensorflow.python.keras.layers import Dense
+from tensorflow.python.keras.layers import Dropout
+from tensorflow.python.keras.layers import Activation
+from tensorflow.python.keras.model import Model
 
 
 ----
@@ -80,7 +80,7 @@ x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_stat
 
 Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。
 
-Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いましたがlink:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
+Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要があります。今回はlossとして'categorical_crossentropy', optimizerとして'adam'を使いましたがlink:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
 
