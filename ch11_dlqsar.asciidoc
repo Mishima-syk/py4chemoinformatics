@@ -108,7 +108,7 @@ NOTE: DNNは初期のランダムに発生させた重みに基づいて予測�
 ****
 トレーニングデータを用いてEpoch毎に正解の値と予測値の誤差を小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまいます。
 
-過学習の判断にはEpoch毎、Training set/ Validation setの精度を評価しプロットするとTraining setの精度が向上する一方でValidation setの精度が変化しないまたは悪くなっているかどうかを調べればよいです。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。
+過学習の判断にはEpoch毎、Training set/ Validation setの精度を評価しプロットするとTraining setの精度が向上する一方でValidation setの精度が変化しないまたは悪くなっているかどうかを調べればよいです。Kerasにはlink:https://keras.io/ja/callbacks/[Early stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。
 
 詳しくはlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Early stoppingの紹介と参考文献]をご覧ください。
 ****
@@ -246,7 +246,7 @@ python example.py
 - link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
 - link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
 - link:https://github.com/deepchem/deepchem[DeepChem]
-- link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Eary stoppingに関して]
+- link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Early stoppingに関して]
 - link:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[SIFT原著論文]
 
 <<<
