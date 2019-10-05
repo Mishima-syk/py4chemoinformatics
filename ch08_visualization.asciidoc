@@ -52,10 +52,10 @@ import os
 [source, python]
 ----
 oxrs = [("CHEMBL3098111", "Merck" ),("CHEMBL3867477", "Merck" ),
-　　　　　("CHEMBL2380240", "Rottapharm" ),("CHEMBL3352684", "Merck" ),
-　　　　　("CHEMBL3769367", "Merck" ),("CHEMBL3526050", "Actelion" ),
-　　　　　("CHEMBL3112474", "Actelion" ),("CHEMBL3739366", "Heptares" ),
-　　　　　("CHEMBL3739395", "Actelion" ), ("CHEMBL3351489", "Eisai" )]
+        ("CHEMBL2380240", "Rottapharm" ),("CHEMBL3352684", "Merck" ),
+        ("CHEMBL3769367", "Merck" ),("CHEMBL3526050", "Actelion" ),
+        ("CHEMBL3112474", "Actelion" ),("CHEMBL3739366", "Heptares" ),
+        ("CHEMBL3739395", "Actelion" ), ("CHEMBL3351489", "Eisai" )]
 
 fps = []
 docs = []
