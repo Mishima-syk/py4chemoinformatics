@@ -21,11 +21,11 @@ from rdkit.Chem.Draw import IPythonConsole
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, f1_score
-from thensorflow.python.keras.layers import Iput
-from thensorflow.python.keras.layers import Dense
-from thensorflow.python.keras.layers import Dropout
-from thensorflow.python.keras.layers import Activation
-from thensorflow.python.keras.Model import Model
+from tensorflow.python.keras.layers import Input
+from tensorflow.python.keras.layers import Dense
+from tensorflow.python.keras.layers import Dropout
+from tensorflow.python.keras.layers import Activation
+from tensorflow.python.keras.model import Model
 
 
 ----
@@ -80,7 +80,7 @@ x_train1, x_test1, y_train1, y_test1 = train_test_split(fps, labels, random_stat
 
 Dropout層はランダムにニューロンを欠損させることにより過学習を防ぐ役割を果たします。
 
-Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要がありますが、今回は'categorical_crossentropy'を使いましたがlink:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
+Kerasではモデルを定義した後compile関数を呼ぶことでモデルを構築します。optimizer, lossは目的に応じて変更する必要があります。今回はlossとして'categorical_crossentropy', optimizerとして'adam'を使いましたがlink:https://keras.io/ja/optimizers/[optimzer]はadam以外にも多くあるのでどれが適切かは実際は試行錯誤が必要となるでしょう。
 
 TIP: link:https://en.wikipedia.org/wiki/Rectifier_(neural_networks)[ReLU]はlink:https://en.wikipedia.org/wiki/Sigmoid_function[Sigmoid]関数の勾配消失の課題を克服できるためよく利用されます。
 
@@ -108,7 +108,7 @@ NOTE: DNNは初期のランダムに発生させた重みに基づいて予測�
 ****
 トレーニングデータを用いてEpoch毎に正解の値と予測値の誤差を小さくするように重みを調整していきます。十分な量のトレーニングデータを用い学習したとしても繰り返しすぎると、同じトレーニングデータで何度も何度も学習することになるのでモデルの汎化性能が落ちてしまいます。
 
-過学習の判断にはEpoch毎、Training set/ Validation setの精度を評価しプロットするとTraining setの精度が向上する一方でValidation setの精度が変化しないまたは悪くなっているかどうかを調べればよいです。Kerasにはlink:https://keras.io/ja/callbacks/[Eary stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。
+過学習の判断にはEpoch毎、Training set/ Validation setの精度を評価しプロットするとTraining setの精度が向上する一方でValidation setの精度が変化しないまたは悪くなっているかどうかを調べればよいです。Kerasにはlink:https://keras.io/ja/callbacks/[Early stopping]という機能があり、ある一定回数以上学習を進めてもモデルの性能が変化しなかったらそこで学習を打ち切るといったこともできます。
 
 詳しくはlink:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Early stoppingの紹介と参考文献]をご覧ください。
 ****
@@ -246,7 +246,7 @@ python example.py
 - link:https://github.com/GUR9000/KerasNeuralFingerprint[for keras1.x]
 - link:https://github.com/ericmjl/graph-fingerprint[ericmjl/graph_fp]
 - link:https://github.com/deepchem/deepchem[DeepChem]
-- link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Eary stoppingに関して]
+- link:https://machinelearningmastery.com/early-stopping-to-avoid-overtraining-neural-network-models/[Early stoppingに関して]
 - link:https://www.cs.ubc.ca/~lowe/papers/iccv99.pdf[SIFT原著論文]
 
 <<<
