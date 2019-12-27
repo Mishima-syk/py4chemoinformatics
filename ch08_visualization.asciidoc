@@ -215,7 +215,7 @@ companies = np.array(companies)
 docs = np.array(docs)
 
 trainIDX, testIDX = train_test_split(range(len(fps)), random_state=seed)
-----　
+----
 
 データの準備ができたのでまずTSNEで企業のラベルとともにケミカルスペースを眺めましょう。
 
