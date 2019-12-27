@@ -61,6 +61,9 @@ image::souyakuchan.png[py4chemoinformatics, width=150]
 - Chemical Spaceとは
 - ユークリッド距離を用いたマッピング
 - tSNEをつかったマッピング
+- 化合物の距離情報に基づいたクラスタリング(HDBSCANを使ってみる)
+- 予め定義したケミカルスペースに新しいデータを足したい
+
 
 == link:ch09_qsar.asciidoc[09 構造活性相関（QSAR）の基礎]
 
