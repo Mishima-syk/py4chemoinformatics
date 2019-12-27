@@ -145,4 +145,197 @@ image::ch08/tsne01.png[PCA, size=500]
 
 今回紹介したPCA,tSNEの他にも色々な描画方法があるので調べてみるとよいでしょう。
 
+=== 化合物の距離情報に基づいたクラスタリング(HDBSCANを使ってみる)
+
+今回取り上げた事例では、化合物のFingerprintをPCAやtSNEを用いて次元圧縮した結果に企業名を載せると綺麗にマッピングができました。
+このように予めラベル（今回は企業名）がある場合、次元圧縮後にラベルを載せて眺めることができますが、毎回情報があるとは限りません。このような場合、6章で簡単に紹介しましたがクラスタリングを行い化合物を適当なグループに分割することがあります。
+クラスタリングには様々な方法があります。例えば、ｋ近傍法や、階層別クラスタリングなどは有名です。
+クラスタリングで悩ましいのは、どれくらいのサイズのクラスタに分けるべきか？だと思います。例えば、今回の例であれば付与するクラスタラベルがほぼ企業名に対応するというように、いい感じに割り振ってくれると嬉しいわけです。
+このような目的に合うアルゴリズムは色々ありますが、今回はlink:https://link.springer.com/chapter/10.1007/978-3-642-37456-2_14[HDBSCAN]を使ってみます。HDBSCANは密度に基づくクラスタリング手法です。インストールはCondaまたは、Pipコマンドでインストールできます。また以下のコードで可視化にはlink:https://seaborn.pydata.org/[seaborn]を使いますので入れていない方はこれもインストールしましょう。
+データの読み込みは上のパートと同じです。
+コードを実行する際にWarningが出るのが嫌なのでRDLogger.DisableLog('rdApp.*')を入れて抑制しました。
+
+[source, python]
+----
+pip install hdbscan
+#or
+conda install -c conda-forge hdbscan
+conda install -c conda-forge seaborn
+----　
+
+さて、インストールが終わったら早速使ってみましょう！
+
+[source, python]
+----
+%matplotlib inline
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from rdkit import Chem, DataStructs
+from rdkit.Chem import AllChem, Draw
+from rdkit import RDLogger
+from sklearn.manifold import TSNE
+from hdbscan import HDBSCAN
+## 以下のパッケージは後半で利用します
+from sklearn.model_selection import train_test_split
+from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.ensemble import RandomForestRegressor
+from mlinsights.mlmodel import PredictableTSNE
+
+sns.set_context('poster')
+sns.set_style('white')
+sns.set_color_codes()
+plot_kwds = {'alpha' : 0.5, 's' : 80, 'linewidths':0}
+RDLogger.DisableLog('rdApp.*')
+seed = 794
+
+oxrs = [("CHEMBL3098111", "Merck" ),  ("CHEMBL3867477", "Merck" ),  ("CHEMBL2380240", "Rottapharm" ),
+             ("CHEMBL3352684", "Merck" ),  ("CHEMBL3769367", "Merck" ),  ("CHEMBL3526050", "Actelion" ),
+             ("CHEMBL3112474", "Actelion" ),  ("CHEMBL3739366", "Heptares" ),  ("CHEMBL3739395", "Actelion" ), 
+             ("CHEMBL3351489", "Eisai" )]
+fps = []
+docs = []
+companies = []
+mol_list = []
+for cid, company in oxrs:
+    sdf_file = os.path.join("ch08", cid + ".sdf")
+    mols = Chem.SDMolSupplier(sdf_file)
+    for mol in mols:
+        if mol is not None:
+            mol_list.append(mol)
+            fp = AllChem.GetMorganFingerprintAsBitVect(mol, 2)
+            arr = np.zeros((1,))
+            DataStructs.ConvertToNumpyArray(fp, arr)
+            docs.append(cid)
+            companies.append(company)
+            fps.append(arr)
+fps = np.array(fps)
+companies = np.array(companies)
+docs = np.array(docs)
+
+trainIDX, testIDX = train_test_split(range(len(fps)), random_state=seed)
+----　
+
+データの準備ができたのでまずTSNEで企業のラベルとともにケミカルスペースを眺めましょう。
+
+[source, python]
+----
+tsne = TSNE(random_state=seed)
+res = tsne.fit_transform(fps)
+plt.clf()
+plt.figure(figsize=(12, 6))
+sns.scatterplot(res[:,0], res[:,1], hue=companies, **plot_kwds)
+----
+
+image::ch08/tsne02.png[TSNE2, size=500]
+
+きれいに分かれています。ではHDBSCANの実行とその結果の可視化をしてみます。
+HDBSCANのお作法はScikit-learnに準拠しているのでオブジェクトを作ってFitをコールするだけで完了です。クラスタリング実施の際に各データの特徴量に基づく距離を計算します。HDBSCANにはデフォルトでユークリッド距離、コサイン距離など多くのメトリクスが用意されていますが、今回は化合物のFingeprintでの距離ということでタニモト係数を使います。これは自分で実装する必要があります。この場合は2つのNumpy arrayを受け取り距離を返す関数を定義してHDBSCANに渡します。ここではtanimoto_distという関数を定義しました。このようにユーザーオリジナルの関数を実装する場合はmetric='pyfunc'として、func引数に定義した関数を渡します。
+
+TIP: Numpyのarrayを2つ受ける関数と書きましたがもっと複雑な関数を使いたい場合はfunctools link:https://docs.python.org/3.7/library/functools.html[partical]などを使うことも可能でしょう。
+
+[source, python]
+----
+def tanimoto_dist(ar1, ar2):
+    a = np.dot(ar1, ar2)
+    b = ar1 + ar2 - ar1*ar2
+    return 1 - a/np.sum(b)
+
+clusterer = HDBSCAN(algorithm='best', min_samples=5, metric='pyfunc', func=tanimoto_dist)
+clusterer.fit(fps)
+----
+
+計算が終わったらclustererオブジェクトのlabels_というプロパティにラベル付与されています。それを使ってプロットしてみましょう。今回はmin_sampleにクラスタを形成する場合最低限含まれるべき化合物数を5としました。このあたりのパラメータを増減すると異なる出力が得られますので、ある程度試行錯誤してみるのも良いでしょう。
+また、以下のプロットにおいて灰色になっている部分はどのクラスタにも属さないと判断されたものとなります。
+
+[source, python]
+----
+plt.clf()
+plt.figure(figsize=(12, 6))
+palette = sns.color_palette()
+cluster_colors = [sns.desaturate(palette[col], sat)
+                 if col >= 0 else (0.5, 0.5, 0.5) for col, sat in zip(clusterer.labels_, clusterer.probabilities_)]
+plt.scatter(res[:,0], res[:,1], c=cluster_colors, **plot_kwds)
+----
+
+image::ch08/tsne03.png[TSNE3, size=500]
+
+いかがでしょうか。おおよそですが、TSNEで分離されている島とラベルが対応しています。どちらも入力は化合物のFingerprintで似ているものを集めるという観点ですので当たり前かもしれませんが、密度に基づいて客観的にラベルを付与できる手法としてHDBSCANは覚えておいていい手法の一つではないでしょうか。
+
+=== 予め定義したケミカルスペースに新しいデータを足したい。
+
+さて、ここまでで何かしらの化合物の特徴を元にそれを低次元のケミカルスペースに投影する手法を学びました。私がPCAやTSNEを使ってマップしたときによく思うのは、次に作る化合物はこの空間のどこに来るのだろうか？ということです。また、HTSライブラリの拡張など際に今までにないケミカルスペースを埋めたい！などのニーズもあるでしょう。
+既存のケミカルスペースに新しい化合物を投影できるのでしょうか？PCAやTSNEは残念ながらできません。全化合物を入れて再計算する必要があります。自己組織化マップ(SOM)を使うという手はありますがこの章では、できないと言っておきつつ、PCAやTSNEで新しいデータをプロットする方法を紹介したいと思います。
+できないといったことを実現するためには発送の転換が必要です。トレーニングデータを使い特徴量＝＞低次元空間への次元圧縮の予測モデルを作るのですFingerprintを入力、2次元圧縮したｘｙを予測するモデルを作ればいいですね！（もちろんこの手法は万全ではなくモデルに結果が大きく依存します）
+この予測可能なTSNEを実装してるパッケージがlink:http://www.xavierdupre.fr/app/mlinsights/helpsphinx/index.html[mlinsights]です。このパッケージはpip コマンドでインストール可能です。
+
+[source, python]
+----
+pip install mlinsights
+----
+
+mlinsightsは複数の手法を実装していますが今回は、PredictableTSNEのみの事例紹介に絞ります。
+ランダムにトレーニングとテストデータに分割しトレーニングデータでTSNEを実施、その結果をRandomForestとGausianProcessRegressorの2つの手法で学習、このモデルを用いてテストデータを投影するというテストをします。
+
+[source, python]
+----
+trainFP = [fps[i] for i in trainIDX]
+train_mol = [mol_list[i] for i in trainIDX]
+
+testFP = [fps[i] for i in testIDX]
+test_mol = [mol_list[i] for i in testIDX]
+allFP = trainFP + testFP
+tsne_ref = TSNE(random_state=seed)
+res = tsne_ref.fit_transform(allFP)
+plt.clf()
+plt.figure(figsize=(12, 6))
+sns.scatterplot(res[:,0], res[:,1], hue=['train' for i in range(len(trainFP))] + ['test' for i in range(len(testFP))])
+----
+
+ランダムスプリットなのでまんべんなくサンプリングできています。
+
+image::ch08/ptsne01.png[pTSNE1, size=500]
+
+PredictableTSNEもscikit-learnと同じなので
+オブジェクトを作ってFitで学習、Transformデータの次元削減をします。transformerにはTSNEやPCA次元圧縮用のオブジェクトを、Estimatorにはその結果を元にモデルを作る学習機を渡します。後でトレーニングデータとテストデータを重ねるのでkeep_tsne_outputs=Trueとしています。
+
+
+[source, python]
+----
+rfr = RandomForestRegressor(random_state=seed)
+tsne1 = TSNE(random_state=seed)
+pred_tsne_rfr = PredictableTSNE(transformer=tsne1, estimator=rfr, keep_tsne_outputs=True)
+pred_tsne_rfr.fit(trainFP, list(range(len(trainFP))))
+
+pred1 = pred_tsne_rfr.transform(testFP)
+plt.clf()
+plt.figure(figsize=(12, 6))
+plt.scatter(pred_tsne_rfr.tsne_outputs_[:,0], pred_tsne_rfr.tsne_outputs_[:,1], c='blue', alpha=0.5)
+plt.scatter(pred1[:,0], pred1[:,1], c='red', alpha=0.5)
+----
+
+image::ch08/ptsne02.png[pTSNE2, size=500]
+
+赤いポイントがテストデータです。意外といい感じです。
+次はGaussianProcessで同じことをやってみます。
+
+[source, python]
+----
+gbr = GaussianProcessRegressor(random_state=seed)
+tsne2 = TSNE(random_state=seed)
+pred_tsne_gbr = PredictableTSNE(transformer=tsne2, estimator=gbr, keep_tsne_outputs=True)
+pred_tsne_gbr.fit(trainFP, list(range(len(trainFP))))
+pred2 = pred_tsne_gbr.transform(testFP)
+plt.clf()
+plt.figure(figsize=(12, 6))
+plt.scatter(pred_tsne_gbr.tsne_outputs_[:,0], pred_tsne_gbr.tsne_outputs_[:,1], c='blue', alpha=0.5)
+plt.scatter(pred2[:,0], pred2[:,1], c='red', alpha=0.5)
+----
+
+image::ch08/ptsne03.png[pTSNE3, size=500]
+
+GPモデルはあまり性能が出ませんでした。PredictableTSNEは新しい化合物の既存スペースへの投影の一つのツールとなりえますがこの例のようにモデルにより結果が大きく左右される懸念があるようです。
+実プロジェクト投入時にはよく検証しないとメドケムの方をミスリードするリスクがあるかもしれません。一つのアプローチとして紹介させてもらいました。
+
 <<<
