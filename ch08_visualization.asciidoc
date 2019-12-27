@@ -161,7 +161,7 @@ pip install hdbscan
 #or
 conda install -c conda-forge hdbscan
 conda install -c conda-forge seaborn
-----　
+----
 
 さて、インストールが終わったら早速使ってみましょう！
 
