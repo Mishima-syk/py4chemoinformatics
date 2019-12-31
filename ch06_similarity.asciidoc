@@ -88,11 +88,11 @@ DataStructs.TanimotoSimilarity(fp1, fp2, returnDistance=True)
 
 例えば薬になりそうな化合物が特許や論文で発表されたり、自社のアッセイ系で有望そうな化合物が見つかった場合、自社の化合物ライブラリデータベースや市販化合物のデータベースの中に類似の化合物で、より有望そうなものがあるかどうかを探したいことがあります。ここではノイラミニダーゼ阻害薬として知られるインフルエンザ治療薬であるlink:https://www.ebi.ac.uk/chembl/beta/compound_report_card/CHEMBL466246/[イナビル]の類似体が購入可能であるかをlink:http://zinc15.docking.org/[ZINC]を利用して調べます。
 
-イナビルの分子量が約350,ALogPが-2.92だったので、ZINCの分子量350-375,LogP=-1の340万化合物の区画を選択しました。この区画は16のファイルに分かれていますが、最初の1セットだけダウンロードして使ってみます。
+イナビルの分子量が約350,ALogPが-2.92だったので、ZINCの分子量350-375,LogPが-1未満の340万化合物の区画を選択しました。この区画は16のファイルに分かれていますが、最初の1セットだけダウンロードして使ってみます。
 
 NOTE: データのダウンロード方法は4章で説明しています。
 
-jupyter notebookでは!で始めるとShellコマンドを実行できます。以下はjupyter notebook上でwgetコマンドでZINCのデータセットをダウンロードする例です
+jupyter notebookでは!で始めるとShellコマンドを実行できます。以下はjupyter notebook上でwgetコマンドでZINCのデータセットをダウンロードする例です。
 
 [source, python]
 ----
@@ -110,7 +110,7 @@ len(spl)
 # 195493
 ----
 
-続いてイナビル(LANIMAMIBIR)との類似度を調べるための関数を用意します。
+続いてイナビル(Laninamivir)との類似度を調べるための関数を用意します。
 
 [source, python]
 ----
