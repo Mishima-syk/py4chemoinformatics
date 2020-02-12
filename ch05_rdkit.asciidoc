@@ -291,6 +291,49 @@ image::ch05/ch05_07.png[res2]
 Oxaprozinはオキサゾールを有しています。５員環の芳香環を形成する原子の候補は炭素、窒素、硫黄、酸素が挙げられます。このような分子の場合の例として紹介しました。
 いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されています
 
+TIP: 2018.03.1 以降のRDKitではEnumerateHeterocyclesというメソッドが実装されているので上記のコードを書かずともヘテロシャッフルを容易に行うことができます。また、全部の芳香族原子を変換の対象にしたくないという場合があるかと思います。その時は、除外したい原子に_protectedという属性持たせておくと良いです。実際の例をコードで見てみましょう。
+ 
+[source, python]
+---
+# EnumerateHeterocyclesはジェネレーターを返します。これは組み合わせが多くリストで返すとメモリを多く消費するためです。以下の例ではわかりやすくするためリストに変換しています。
+from rdkit import Chem
+from rdkit.Chem import EnumerateHeterocycles
+from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem import Draw
+from rdkit.Chem import AllChem
+import copy
+omeprazole = Chem.MolFromSmiles('CC1=CN=C(C(=C1OC)C)CS(=O)C2=NC3=C(N2)C=C(C=C3)OC')
+enumerated_mols = EnumerateHeterocycles.EnumerateHeterocycles(omeprazole)
+enumerated_mols = [m for m in enumerated_mols]
+print(len(enumerated_mols))
+# 384
+Draw.MolsToGridImage(enumerated_mols[:6], molsPerRow=3)
+---
+
+image::ch05/ch05_09.png[res3]
+
+[source, python]
+---
+# 今度は56縮環部分は保護してみます。
+ringinfo = omeprazole.GetRingInfo()
+ringinfo.AtomRings()
+# ((1, 6, 5, 4, 3, 2), (14, 13, 17, 16, 15), (18, 19, 20, 21, 15, 16))
+protected_omeprazole = copy.deepcopy(omeprazole)
+for idx in ringinfo.AtomRings()[1]:
+    atom = protected_omeprazole.GetAtomWithIdx(idx)
+    atom.SetProp("_protected", "1")
+for idx in ringinfo.AtomRings()[2]:
+    atom = protected_omeprazole.GetAtomWithIdx(idx)
+    atom.SetProp("_protected", "1")
+enumerated_mols2 = EnumerateHeterocycles.EnumerateHeterocycles(protected_omeprazole)
+enumerated_mols2 = [m for m in enumerated_mols2]
+print(len(enumerated_mols2))
+# 4
+Draw.MolsToGridImage(enumerated_mols2)
+---
+
+image::ch05/ch05_10.png[res4]
+
 .ヘテロシャッフリングについてもう少し詳しく
 ****
 link:https://pubs.acs.org/doi/10.1021/jm3001289[J. Med. Chem. 2012,  55, 11, 5151-5164]ではPIM-1キナーゼ阻害剤におけるNシャッフリングの効果をFragment Molecular Orbital法という量子化学的なアプローチを使って検証しています。さらにlink:https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563[J. Chem. Inf. Model. 2019,  59, 1, 149-158]ではAsp–Arg塩橋とヘテロ環のスタッキングのメカニズムを量子化学計算により探っており、置換デザインの指標になりそうです。
