@@ -294,7 +294,7 @@ Oxaprozinはオキサゾールを有しています。５員環の芳香環を�
 TIP: 2018.03.1 以降のRDKitではEnumerateHeterocyclesというメソッドが実装されているので上記のコードを書かずともヘテロシャッフルを容易に行うことができます。また、全部の芳香族原子を変換の対象にしたくないという場合があるかと思います。その時は、除外したい原子に_protectedという属性持たせておくと良いです。実際の例をコードで見てみましょう。
  
 [source, python]
----
+----
 # EnumerateHeterocyclesはジェネレーターを返します。これは組み合わせが多くリストで返すとメモリを多く消費するためです。以下の例ではわかりやすくするためリストに変換しています。
 from rdkit import Chem
 from rdkit.Chem import EnumerateHeterocycles
@@ -308,12 +308,12 @@ enumerated_mols = [m for m in enumerated_mols]
 print(len(enumerated_mols))
 # 384
 Draw.MolsToGridImage(enumerated_mols[:6], molsPerRow=3)
----
+----
 
 image::ch05/ch05_09.png[res3]
 
 [source, python]
----
+----
 # 今度は56縮環部分は保護してみます。
 ringinfo = omeprazole.GetRingInfo()
 ringinfo.AtomRings()
@@ -330,7 +330,7 @@ enumerated_mols2 = [m for m in enumerated_mols2]
 print(len(enumerated_mols2))
 # 4
 Draw.MolsToGridImage(enumerated_mols2)
----
+----
 
 image::ch05/ch05_10.png[res4]
 
