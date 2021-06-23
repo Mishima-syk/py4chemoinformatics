@@ -2,6 +2,7 @@ name: py4chemoinformatics
 channels:
   - conda-forge
 dependencies:
+  - pandas=0.22
   - rdkit
   - seaborn
   - ggplot
