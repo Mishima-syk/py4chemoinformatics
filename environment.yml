@@ -1,0 +1,9 @@
+name: py4chemoinformatics
+channels:
+  - conda-forge
+dependencies:
+  - rdkit
+  - seaborn
+  - ggplot
+  - git
+
