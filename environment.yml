@@ -9,4 +9,8 @@ dependencies:
   - ggplot
   - git
   - scikit-learn
+  - mlinsights
+  - hdbscan
+  - keras
+  - pytorch
 
