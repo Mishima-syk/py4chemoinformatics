@@ -8,4 +8,5 @@ dependencies:
   - seaborn
   - ggplot
   - git
+  - scikit-learn
 
