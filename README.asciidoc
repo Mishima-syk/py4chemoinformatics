@@ -1,3 +1,7 @@
+[#image-binder]
+[link=https://mybinder.org/v2/gh/mnagaku/py4chemoinformatics/binder]
+image::https://mybinder.org/badge_logo.svg[]
+
 link:https://github.com/joofio/py4chemoinformatics[English version of Python for Chemoinformatics] link:https://github.com/joofio/py4chemoinformatics/blob/master/pdf/py4chemoinformatics.pdf[(pdf)]
 
 = 目次
