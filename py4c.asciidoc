@@ -1,6 +1,6 @@
 = AI創薬のための ケモインフォマティクス入門
 @fmkz___, @iwatobipen
-v1.101 2019/12/31
+v1.102 2021/06/26
 :toc:
 :toc-title: 目次
 :lang: ja
@@ -105,8 +105,9 @@ link:https://twitter.com/bonohu[@bonohu],
 link:https://twitter.com/ReLuTropy[@ReLuTropy],
 link:https://twitter.com/ski_nanko[@ski_nanko],
 link:https://twitter.com/torusengoku[@torusengoku],
-link:https://twitter.com/yamasaKit_[@yamasaKit_]
-link:https://github.com/keisuke-yanagisawa[keisuke-yanagisawa]
+link:https://twitter.com/yamasaKit_[@yamasaKit_],
+link:https://github.com/keisuke-yanagisawa[keisuke-yanagisawa],
+link:https://github.com/mnagaku[Masaru Nagaku]
 
 
 ここから先は(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___ 2019/03/03)
@@ -763,6 +764,49 @@ image::ch05/ch05_07.png[res2]
 Oxaprozinはオキサゾールを有しています。５員環の芳香環を形成する原子の候補は炭素、窒素、硫黄、酸素が挙げられます。このような分子の場合の例として紹介しました。
 いずれのケースでも上記のコードでヘテロ原子がシャッフルされたものが生成されています
 
+TIP: 2018.03.1 以降のRDKitではEnumerateHeterocyclesというメソッドが実装されているので上記のコードを書かずともヘテロシャッフルを容易に行うことができます。また、全部の芳香族原子を変換の対象にしたくないという場合があるかと思います。その時は、除外したい原子に_protectedという属性持たせておくと良いです。実際の例をコードで見てみましょう。
+ 
+[source, python]
+----
+# EnumerateHeterocyclesはジェネレーターを返します。これは組み合わせが多くリストで返すとメモリを多く消費するためです。以下の例ではわかりやすくするためリストに変換しています。
+from rdkit import Chem
+from rdkit.Chem import EnumerateHeterocycles
+from rdkit.Chem.Draw import IPythonConsole
+from rdkit.Chem import Draw
+from rdkit.Chem import AllChem
+import copy
+omeprazole = Chem.MolFromSmiles('CC1=CN=C(C(=C1OC)C)CS(=O)C2=NC3=C(N2)C=C(C=C3)OC')
+enumerated_mols = EnumerateHeterocycles.EnumerateHeterocycles(omeprazole)
+enumerated_mols = [m for m in enumerated_mols]
+print(len(enumerated_mols))
+# 384
+Draw.MolsToGridImage(enumerated_mols[:6], molsPerRow=3)
+----
+
+image::ch05/ch05_09.png[res3]
+
+[source, python]
+----
+# 今度は56縮環部分は保護してみます。
+ringinfo = omeprazole.GetRingInfo()
+ringinfo.AtomRings()
+# ((1, 6, 5, 4, 3, 2), (14, 13, 17, 16, 15), (18, 19, 20, 21, 15, 16))
+protected_omeprazole = copy.deepcopy(omeprazole)
+for idx in ringinfo.AtomRings()[1]:
+    atom = protected_omeprazole.GetAtomWithIdx(idx)
+    atom.SetProp("_protected", "1")
+for idx in ringinfo.AtomRings()[2]:
+    atom = protected_omeprazole.GetAtomWithIdx(idx)
+    atom.SetProp("_protected", "1")
+enumerated_mols2 = EnumerateHeterocycles.EnumerateHeterocycles(protected_omeprazole)
+enumerated_mols2 = [m for m in enumerated_mols2]
+print(len(enumerated_mols2))
+# 4
+Draw.MolsToGridImage(enumerated_mols2)
+----
+
+image::ch05/ch05_10.png[res4]
+
 .ヘテロシャッフリングについてもう少し詳しく
 ****
 link:https://pubs.acs.org/doi/10.1021/jm3001289[J. Med. Chem. 2012,  55, 11, 5151-5164]ではPIM-1キナーゼ阻害剤におけるNシャッフリングの効果をFragment Molecular Orbital法という量子化学的なアプローチを使って検証しています。さらにlink:https://pubs.acs.org/doi/10.1021/acs.jcim.8b00563[J. Chem. Inf. Model. 2019,  59, 1, 149-158]ではAsp–Arg塩橋とヘテロ環のスタッキングのメカニズムを量子化学計算により探っており、置換デザインの指標になりそうです。
@@ -1013,11 +1057,11 @@ image::ch06/apx_rvx.png[APX+RVX, width=600, pdfwidth=60%]
 
 [source, python]
 ----
-apx_fp = AllChem.GetMorganFingerprint(apx, 2)
-rvx_fp = AllChem.GetMorganFingerprint(rvx, 2)
+apx_fp = AllChem.GetMorganFingerprint(apx, 2, useFeatures=True)
+rvx_fp = AllChem.GetMorganFingerprint(rvx, 2, useFeatures=True)
 
 DataStructs.TanimotoSimilarity(apx_fp, rvx_fp)
-# 0.32353
+# 0.40625
 ----
 
 40%くらいの類似度ということになりました。実はlink:https://www.rcsb.org/structure/2P16[apixaban]もlink:https://www.rcsb.org/structure/2W26[rivaroxaban]も複合体結晶構造が解かれており、link:https://pymol.org/2/[PyMOL]を利用して重ねて描画しました。
@@ -1621,8 +1665,9 @@ clusterer.fit(fps)
 ----
 
 計算が終わると、clustererオブジェクトのlabels_というプロパティにラベルが付与されるので、それを使ってプロットしてみましょう。今回はmin_sample=5とし、クラスタを形成時に最低限含まれるべき化合物数を5としました。このパラメータを増減すると、異なる出力が得られますので、ある程度試行錯誤してみるのも良いでしょう。
+min_cluster_sizeは、クラスターサイズの規定をするパラメータです。この値より小さいクラスターはノイズとして扱われます。min_samplesは、考慮するコア（クラスタ中心）近傍のサンプル数です。このパラメータを大きくするほど、コンサバティブ（より近傍が多いもののみをクラスタにする）なモデルを作ります。クラスタリングの結果に正解不正解といったものはなく、実務に落とし込んだ際に、メディシナルケミストが見てリーズナブルかどうかが大事かと思います。従って、プロジェクトを一緒に勧めてるメディシナルケミストの方と結果を見ながら良い塩梅のところを見つけるのが良いかなと思います。link:https://hdbscan.readthedocs.io/en/latest/parameter_selection.html?highlight=min_sample[公式ドキュメント]に例があるので興味のある方はご覧ください。
 
-プロットで灰色になっている部分は、どのクラスタにも属さないと判断されたものです。
+*プロットで灰色になっている部分は、どのクラスタにも属さないと判断されたものです。
 
 [source, python]
 ----
@@ -1713,7 +1758,7 @@ plt.scatter(pred2[:,0], pred2[:,1], c='red', alpha=0.5)
 image::ch08/ptsne03.png[pTSNE3, size=500]
 
 GPモデルはあまり性能が出ませんでした。PredictableTSNEは新しい化合物の既存スペースへマッピングの一つのツールとなり得ますが、この例のようにモデルにより結果が大きく左右されることがあるようです。
-実プロジェクト投入時にはよく検証しないとメドケムの方をミスリードするリスクがあるかもしれませんが一つのアプローチとして紹介しました。
+実プロジェクト投入時にはよく検証しないとメディシナルケミストの方をミスリードするリスクがあるかもしれませんが一つのアプローチとして紹介しました。
 
 
 TIP: 新しいバージョンのpandasを利用しているとggplotを呼ぶ際にエラーが起きることがあるかもしれません。link:https://github.com/yhat/ggpy/issues/662[github_issue]　解決策はこのリンクにあるようにインストールされたggplotのフォルダ内のコードggplot/utils.pyのpd.tslib.Timestampをpd.Timestampに、ggplot/stats/smoothers.pyのfrom pandas.lib import Timestamp を from pandas import Timestampに変えると動くと思います。

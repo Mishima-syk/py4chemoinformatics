@@ -92,8 +92,9 @@ link:https://twitter.com/bonohu[@bonohu],
 link:https://twitter.com/ReLuTropy[@ReLuTropy],
 link:https://twitter.com/ski_nanko[@ski_nanko],
 link:https://twitter.com/torusengoku[@torusengoku],
-link:https://twitter.com/yamasaKit_[@yamasaKit_]
-link:https://github.com/keisuke-yanagisawa[keisuke-yanagisawa]
+link:https://twitter.com/yamasaKit_[@yamasaKit_],
+link:https://github.com/keisuke-yanagisawa[keisuke-yanagisawa],
+link:https://github.com/mnagaku[Masaru Nagaku]
 
 
 ここから先は(Nujabes - reflection eternalを聴きながら書きました　by @fmkz___ 2019/03/03)
