@@ -1,0 +1,16 @@
+name: py4chemoinformatics
+channels:
+  - conda-forge
+dependencies:
+  - python=3.6
+  - pandas=0.22
+  - rdkit
+  - seaborn
+  - ggplot
+  - git
+  - scikit-learn
+  - mlinsights
+  - hdbscan
+  - keras
+  - pytorch
+
